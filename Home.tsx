@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Trophy, Calendar, Users, Zap, Flame, Star } from 'lucide-react';
+import { Trophy, Calendar, Users, Zap, Flame, Star, MapPin, Phone, Clock, ExternalLink } from 'lucide-react';
 
 /**
  * Supercopa de Basquete - Redesign Premium
@@ -28,6 +28,87 @@ const games = [
   { id: 2, team1: 'Equipe Y', team2: 'Equipe Z', score1: 92, score2: 68, date: '25/07/2026', time: '20:30', status: 'finalizado' },
   { id: 3, team1: 'Equipe W', team2: 'Equipe V', score1: 78, score2: 78, date: '26/07/2026', time: '19:00', status: 'agendado' },
   { id: 4, team1: 'CT das Montanhas', team2: 'Equipe Y', score1: null, score2: null, date: '26/07/2026', time: '20:30', status: 'agendado' },
+];
+
+// Dados dos locais
+const localPlaces = [
+  {
+    id: 1,
+    name: 'Quadra Eurico Vieira de Resende',
+    category: 'quadra',
+    categoryLabel: '🏀 Local do Evento',
+    address: 'Av. Idolindo Fonseca Lamas, 221 – Afonso Cláudio, ES',
+    phone: null,
+    hours: null,
+    mapsUrl: 'https://maps.google.com/?cid=14397320840438908995',
+    highlight: true,
+  },
+  {
+    id: 2,
+    name: 'Conferência São Vicente de Paulo',
+    category: 'hospital',
+    categoryLabel: '🏥 Hospital',
+    address: 'R. José Giestas, 63 – Centro, Afonso Cláudio, ES',
+    phone: '(27) 3735-1699',
+    hours: 'Aberto 24 horas',
+    mapsUrl: 'https://maps.google.com/?cid=6542271719951999176',
+    highlight: false,
+  },
+  {
+    id: 3,
+    name: 'Express Pizzas e Lanches',
+    category: 'restaurante',
+    categoryLabel: '🍕 Pizza & Lanches',
+    address: 'Centro – Afonso Cláudio, ES',
+    phone: '(27) 99999-5220',
+    hours: 'Ter–Dom: 18h – 00h',
+    mapsUrl: 'https://maps.google.com/?cid=818182377540330188',
+    highlight: false,
+  },
+  {
+    id: 4,
+    name: 'Restaurante Prato Fino',
+    category: 'restaurante',
+    categoryLabel: '🍽️ Restaurante',
+    address: 'R. José Jorge Haddad, 34 – Centro, Afonso Cláudio, ES',
+    phone: '(27) 99900-4700',
+    hours: 'Seg–Dom: 9h – 14h',
+    mapsUrl: 'https://maps.google.com/?cid=5906541593162519242',
+    highlight: false,
+  },
+  {
+    id: 5,
+    name: 'Farmácia São Tomé',
+    category: 'farmacia',
+    categoryLabel: '💊 Farmácia',
+    address: 'Av. Pres. Vargas, 236 – Afonso Cláudio, ES',
+    phone: '(27) 3735-1165',
+    hours: 'Seg–Sáb: 8h – 18h',
+    mapsUrl: 'https://maps.google.com/?cid=4168622811040752207',
+    highlight: false,
+  },
+  {
+    id: 6,
+    name: 'Farmácia São Tomé',
+    category: 'farmacia',
+    categoryLabel: '💊 Farmácia',
+    address: 'Av. Mal. Deodoro, 212 – Centro, Afonso Cláudio, ES',
+    phone: '(27) 99890-6726',
+    hours: 'Seg–Sex: 7h – 18h | Sáb: 7h – 12h',
+    mapsUrl: 'https://maps.google.com/?cid=15484967853277222919',
+    highlight: false,
+  },
+  {
+    id: 7,
+    name: 'Pousada Afonso Cláudio',
+    category: 'hospedagem',
+    categoryLabel: '🏨 Hospedagem',
+    address: 'R. Quintino Bocaiúva, 128 – Centro, Afonso Cláudio, ES',
+    phone: '(27) 3735-7801',
+    hours: null,
+    mapsUrl: 'https://maps.google.com/?cid=1729478197940830975',
+    highlight: false,
+  },
 ];
 
 export default function Home() {
@@ -144,14 +225,14 @@ export default function Home() {
         {/* Tabs de Conteúdo Premium */}
         <div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-[#1A1A1A] to-[#0F0F0F] border border-[#D4AF37]/20 rounded-xl p-1 mb-8">
-              {['inicio', 'classificacao', 'times'].map((tab, idx) => (
+            <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-[#1A1A1A] to-[#0F0F0F] border border-[#D4AF37]/20 rounded-xl p-1 mb-8">
+              {['inicio', 'classificacao', 'times', 'local'].map((tab, idx) => (
                 <TabsTrigger 
                   key={tab}
                   value={tab}
                   className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#D4AF37] data-[state=active]:to-[#E8C547] data-[state=active]:text-[#0F0F0F] data-[state=active]:shadow-lg data-[state=active]:shadow-[#D4AF37]/50 text-gray-300 font-semibold transition-all duration-300 rounded-lg"
                 >
-                  {['Jogos', 'Classificação', 'Times'][idx]}
+                  {['Jogos', 'Classificação', 'Times', 'Local'][idx]}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -292,6 +373,82 @@ export default function Home() {
                             <p className="text-xs text-gray-500 mb-1 font-medium">Pontos</p>
                             <p className="text-2xl font-bold text-[#D4AF37]">{team.wins * 2}</p>
                           </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+            {/* Tab: Local */}
+            <TabsContent value="local" className="space-y-4 mt-6 animate-fade-in">
+              <h2 className="text-3xl font-bold text-[#D4AF37] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                Guia de Locais
+              </h2>
+              <p className="text-gray-400 mb-8">Tudo que você precisa saber para aproveitar o evento em Afonso Cláudio.</p>
+
+              {/* Mapa embed - quadra principal */}
+              <div className="rounded-xl overflow-hidden border border-[#D4AF37]/30 shadow-2xl shadow-[#D4AF37]/10 mb-8">
+                <iframe
+                  title="Quadra Eurico Vieira de Resende"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFmBWY&q=-20.0752374,-41.1267671&zoom=15"
+                ></iframe>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {localPlaces.map((place, idx) => (
+                  <div
+                    key={place.id}
+                    className="animate-slide-up"
+                    style={{ animationDelay: `${idx * 0.07}s` }}
+                  >
+                    <Card className={`h-full bg-gradient-to-br from-[#1A1A1A] to-[#0F0F0F] transition-all duration-500 hover:shadow-2xl group transform hover:scale-[1.02] ${
+                      place.highlight
+                        ? 'border-[#D4AF37]/60 shadow-lg shadow-[#D4AF37]/20'
+                        : 'border-[#333333]/50 hover:border-[#D4AF37]/40'
+                    }`}>
+                      <CardContent className="pt-5 pb-5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <span className="text-xs font-bold text-[#D4AF37]/70 uppercase tracking-widest mb-1 block">
+                              {place.categoryLabel}
+                            </span>
+                            <h3 className={`font-bold text-lg leading-tight mb-2 group-hover:text-[#D4AF37] transition-colors ${
+                              place.highlight ? 'text-[#D4AF37]' : 'text-gray-100'
+                            }`}>
+                              {place.name}
+                            </h3>
+                            <div className="flex items-start gap-2 text-gray-400 text-sm mb-2">
+                              <MapPin className="w-3.5 h-3.5 text-[#D4AF37]/60 mt-0.5 shrink-0" />
+                              <span className="leading-snug">{place.address}</span>
+                            </div>
+                            {place.phone && (
+                              <div className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                                <Phone className="w-3.5 h-3.5 text-[#D4AF37]/60 shrink-0" />
+                                <span>{place.phone}</span>
+                              </div>
+                            )}
+                            {place.hours && (
+                              <div className="flex items-center gap-2 text-gray-400 text-sm">
+                                <Clock className="w-3.5 h-3.5 text-[#D4AF37]/60 shrink-0" />
+                                <span>{place.hours}</span>
+                              </div>
+                            )}
+                          </div>
+                          <a
+                            href={place.mapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="shrink-0 flex items-center gap-1 text-xs font-bold text-[#0F0F0F] bg-gradient-to-r from-[#D4AF37] to-[#E8C547] px-3 py-2 rounded-lg hover:shadow-lg hover:shadow-[#D4AF37]/40 transition-all hover:scale-105"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            Maps
+                          </a>
                         </div>
                       </CardContent>
                     </Card>
