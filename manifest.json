@@ -1,0 +1,18 @@
+{
+  "name": "Supercopa de Basquete — Afonso Cláudio",
+  "short_name": "Supercopa",
+  "description": "App oficial da Supercopa de Basquete de Afonso Cláudio",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D0D0D",
+  "theme_color": "#7C0A02",
+  "icons": [
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
