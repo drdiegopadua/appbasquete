@@ -223,9 +223,11 @@
 
   <!-- CLASSIFICAÇÃO -->
   <section id="classificacao" class="section">
-    <div class="sec-hd">
-      <h2>Classificação</h2>
-      <span class="sec-badge">Geral</span>
+    <div class="sec-hd"><h2>Classificação</h2></div>
+    <div style="display:flex;gap:.5rem;margin-bottom:1.2rem;">
+      <button class="filter-btn active" id="tab-ga" onclick="showClassTab('A')">Grupo A</button>
+      <button class="filter-btn" id="tab-gb" onclick="showClassTab('B')">Grupo B</button>
+      <button class="filter-btn" id="tab-mm" onclick="showClassTab('MM')">Mata-Mata</button>
     </div>
     <div id="class-container">
       <div class="loading"><div class="spinner"></div><p>Carregando tabela...</p></div>
@@ -374,7 +376,7 @@ function startCountdown() {
 async function loadData() {
   if (!CFG.sheetsUrl || CFG.sheetsUrl.includes('SUA_URL')) { useFallback(); return; }
   try {
-    const r = await fetch(CFG.sheetsUrl);
+    const r = await fetch(CFG.sheetsUrl + (CFG.sheetsUrl.includes('?') ? '&' : '?') + 't=' + Date.now());
     if (!r.ok) throw new Error('HTTP '+r.status);
     const json = await r.json();
     DATA = json;
@@ -408,7 +410,17 @@ function useFallback() {
 /* ═══════════════════════════════════════════
    RENDER
 ═══════════════════════════════════════════ */
-function renderAll() { buildFilters(); renderGames(); renderClass(); }
+let classTabAtivo = 'A';
+
+function renderAll() { buildFilters(); renderGames(); renderClass('A'); }
+
+function showClassTab(grupo) {
+  classTabAtivo = grupo;
+  ['ga','gb','mm'].forEach(id => document.getElementById('tab-'+id).classList.remove('active'));
+  const map = {A:'ga', B:'gb', MM:'mm'};
+  document.getElementById('tab-'+map[grupo]).classList.add('active');
+  renderClass(grupo);
+}
 
 function buildFilters() {
   const fases = [...new Set(DATA.jogos.map(j => j.fase))];
@@ -453,26 +465,81 @@ function renderGames() {
     </div>`).join('');
 }
 
-function renderClass() {
+function renderClass(grupo) {
   const c = document.getElementById('class-container');
-  if (!DATA.classificacao.length) {
+  if (grupo === 'MM') { renderMataMata(c); return; }
+
+  const lista = (DATA.classificacao || []).filter(t => t.grupo === grupo)
+    .sort((a,b) => a.pos - b.pos || b.pts - a.pts);
+
+  if (!lista.length) {
     c.innerHTML = '<div class="empty"><span>🏆</span>Classificação disponível após os primeiros jogos</div>'; return;
   }
+
   const rankCls = ['g','s','b'];
+  const statusStyle = {
+    'Classificado': 'background:rgba(6,214,160,.15);color:#06D6A0;',
+    'Eliminado':    'background:rgba(255,107,53,.15);color:#FF6B35;'
+  };
+
   c.innerHTML = `
     <div class="table-wrap">
-      <div class="table-head"><div>#</div><div>Time</div><div>J</div><div>V</div><div>D</div><div>PP</div><div>PTS</div></div>
-      ${DATA.classificacao.map((t,i) => `
-        <div class="table-row ${i<3?'r'+(i+1):''}">
-          <div class="rnk ${rankCls[i]||''}">${i+1}</div>
+      <div class="table-head" style="grid-template-columns:1.8rem 1fr 2rem 2rem 2rem 2rem 2.6rem 5rem">
+        <div>#</div><div>Time</div><div>J</div><div>V</div><div>D</div><div>SD</div><div>PTS</div><div>Status</div>
+      </div>
+      ${lista.map((t,i) => `
+        <div class="table-row ${i<2?'r'+(i+1):''}" style="grid-template-columns:1.8rem 1fr 2rem 2rem 2rem 2rem 2.6rem 5rem">
+          <div class="rnk ${rankCls[i]||''}">${t.pos||i+1}</div>
           <div class="tcell">${t.time}</div>
           <div class="scell">${t.j}</div>
           <div class="scell">${t.v}</div>
           <div class="scell">${t.d}</div>
-          <div class="scell">${t.pp}</div>
+          <div class="scell">${t.sd>=0?'+'+t.sd:t.sd}</div>
           <div class="scell pts">${t.pts}</div>
+          <div class="scell" style="font-size:.62rem;font-weight:800;letter-spacing:.05em;border-radius:6px;padding:.15rem .3rem;text-align:center;${statusStyle[t.status]||'color:var(--muted)'}">
+            ${t.status||'—'}
+          </div>
         </div>`).join('')}
     </div>`;
+}
+
+function renderMataMata(c) {
+  const mm = DATA.mataMata;
+  if (!mm) { c.innerHTML = '<div class="empty"><span>🏆</span>Mata-mata ainda não disponível</div>'; return; }
+
+  function jogo(titulo, dados, icone) {
+    if (!dados || !dados.timeA) return '';
+    const ag = dados.status === 'agendado';
+    const campeaoJogo = dados.classificado ? dados.classificado.replace(/CLASSIF[:\s]*/i,'').trim() : '';
+    return `
+      <div style="margin-bottom:1rem">
+        <div style="font-family:'Barlow Condensed';font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">${icone} ${titulo}</div>
+        <div class="game-card ${ag?'':'finalizado'}" style="margin-bottom:0">
+          <div class="game-teams">
+            <div class="team-name" style="${!ag&&dados.placarA>dados.placarB?'color:var(--gold2)':''}">${dados.timeA}</div>
+            <div class="score-box">
+              <span class="score">${dados.placarA}</span>
+              <span class="score-sep">×</span>
+              <span class="score">${dados.placarB}</span>
+            </div>
+            <div class="team-name r" style="${!ag&&dados.placarB>dados.placarA?'color:var(--gold2)':''}">${dados.timeB}</div>
+          </div>
+          ${campeaoJogo && !ag ? `<div style="margin-top:.5rem;font-family:'Barlow Condensed';font-size:.7rem;font-weight:800;color:var(--green)">✅ Classificado: ${campeaoJogo}</div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  const campeao = mm.campeao;
+  c.innerHTML = `
+    ${jogo('Semifinal 1', mm.semi1, '⚔️')}
+    ${jogo('Semifinal 2', mm.semi2, '⚔️')}
+    ${jogo('Grande Final', mm.final, '🏆')}
+    ${campeao ? `
+      <div style="margin-top:1.5rem;background:linear-gradient(135deg,rgba(245,166,35,.2),rgba(255,107,53,.1));border:2px solid rgba(245,166,35,.5);border-radius:20px;padding:1.5rem;text-align:center">
+        <div style="font-size:2.5rem;margin-bottom:.5rem">🏆</div>
+        <div style="font-family:'Barlow Condensed';font-size:.7rem;font-weight:800;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:.3rem">Campeão da Supercopa</div>
+        <div style="font-family:'Bebas Neue';font-size:2.2rem;background:linear-gradient(135deg,var(--gold2),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent">${campeao}</div>
+      </div>` : ''}`;
 }
 
 /* ═══════════════════════════════════════════
