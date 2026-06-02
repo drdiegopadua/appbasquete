@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta name="theme-color" content="#7C0A02">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Supercopa de Basquete | Afonso Cláudio</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --maroon:  #7C0A02;
+      --maroon2: #A01010;
+      --gold:    #F5A623;
+      --gold2:   #FFD166;
+      --orange:  #FF6B35;
+      --green:   #06D6A0;
+      --dark:    #0D0D0D;
+      --dark2:   #161616;
+      --surface: #1E1E1E;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #F2F2F2;
+      --muted:   rgba(242,242,242,0.42);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;padding-bottom:96px;overflow-x:hidden;}
+
+    /* HERO */
+    .hero{position:relative;min-height:40vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:2.5rem;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 50% 0%,rgba(124,10,2,0.95) 0%,transparent 70%),radial-gradient(ellipse 55% 45% at 85% 85%,rgba(245,166,35,0.22) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 10% 80%,rgba(255,107,53,0.18) 0%,transparent 60%),linear-gradient(180deg,#190404 0%,#0D0D0D 100%);}
+    .hero-ball{position:absolute;top:-70px;right:-70px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle at 32% 32%,#FF8C42,#C44D1A,#7C2D12);opacity:.10;animation:float 7s ease-in-out infinite;}
+    @keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(6deg)}}
+    .hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.018) 39px,rgba(255,255,255,.018) 40px);}
+    .hero-logo{position:relative;z-index:2;width:110px;height:110px;border-radius:50%;overflow:hidden;border:3px solid rgba(245,166,35,.45);box-shadow:0 0 40px rgba(245,166,35,.28),0 0 80px rgba(124,10,2,.5);margin-bottom:.9rem;animation:pglow 3.5s ease-in-out infinite;}
+    @keyframes pglow{0%,100%{box-shadow:0 0 40px rgba(245,166,35,.28),0 0 80px rgba(124,10,2,.5)}50%{box-shadow:0 0 64px rgba(245,166,35,.5),0 0 110px rgba(124,10,2,.7)}}
+    .hero-logo img{width:100%;height:100%;object-fit:cover;}
+    .hero-title{position:relative;z-index:2;font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:.18em;line-height:1;text-align:center;background:linear-gradient(135deg,#FFD166,#F5A623,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 20px rgba(245,166,35,.4));}
+    .hero-sub{position:relative;z-index:2;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;margin-top:.25rem;}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:100;margin:-1.5rem 1rem 0;background:rgba(20,20,20,.88);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:18px;padding:.3rem;display:flex;box-shadow:0 8px 32px rgba(0,0,0,.55);}
+    .tab-btn{flex:1;padding:.6rem .3rem;border:none;background:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-radius:12px;cursor:pointer;transition:all .22s;}
+    .tab-btn span{display:block;font-size:1.05rem;margin-bottom:2px;}
+    .tab-btn.active{background:linear-gradient(135deg,var(--maroon),var(--maroon2));color:var(--gold2);box-shadow:0 4px 16px rgba(124,10,2,.5);}
+
+    /* MAIN */
+    main{max-width:480px;margin:0 auto;padding:1.5rem 1rem;}
+    .section{display:none;animation:fadeUp .3s ease;}
+    .section.active{display:block;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+    /* COUNTDOWN */
+    .cd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.4rem;}
+    .cd-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1rem .5rem;text-align:center;position:relative;overflow:hidden;}
+    .cd-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--orange));}
+    .cd-num{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;line-height:1;background:linear-gradient(135deg,var(--gold2),var(--gold),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .cd-label{font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+
+    /* INFO CARD */
+    .info-card{background:linear-gradient(135deg,rgba(124,10,2,.38),rgba(160,16,16,.18));border:1px solid rgba(245,166,35,.22);border-radius:20px;padding:1.4rem;margin-bottom:1rem;position:relative;overflow:hidden;}
+    .info-card::after{content:'🏀';position:absolute;right:-12px;bottom:-18px;font-size:5.5rem;opacity:.07;}
+    .info-card h2{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;}
+    .info-date{color:var(--gold);font-weight:700;font-size:.85rem;margin:.3rem 0 .75rem;}
+    .info-card p{font-size:.88rem;color:var(--muted);line-height:1.55;}
+    .info-meta{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.9rem;}
+    .info-meta span{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;color:var(--muted);}
+    .info-meta b{color:var(--text);}
+    .info-meta .prize{color:var(--gold);}
+
+    .social-row{display:flex;gap:.75rem;margin-top:1rem;}
+    .social-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem;border-radius:14px;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;letter-spacing:.05em;text-decoration:none;transition:transform .2s,box-shadow .2s;}
+    .social-btn:hover{transform:translateY(-2px);}
+    .social-btn.wa{background:rgba(37,211,102,.13);border:1px solid rgba(37,211,102,.28);color:#25D366;}
+    .social-btn.ig{background:rgba(225,48,108,.13);border:1px solid rgba(225,48,108,.28);color:#E1306C;}
+
+    /* SECTION HEADER */
+    .sec-hd{display:flex;align-items:center;gap:.7rem;margin-bottom:1.2rem;}
+    .sec-hd h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.1em;background:linear-gradient(90deg,var(--gold2),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .sec-badge{font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;background:var(--maroon);color:var(--gold);padding:.22rem .55rem;border-radius:6px;margin-left:auto;}
+
+    /* FILTERS */
+    .filter-row{display:flex;gap:.5rem;margin-bottom:.9rem;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+    .filter-row::-webkit-scrollbar{display:none;}
+    .filter-btn{flex-shrink:0;padding:.38rem .85rem;border-radius:100px;border:1px solid var(--border);background:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .filter-btn.active,.filter-btn:hover{background:linear-gradient(135deg,var(--gold),var(--orange));color:#000;border-color:transparent;}
+
+    /* GAME CARDS */
+    .game-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:1.05rem 1.2rem;margin-bottom:.7rem;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+    .game-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
+    .game-card.live::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--gold),var(--orange));background-size:200%;animation:shimmer 2s linear infinite;}
+    .game-card.finalizado::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),#059669);}
+    @keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}
+    .game-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;}
+    .game-fase{font-family:'Barlow Condensed',sans-serif;font-size:.63rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+    .game-status-badge{font-family:'Barlow Condensed',sans-serif;font-size:.63rem;font-weight:800;letter-spacing:.1em;padding:.2rem .55rem;border-radius:6px;}
+    .s-agendado{background:rgba(245,166,35,.14);color:var(--gold);}
+    .s-live{background:rgba(255,107,53,.18);color:var(--orange);animation:blink 1.6s ease-in-out infinite;}
+    .s-finalizado{background:rgba(6,214,160,.14);color:var(--green);}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.45}}
+    .game-teams{display:flex;align-items:center;gap:.7rem;}
+    .team-name{flex:1;font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase;line-height:1.2;}
+    .team-name.r{text-align:right;}
+    .score-box{display:flex;align-items:center;gap:.35rem;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:12px;padding:.38rem .75rem;flex-shrink:0;}
+    .score{font-family:'Bebas Neue',sans-serif;font-size:1.75rem;line-height:1;color:var(--gold2);}
+    .score-sep{font-family:'Bebas Neue';font-size:1.1rem;color:var(--muted);}
+
+    /* CLASSIFICAÇÃO */
+    .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+    .table-head{display:grid;grid-template-columns:2rem 1fr 2.2rem 2.2rem 2.2rem 2.2rem 2.8rem;padding:.65rem 1rem;background:linear-gradient(135deg,var(--maroon),var(--maroon2));font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);}
+    .table-row{display:grid;grid-template-columns:2rem 1fr 2.2rem 2.2rem 2.2rem 2.2rem 2.8rem;padding:.7rem 1rem;border-top:1px solid var(--border);align-items:center;transition:background .2s;}
+    .table-row:hover{background:rgba(255,255,255,.025);}
+    .table-row.r1{background:linear-gradient(90deg,rgba(245,166,35,.1),transparent);}
+    .table-row.r2{background:linear-gradient(90deg,rgba(192,192,192,.06),transparent);}
+    .table-row.r3{background:linear-gradient(90deg,rgba(205,127,50,.06),transparent);}
+    .rnk{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--muted);}
+    .rnk.g{color:var(--gold);} .rnk.s{color:#C0C0C0;} .rnk.b{color:#CD7F32;}
+    .tcell{font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:700;}
+    .scell{text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:600;color:var(--muted);}
+    .scell.pts{font-weight:900;font-size:.98rem;color:var(--gold2);}
+
+    /* LOCAL */
+    .map-wrap{border-radius:20px;overflow:hidden;border:1px solid var(--border);aspect-ratio:16/9;margin-bottom:1rem;box-shadow:0 8px 32px rgba(0,0,0,.4);}
+    .map-wrap iframe{width:100%;height:100%;border:0;filter:saturate(.85) contrast(1.05);}
+    .gps-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:1rem;background:linear-gradient(135deg,var(--gold),var(--orange));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;border-radius:16px;text-decoration:none;margin-bottom:1.4rem;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(245,166,35,.32);}
+    .gps-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(245,166,35,.5);}
+    .poi-group{font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:1.2rem 0 .55rem .2rem;}
+    .poi-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:.85rem 1rem;margin-bottom:.55rem;display:flex;align-items:flex-start;gap:.8rem;transition:transform .2s,border-color .2s;}
+    .poi-card:hover{transform:translateX(4px);border-color:rgba(245,166,35,.28);}
+    .poi-card.hl{border-color:rgba(245,166,35,.38);background:linear-gradient(135deg,rgba(124,10,2,.28),var(--surface));}
+    .poi-emoji{font-size:1.55rem;flex-shrink:0;margin-top:2px;}
+    .poi-info{flex:1;min-width:0;}
+    .poi-type{font-family:'Barlow Condensed',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1px;}
+    .poi-name{font-family:'Barlow Condensed',sans-serif;font-size:.98rem;font-weight:800;line-height:1.2;margin-bottom:2px;}
+    .poi-name.gd{color:var(--gold);}
+    .poi-addr{font-size:.73rem;color:var(--muted);line-height:1.4;}
+    .poi-detail{font-size:.7rem;color:var(--muted);margin-top:2px;}
+    .poi-detail em{color:var(--gold2);font-style:normal;}
+    .poi-maps{flex-shrink:0;display:flex;align-items:center;gap:3px;background:linear-gradient(135deg,var(--gold),var(--orange));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:.08em;padding:.38rem .6rem;border-radius:8px;text-decoration:none;transition:transform .15s;margin-top:2px;}
+    .poi-maps:hover{transform:scale(1.06);}
+
+    /* UTILS */
+    .loading{display:flex;flex-direction:column;align-items:center;padding:3rem 1rem;gap:1rem;color:var(--muted);}
+    .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading p{font-family:'Barlow Condensed';font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;}
+    .empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-family:'Barlow Condensed';font-size:.88rem;letter-spacing:.1em;}
+    .empty span{display:block;font-size:2.5rem;margin-bottom:.7rem;}
+    .info-box{background:linear-gradient(135deg,rgba(17,138,178,.18),rgba(6,214,160,.08));border:1px solid rgba(17,138,178,.28);border-radius:14px;padding:.9rem 1rem;margin-bottom:1.2rem;font-size:.8rem;color:rgba(6,214,160,.88);line-height:1.55;}
+    .info-box strong{color:var(--green);}
+    .info-box a{color:var(--gold);}
+  </style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ball"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-logo">
+    <img src="logo.png" alt="Supercopa"
+      onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#7C0A02,#F5A623)';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;\'>🏀</div>'">
+  </div>
+  <h1 class="hero-title">Supercopa</h1>
+  <p class="hero-sub">Basquete · Afonso Cláudio · ES</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('inicio',this)"><span>🏠</span>Início</button>
+  <button class="tab-btn" onclick="showTab('jogos',this)"><span>🏀</span>Jogos</button>
+  <button class="tab-btn" onclick="showTab('classificacao',this)"><span>🏆</span>Tabela</button>
+  <button class="tab-btn" onclick="showTab('local',this)"><span>📍</span>Local</button>
+</nav>
+
+<main>
+
+  <!-- INÍCIO -->
+  <section id="inicio" class="section active">
+    <div class="cd-grid" style="margin-top:1.5rem">
+      <div class="cd-card"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Dias</div></div>
+      <div class="cd-card"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Horas</div></div>
+      <div class="cd-card"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Mins</div></div>
+    </div>
+    <div class="info-card">
+      <h2>Afonso Cláudio, ES</h2>
+      <p class="info-date">📅 25 e 26 de Julho, 2026</p>
+      <p id="info-desc">Prepare-se para o maior espetáculo de basquete da região das montanhas. Talento, garra e muita emoção em cada lance!</p>
+      <div class="info-meta">
+        <span>🏟️ <b id="info-local">Quadra Eurico Vieira de Resende</b></span>
+        <span>🏆 <b class="prize" id="info-premio">R$ 5.000,00</b></span>
+      </div>
+    </div>
+    <div class="social-row">
+      <a href="https://wa.link/900kb2" target="_blank" class="social-btn wa">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 0 5.414 0 12.05c0 2.123.553 4.197 1.602 6.02L0 24l6.132-1.61c1.766.963 3.755 1.47 5.783 1.472h.005c6.634 0 12.048-5.414 12.048-12.05a11.79 11.79 0 00-3.526-8.51z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://www.instagram.com/supercopaafc/" target="_blank" class="social-btn ig">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.668-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        Instagram
+      </a>
+    </div>
+  </section>
+
+  <!-- JOGOS -->
+  <section id="jogos" class="section">
+    <div class="sec-hd">
+      <h2>Jogos</h2>
+      <span class="sec-badge" id="jogos-count">—</span>
+    </div>
+    <div class="filter-row" id="filter-row">
+      <button class="filter-btn active" onclick="filterGames('todos',this)">Todos</button>
+    </div>
+    <div id="games-container">
+      <div class="loading"><div class="spinner"></div><p>Carregando jogos...</p></div>
+    </div>
+  </section>
+
+  <!-- CLASSIFICAÇÃO -->
+  <section id="classificacao" class="section">
+    <div class="sec-hd">
+      <h2>Classificação</h2>
+      <span class="sec-badge">Geral</span>
+    </div>
+    <div id="class-container">
+      <div class="loading"><div class="spinner"></div><p>Carregando tabela...</p></div>
+    </div>
+  </section>
+
+  <!-- LOCAL -->
+  <section id="local" class="section">
+    <div class="sec-hd" style="margin-top:.5rem"><h2>Local</h2></div>
+    <div class="map-wrap">
+      <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFmBWY&q=-20.0752374,-41.1267671&zoom=16" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <a class="gps-btn" href="https://www.google.com/maps/dir/?api=1&destination=-20.0752374,-41.1267671" target="_blank">
+      📍 Abrir GPS — Quadra Eurico Vieira
+    </a>
+
+    <p class="poi-group">🏀 Local do Evento</p>
+    <div class="poi-card hl">
+      <div class="poi-emoji">🏀</div>
+      <div class="poi-info">
+        <div class="poi-type">Quadra</div>
+        <div class="poi-name gd">Quadra Eurico Vieira de Resende</div>
+        <div class="poi-addr">Av. Idolindo Fonseca Lamas, 221 — Afonso Cláudio, ES</div>
+      </div>
+      <a class="poi-maps" href="https://maps.google.com/?cid=14397320840438908995" target="_blank">📍 Maps</a>
+    </div>
+
+    <p class="poi-group">🏥 Saúde</p>
+    <div class="poi-card">
+      <div class="poi-emoji">🏥</div>
+      <div class="poi-info">
+        <div class="poi-type">Hospital</div>
+        <div class="poi-name">Conferência São Vicente de Paulo</div>
+        <div class="poi-addr">R. José Giestas, 63 — Centro</div>
+        <div class="poi-detail">📞 <em>(27) 3735-1699</em> · 🕐 <em>24 horas</em></div>
+      </div>
+      <a class="poi-maps" href="https://maps.google.com/?cid=6542271719951999176" target="_blank">📍 Maps</a>
+    </div>
+
+    <p class="poi-group">🏨 Hospedagem</p>
+    <div class="poi-card">
+      <div class="poi-emoji">🏨</div>
+      <div class="poi-info">
+        <div class="poi-type">Pousada</div>
+        <div class="poi-name">Pousada Afonso Cláudio</div>
+        <div class="poi-addr">R. Quintino Bocaiúva, 128 — Centro</div>
+        <div class="poi-detail">📞 <em>(27) 3735-7801</em></div>
+      </div>
+      <a class="poi-maps" href="https://maps.google.com/?cid=1729478197940830975" target="_blank">📍 Maps</a>
+    </div>
+
+    <p class="poi-group">🍽️ Alimentação</p>
+    <div class="poi-card">
+      <div class="poi-emoji">🍕</div>
+      <div class="poi-info">
+        <div class="poi-type">Pizza & Lanches</div>
+        <div class="poi-name">Express Pizzas e Lanches</div>
+        <div class="poi-addr">Centro — Afonso Cláudio</div>
+        <div class="poi-detail">📞 <em>(27) 99999-5220</em> · 🕐 <em>Ter–Dom 18h–00h</em></div>
+      </div>
+      <a class="poi-maps" href="https://maps.google.com/?cid=818182377540330188" target="_blank">📍 Maps</a>
+    </div>
+    <div class="poi-card">
+      <div class="poi-emoji">🍽️</div>
+      <div class="poi-info">
+        <div class="poi-type">Restaurante</div>
+        <div class="poi-name">Restaurante Prato Fino</div>
+        <div class="poi-addr">R. José Jorge Haddad, 34 — Centro</div>
+        <div class="poi-detail">📞 <em>(27) 99900-4700</em> · 🕐 <em>Seg–Dom 9h–14h</em></div>
+      </div>
+      <a class="poi-maps" href="https://maps.google.com/?cid=5906541593162519242" target="_blank">📍 Maps</a>
+    </div>
+
+    <p class="poi-group">💊 Farmácias</p>
+    <div class="poi-card">
+      <div class="poi-emoji">💊</div>
+      <div class="poi-info">
+        <div class="poi-type">Farmácia</div>
+        <div class="poi-name">Farmácia São Tomé</div>
+        <div class="poi-addr">Av. Pres. Vargas, 236</div>
+        <div class="poi-detail">📞 <em>(27) 3735-1165</em> · 🕐 <em>Seg–Sáb 8h–18h</em></div>
+      </div>
+      <a class="poi-maps" href="https://maps.google.com/?cid=4168622811040752207" target="_blank">📍 Maps</a>
+    </div>
+    <div class="poi-card">
+      <div class="poi-emoji">💊</div>
+      <div class="poi-info">
+        <div class="poi-type">Farmácia</div>
+        <div class="poi-name">Farmácia São Tomé</div>
+        <div class="poi-addr">Av. Mal. Deodoro, 212 — Centro</div>
+        <div class="poi-detail">📞 <em>(27) 99890-6726</em> · 🕐 <em>Seg–Sex 7h–18h | Sáb 7h–12h</em></div>
+      </div>
+      <a class="poi-maps" href="https://maps.google.com/?cid=15484967853277222919" target="_blank">📍 Maps</a>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════
+   CONFIGURAÇÃO — edite só este bloco
+═══════════════════════════════════════════ */
+const CFG = {
+  // URL do Google Apps Script (veja o README para criar)
+  sheetsUrl: 'SUA_URL_AQUI',
+  dataInicio: '2026-07-25T08:00:00',
+  local:  'Quadra Eurico Vieira de Resende',
+  premio: 'R$ 5.000,00',
+  descricao: 'Prepare-se para o maior espetáculo de basquete da região das montanhas. Talento, garra e muita emoção em cada lance!',
+};
+
+/* ═══════════════════════════════════════════
+   ESTADO
+═══════════════════════════════════════════ */
+let DATA = { jogos: [], classificacao: [] };
+let filterAtivo = 'todos';
+
+/* ═══════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════ */
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════
+   COUNTDOWN
+═══════════════════════════════════════════ */
+function startCountdown() {
+  const target = new Date(CFG.dataInicio).getTime();
+  function tick() {
+    const d = target - Date.now();
+    if (d <= 0) { ['days','hours','mins'].forEach(k => document.getElementById('cd-'+k).textContent = '00'); return; }
+    document.getElementById('cd-days').textContent  = String(Math.floor(d/864e5)).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(Math.floor((d%864e5)/36e5)).padStart(2,'0');
+    document.getElementById('cd-mins').textContent  = String(Math.floor((d%36e5)/6e4)).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 30000);
+}
+
+/* ═══════════════════════════════════════════
+   GOOGLE SHEETS LOADER
+═══════════════════════════════════════════ */
+async function loadData() {
+  if (!CFG.sheetsUrl || CFG.sheetsUrl.includes('SUA_URL')) { useFallback(); return; }
+  try {
+    const r = await fetch(CFG.sheetsUrl);
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    const json = await r.json();
+    DATA = json;
+    renderAll();
+  } catch(e) {
+    console.warn('Sheets indisponível, usando dados de exemplo.', e);
+    useFallback();
+  }
+}
+
+function useFallback() {
+  DATA = {
+    jogos: [
+      {id:1,data:'25/07',hora:'09:00',fase:'Grupo A',timeA:'CT Montanhas',   timeB:'Time Convidado 1',placarA:0, placarB:0, status:'agendado'},
+      {id:2,data:'25/07',hora:'10:30',fase:'Grupo B',timeA:'Time Convidado 2',timeB:'Time Convidado 3',placarA:68,placarB:55,status:'finalizado'},
+      {id:3,data:'25/07',hora:'14:00',fase:'Grupo A',timeA:'Time Convidado 1',timeB:'Time Convidado 3',placarA:0, placarB:0, status:'agendado'},
+      {id:4,data:'26/07',hora:'09:00',fase:'Semifinal',timeA:'A definir',    timeB:'A definir',        placarA:0, placarB:0, status:'agendado'},
+      {id:5,data:'26/07',hora:'11:00',fase:'Semifinal',timeA:'A definir',    timeB:'A definir',        placarA:0, placarB:0, status:'agendado'},
+      {id:6,data:'26/07',hora:'15:00',fase:'Final',   timeA:'A definir',     timeB:'A definir',        placarA:0, placarB:0, status:'agendado'},
+    ],
+    classificacao: [
+      {time:'Time Convidado 2',j:1,v:1,d:0,pp:68,pc:55,pts:2},
+      {time:'Time Convidado 3',j:1,v:0,d:1,pp:55,pc:68,pts:1},
+      {time:'CT Montanhas',    j:0,v:0,d:0,pp:0, pc:0, pts:0},
+      {time:'Time Convidado 1',j:0,v:0,d:0,pp:0, pc:0, pts:0},
+    ]
+  };
+  renderAll();
+}
+
+/* ═══════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════ */
+function renderAll() { buildFilters(); renderGames(); renderClass(); }
+
+function buildFilters() {
+  const fases = [...new Set(DATA.jogos.map(j => j.fase))];
+  const row = document.getElementById('filter-row');
+  row.innerHTML = '<button class="filter-btn active" onclick="filterGames(\'todos\',this)">Todos</button>';
+  fases.forEach(f => {
+    row.innerHTML += `<button class="filter-btn" onclick="filterGames('${f.replace(/'/g,"\\'") }',this)">${f}</button>`;
+  });
+  document.getElementById('jogos-count').textContent = DATA.jogos.length + ' jogo' + (DATA.jogos.length!==1?'s':'');
+}
+
+function filterGames(fase, btn) {
+  filterAtivo = fase;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGames();
+}
+
+function renderGames() {
+  const c = document.getElementById('games-container');
+  const list = filterAtivo === 'todos' ? DATA.jogos : DATA.jogos.filter(j => j.fase === filterAtivo);
+  if (!list.length) { c.innerHTML = '<div class="empty"><span>📋</span>Nenhum jogo encontrado</div>'; return; }
+
+  const lbl = {agendado:'Agendado', live:'AO VIVO', finalizado:'Encerrado'};
+  const cls = {agendado:'s-agendado', live:'s-live', finalizado:'s-finalizado'};
+
+  c.innerHTML = list.map(j => `
+    <div class="game-card ${j.status}">
+      <div class="game-meta">
+        <span class="game-fase">${j.data} · ${j.hora} · ${j.fase}</span>
+        <span class="game-status-badge ${cls[j.status]||'s-agendado'}">${lbl[j.status]||j.status}</span>
+      </div>
+      <div class="game-teams">
+        <div class="team-name">${j.timeA}</div>
+        <div class="score-box">
+          <span class="score">${j.placarA}</span>
+          <span class="score-sep">×</span>
+          <span class="score">${j.placarB}</span>
+        </div>
+        <div class="team-name r">${j.timeB}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderClass() {
+  const c = document.getElementById('class-container');
+  if (!DATA.classificacao.length) {
+    c.innerHTML = '<div class="empty"><span>🏆</span>Classificação disponível após os primeiros jogos</div>'; return;
+  }
+  const rankCls = ['g','s','b'];
+  c.innerHTML = `
+    <div class="table-wrap">
+      <div class="table-head"><div>#</div><div>Time</div><div>J</div><div>V</div><div>D</div><div>PP</div><div>PTS</div></div>
+      ${DATA.classificacao.map((t,i) => `
+        <div class="table-row ${i<3?'r'+(i+1):''}">
+          <div class="rnk ${rankCls[i]||''}">${i+1}</div>
+          <div class="tcell">${t.time}</div>
+          <div class="scell">${t.j}</div>
+          <div class="scell">${t.v}</div>
+          <div class="scell">${t.d}</div>
+          <div class="scell">${t.pp}</div>
+          <div class="scell pts">${t.pts}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════
+   INFO ESTÁTICA
+═══════════════════════════════════════════ */
+function fillInfo() {
+  document.getElementById('info-local').textContent  = CFG.local;
+  document.getElementById('info-premio').textContent = CFG.premio;
+  document.getElementById('info-desc').textContent   = CFG.descricao;
+}
+
+/* ═══════════════════════════════════════════
+   SERVICE WORKER
+═══════════════════════════════════════════ */
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+/* INIT */
+fillInfo();
+startCountdown();
+loadData();
+</script>
+</body>
+</html>
