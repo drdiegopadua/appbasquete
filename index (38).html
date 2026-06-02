@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#450a0a">
+    <title>Supercopa Basquete | Afonso Cláudio</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon-512x512.png">
+    <link rel="apple-touch-icon" href="icons/icon-512x512.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'sc-maroon': '#450a0a',
+                        'sc-gold': '#fbbd3c',
+                        'sc-accent': '#991b1b',
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to bottom, rgba(69, 10, 10, 0.9), rgba(0, 0, 0, 0.9)), url('https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200')",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-title { font-family: 'Syncopate', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .tab-active { color: #fbbd3c; position: relative; }
+        .tab-active::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 20px; height: 3px; background: #fbbd3c; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 pb-24 selection:bg-sc-gold selection:text-sc-maroon overflow-x-hidden">
+
+    <!-- Hero Section -->
+    <header class="relative h-[35vh] flex flex-col items-center justify-center text-center bg-hero-pattern bg-cover bg-center border-b border-white/10">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent"></div>
+        <div class="relative z-10 animate__animated animate__fadeInDown">
+            <img src="logo.png" alt="Supercopa Logo" class="h-32 mx-auto drop-shadow-[0_0_20px_rgba(251,189,60,0.3)] mb-2">
+            <h1 class="font-title text-lg font-bold tracking-[0.2em] text-sc-gold uppercase">Supercopa</h1>
+        </div>
+        <button onclick="toggleDarkMode()" class="absolute top-6 right-6 p-2 glass rounded-full z-20">
+            <span id="dark-icon">🌙</span>
+        </button>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 glass mx-4 -mt-6 rounded-2xl shadow-2xl flex justify-around p-4 z-50 border border-white/10 overflow-x-auto no-scrollbar">
+        <button onclick="showSection('inicio')" class="tab-btn font-bold text-[10px] uppercase tracking-widest tab-active flex-shrink-0 px-2">Início</button>
+        <button onclick="showSection('jogos')" class="tab-btn font-bold text-[10px] uppercase tracking-widest text-slate-500 flex-shrink-0 px-2">Jogos</button>
+        <button onclick="showSection('local')" class="tab-btn font-bold text-[10px] uppercase tracking-widest text-slate-500 flex-shrink-0 px-2">Local</button>
+        <button onclick="showSection('midia')" class="tab-btn font-bold text-[10px] uppercase tracking-widest text-slate-500 flex-shrink-0 px-2">Mídia</button>
+    </nav>
+
+    <main class="max-w-md mx-auto p-6 space-y-8">
+        
+        <!-- Section: Início -->
+        <section id="inicio" class="content-section space-y-8 animate__animated animate__fadeIn">
+            <div class="grid grid-cols-3 gap-3">
+                <div class="glass p-4 rounded-2xl text-center"><p id="days" class="text-2xl font-black text-sc-gold">00</p><p class="text-[9px] uppercase opacity-50">Dias</p></div>
+                <div class="glass p-4 rounded-2xl text-center"><p id="hours" class="text-2xl font-black text-sc-gold">00</p><p class="text-[9px] uppercase opacity-50">Horas</p></div>
+                <div class="glass p-4 rounded-2xl text-center"><p id="mins" class="text-2xl font-black text-sc-gold">00</p><p class="text-[9px] uppercase opacity-50">Mins</p></div>
+            </div>
+            <div class="relative glass p-6 rounded-3xl border-l-4 border-sc-gold">
+                <h2 class="text-xl font-extrabold mb-1">Afonso Cláudio</h2>
+                <p class="text-sc-gold font-semibold text-xs mb-4">25 e 26 de Julho, 2026</p>
+                <p class="text-sm text-slate-400 leading-relaxed">Prepare-se para o maior espetáculo de basquete da região das montanhas.</p>
+            </div>
+        </section>
+
+        <!-- Section: Jogos -->
+        <section id="jogos" class="content-section hidden animate__animated animate__fadeIn">
+            <h2 class="text-xl font-bold font-title text-sc-gold mb-6">Confrontos</h2>
+            <div id="games-container" class="space-y-4"></div>
+        </section>
+
+        <!-- Section: Local -->
+        <section id="local" class="content-section hidden animate__animated animate__fadeIn space-y-6">
+            <h2 class="text-xl font-bold font-title text-sc-gold">Como Chegar</h2>
+            
+            <!-- Map Embed - Quadra Eurico Vieira de Resende -->
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-slate-900 aspect-video border border-white/10">
+                <iframe class="w-full h-full grayscale opacity-80" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFmBWY&q=-20.0752374,-41.1267671&zoom=16" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <a href="https://www.google.com/maps/dir/?api=1&destination=-20.0752374,-41.1267671" target="_blank" class="flex items-center justify-center w-full p-4 bg-sc-gold text-sc-maroon font-black uppercase tracking-widest rounded-2xl shadow-lg hover:scale-[1.02] transition-transform">
+                <span class="mr-2">📍</span> Abrir no GPS — Quadra Eurico Vieira
+            </a>
+
+            <div class="space-y-3">
+                <h3 class="text-xs font-black uppercase tracking-widest opacity-40 ml-1">Pontos de Interesse</h3>
+                <div id="poi-container" class="space-y-2">
+                    <!-- POIs dinâmicos -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Mídia -->
+        <section id="midia" class="content-section hidden animate__animated animate__fadeIn">
+            <h2 class="text-xl font-bold mb-6 font-title text-sc-gold text-center">Transmissão</h2>
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-black aspect-video border border-white/10 mb-8">
+                <iframe id="live-player" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div id="gallery" class="grid grid-cols-2 gap-3"></div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Bar -->
+    <div class="fixed bottom-6 left-6 right-6 z-50">
+        <div class="glass rounded-full shadow-2xl flex justify-around p-3 border border-white/10">
+            <a href="https://wa.link/900kb2" target="_blank" class="p-3 bg-green-500/10 rounded-full text-green-500"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 0 5.414 0 12.05c0 2.123.553 4.197 1.602 6.02L0 24l6.132-1.61c1.766.963 3.755 1.47 5.783 1.472h.005c6.634 0 12.048-5.414 12.048-12.05a11.79 11.79 0 00-3.526-8.51z"/></svg></a>
+            <a href="https://www.instagram.com/supercopaafc/" target="_blank" class="p-3 bg-pink-500/10 rounded-full text-pink-500"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.668-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+        </div>
+    </div>
+
+    <script>
+        let appData = {};
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                appData = await response.json();
+                renderGames('todos');
+                renderGallery();
+                renderPOIs();
+                startCountdown(appData.torneio.data_inicio);
+                document.getElementById('live-player').src = appData.torneio.transmissao_url;
+            } catch (e) { console.error(e); }
+        }
+
+        function renderGames(filter) {
+            const container = document.getElementById('games-container');
+            container.innerHTML = '';
+            appData.jogos.forEach(jogo => {
+                container.innerHTML += `
+                    <div class="glass p-5 rounded-3xl animate__animated animate__fadeInUp">
+                        <div class="flex justify-between items-center mb-4 text-[9px] font-black uppercase tracking-widest opacity-40">
+                            <span>${jogo.data} • ${jogo.hora}</span>
+                            <span class="${jogo.status === 'finalizado' ? 'text-slate-400' : 'text-sc-gold'}">${jogo.status}</span>
+                        </div>
+                        <div class="flex items-center justify-between gap-4">
+                            <p class="flex-1 text-center text-xs font-black uppercase truncate">${jogo.timeA}</p>
+                            <div class="bg-white/5 px-4 py-1 rounded-xl border border-white/5 font-black text-xl">${jogo.placarA} - ${jogo.placarB}</div>
+                            <p class="flex-1 text-center text-xs font-black uppercase truncate">${jogo.timeB}</p>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function renderPOIs() {
+            const container = document.getElementById('poi-container');
+            appData.locais.forEach(local => {
+                const isDestaque = local.tipo === 'Local do Evento';
+                container.innerHTML += `
+                    <div class="glass p-4 rounded-2xl ${isDestaque ? 'border border-sc-gold/40' : ''}">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex items-start gap-3 flex-1 min-w-0">
+                                <span class="text-2xl mt-0.5">${local.icone}</span>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-[9px] font-black uppercase tracking-widest opacity-40 mb-0.5">${local.tipo}</p>
+                                    <p class="text-sm font-bold ${isDestaque ? 'text-sc-gold' : ''} truncate">${local.nome}</p>
+                                    <p class="text-[10px] opacity-50 mt-0.5 leading-snug">${local.endereco}</p>
+                                    ${local.telefone ? `<p class="text-[10px] text-sc-gold/70 mt-0.5">📞 ${local.telefone}</p>` : ''}
+                                    ${local.horario ? `<p class="text-[10px] opacity-40 mt-0.5">🕐 ${local.horario}</p>` : ''}
+                                </div>
+                            </div>
+                            <a href="${local.maps}" target="_blank" class="shrink-0 flex items-center gap-1 text-[9px] font-black uppercase tracking-wider bg-sc-gold text-sc-maroon px-3 py-2 rounded-xl hover:scale-105 transition-transform mt-1">
+                                📍 Maps
+                            </a>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function renderGallery() {
+            const container = document.getElementById('gallery');
+            appData.fotos.forEach(foto => {
+                container.innerHTML += `<div class="rounded-2xl overflow-hidden aspect-square glass"><img src="${foto}" class="w-full h-full object-cover"></div>`;
+            });
+        }
+
+        function startCountdown(dateStr) {
+            const target = new Date(dateStr).getTime();
+            setInterval(() => {
+                const diff = target - new Date().getTime();
+                if (diff < 0) return;
+                document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
+                document.getElementById('hours').innerText = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
+                document.getElementById('mins').innerText = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
+            }, 1000);
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active', 'text-slate-100'));
+            event.currentTarget.classList.add('tab-active', 'text-slate-100');
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
