@@ -32,16 +32,19 @@
     body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;padding-bottom:96px;overflow-x:hidden;}
 
     /* HERO */
-    .hero{position:relative;min-height:40vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:2.5rem;overflow:hidden;}
-    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 50% 0%,rgba(124,10,2,0.95) 0%,transparent 70%),radial-gradient(ellipse 55% 45% at 85% 85%,rgba(245,166,35,0.22) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 10% 80%,rgba(255,107,53,0.18) 0%,transparent 60%),linear-gradient(180deg,#190404 0%,#0D0D0D 100%);}
-    .hero-ball{position:absolute;top:-70px;right:-70px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle at 32% 32%,#FF8C42,#C44D1A,#7C2D12);opacity:.10;animation:float 7s ease-in-out infinite;}
-    @keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(6deg)}}
-    .hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.018) 39px,rgba(255,255,255,.018) 40px);}
-    .hero-logo{position:relative;z-index:2;width:110px;height:110px;border-radius:50%;overflow:hidden;border:3px solid rgba(245,166,35,.45);box-shadow:0 0 40px rgba(245,166,35,.28),0 0 80px rgba(124,10,2,.5);margin-bottom:.9rem;animation:pglow 3.5s ease-in-out infinite;}
-    @keyframes pglow{0%,100%{box-shadow:0 0 40px rgba(245,166,35,.28),0 0 80px rgba(124,10,2,.5)}50%{box-shadow:0 0 64px rgba(245,166,35,.5),0 0 110px rgba(124,10,2,.7)}}
-    .hero-logo img{width:100%;height:100%;object-fit:cover;}
-    .hero-title{position:relative;z-index:2;font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:.18em;line-height:1;text-align:center;background:linear-gradient(135deg,#FFD166,#F5A623,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 20px rgba(245,166,35,.4));}
-    .hero-sub{position:relative;z-index:2;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.35em;color:var(--muted);text-transform:uppercase;margin-top:.25rem;}
+    .hero{position:relative;height:38vh;min-height:240px;overflow:hidden;}
+    .hero-bg{
+      position:absolute;inset:0;
+      background:
+        linear-gradient(to bottom, rgba(10,2,2,0.45) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.7) 80%, #0D0D0D 100%),
+        url('https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&q=80') center/cover no-repeat;
+    }
+    .hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 39px,rgba(255,255,255,.015) 40px);pointer-events:none;}
+    .hero-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:1.8rem;}
+    .hero-logo-img{width:130px;height:auto;margin-bottom:.7rem;filter:drop-shadow(0 4px 24px rgba(245,166,35,.45)) drop-shadow(0 0 60px rgba(124,10,2,.6));animation:logopulse 3s ease-in-out infinite;}
+    @keyframes logopulse{0%,100%{filter:drop-shadow(0 4px 24px rgba(245,166,35,.45)) drop-shadow(0 0 60px rgba(124,10,2,.6))}50%{filter:drop-shadow(0 4px 36px rgba(245,166,35,.7)) drop-shadow(0 0 80px rgba(124,10,2,.8))}}
+    .hero-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.22em;color:var(--gold);text-align:center;line-height:1;}
+    .dark-toggle{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity .2s;}
 
     /* NAV */
     nav{position:sticky;top:0;z-index:100;margin:-1.5rem 1rem 0;background:rgba(20,20,20,.88);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:18px;padding:.3rem;display:flex;box-shadow:0 8px 32px rgba(0,0,0,.55);}
@@ -160,14 +163,13 @@
 
 <header class="hero">
   <div class="hero-bg"></div>
-  <div class="hero-ball"></div>
   <div class="hero-lines"></div>
-  <div class="hero-logo">
-    <img src="logo.png" alt="Supercopa"
-      onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#7C0A02,#F5A623)';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;\'>🏀</div>'">
+  <div class="hero-content">
+    <img class="hero-logo-img" src="logo.png" alt="Supercopa Logo"
+      onerror="this.style.display='none'">
+    <button class="dark-toggle" onclick="this.style.opacity=this.style.opacity=='.5'?'1':'.5'">🌙</button>
+    <h1 class="hero-title">SUPERCOPA</h1>
   </div>
-  <h1 class="hero-title">Supercopa</h1>
-  <p class="hero-sub">Basquete · Afonso Cláudio · ES</p>
 </header>
 
 <nav>
@@ -181,10 +183,11 @@
 
   <!-- INÍCIO -->
   <section id="inicio" class="section active">
-    <div class="cd-grid" style="margin-top:1.5rem">
+    <div class="cd-grid" style="margin-top:1.5rem;grid-template-columns:repeat(4,1fr)">
       <div class="cd-card"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Dias</div></div>
       <div class="cd-card"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Horas</div></div>
       <div class="cd-card"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Mins</div></div>
+      <div class="cd-card"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Segs</div></div>
     </div>
     <div class="info-card">
       <h2>Afonso Cláudio, ES</h2>
@@ -238,7 +241,7 @@
   <section id="local" class="section">
     <div class="sec-hd" style="margin-top:.5rem"><h2>Local</h2></div>
     <div class="map-wrap">
-      <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFmBWY&q=-20.0752374,-41.1267671&zoom=16" allowfullscreen loading="lazy"></iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1877.5!2d-41.12805!3d-20.07524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjDCsDA0JzMxLjAiUyA0McKwMDcnMzcuNyJX!5e0!3m2!1spt-BR!2sbr!4v1748000000000!5m2!1spt-BR!2sbr" allowfullscreen loading="lazy"></iframe>
     </div>
     <a class="gps-btn" href="https://www.google.com/maps/dir/?api=1&destination=-20.0752374,-41.1267671" target="_blank">
       📍 Abrir GPS — Quadra Eurico Vieira
@@ -276,7 +279,7 @@
         <div class="poi-addr">R. Quintino Bocaiúva, 128 — Centro</div>
         <div class="poi-detail">📞 <em>(27) 3735-7801</em></div>
       </div>
-      <a class="poi-maps" href="https://maps.google.com/?cid=1729478197940830975" target="_blank">📍 Maps</a>
+      <a class="poi-maps" href="https://www.google.com/maps/search/?api=1&query=-20.077409,-41.1240347" target="_blank">📍 Maps</a>
     </div>
 
     <p class="poi-group">🍽️ Alimentação</p>
@@ -335,7 +338,6 @@ const CFG = {
   sheetsUrl: 'SUA_URL_AQUI',
   dataInicio: '2026-07-25T08:00:00',
   local:  'Quadra Eurico Vieira de Resende',
-  premio: 'R$ 5.000,00',
   descricao: 'Prepare-se para o maior espetáculo de basquete da região das montanhas. Talento, garra e muita emoção em cada lance!',
 };
 
@@ -362,12 +364,16 @@ function startCountdown() {
   const target = new Date(CFG.dataInicio).getTime();
   function tick() {
     const d = target - Date.now();
-    if (d <= 0) { ['days','hours','mins'].forEach(k => document.getElementById('cd-'+k).textContent = '00'); return; }
+    if (d <= 0) {
+      ['days','hours','mins','secs'].forEach(k => document.getElementById('cd-'+k).textContent = '00');
+      return;
+    }
     document.getElementById('cd-days').textContent  = String(Math.floor(d/864e5)).padStart(2,'0');
     document.getElementById('cd-hours').textContent = String(Math.floor((d%864e5)/36e5)).padStart(2,'0');
     document.getElementById('cd-mins').textContent  = String(Math.floor((d%36e5)/6e4)).padStart(2,'0');
+    document.getElementById('cd-secs').textContent  = String(Math.floor((d%6e4)/1e3)).padStart(2,'0');
   }
-  tick(); setInterval(tick, 30000);
+  tick(); setInterval(tick, 1000);
 }
 
 /* ═══════════════════════════════════════════
@@ -547,7 +553,6 @@ function renderMataMata(c) {
 ═══════════════════════════════════════════ */
 function fillInfo() {
   document.getElementById('info-local').textContent  = CFG.local;
-  document.getElementById('info-premio').textContent = CFG.premio;
   document.getElementById('info-desc').textContent   = CFG.descricao;
 }
 
