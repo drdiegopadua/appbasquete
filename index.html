@@ -39,12 +39,15 @@
     .hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 39px,rgba(255,255,255,.015) 40px);pointer-events:none;}
     .hero-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:1.8rem;isolation:isolate;}
     
-    /* LOGO AJUSTADA PARA TRANSPARÊNCIA */
+    /* LOGO FIX: Usando a URL direta do site para garantir que apareça */
     .hero-logo-img{width:140px;height:auto;margin-bottom:.7rem;background:transparent;mix-blend-mode:normal;filter:drop-shadow(0 4px 24px rgba(245,166,35,.45));animation:logopulse 3s ease-in-out infinite;}
     @keyframes logopulse{0%,100%{filter:drop-shadow(0 4px 24px rgba(245,166,35,.45)) drop-shadow(0 0 60px rgba(124,10,2,.6))}50%{filter:drop-shadow(0 4px 36px rgba(245,166,35,.7)) drop-shadow(0 0 80px rgba(124,10,2,.8))}}
     
     .hero-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.22em;color:var(--gold);text-align:center;line-height:1;}
-    .dark-toggle{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity .2s;}
+    
+    /* BOTÃO INSTALAR */
+    .install-trigger{position:absolute;top:1rem;right:1rem;background:rgba(245,166,35,.15);backdrop-filter:blur(10px);border:1px solid rgba(245,166,35,.3);border-radius:12px;padding:.5rem .8rem;font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:800;color:var(--gold);cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:all .2s;z-index:10;}
+    .install-trigger:hover{background:rgba(245,166,35,.25);transform:translateY(-2px);}
 
     /* NAV */
     nav{position:sticky;top:0;z-index:100;margin:-1.5rem 1rem 0;background:rgba(20,20,20,.88);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:18px;padding:.3rem;display:flex;box-shadow:0 8px 32px rgba(0,0,0,.55);}
@@ -147,22 +150,29 @@
     .poi-maps{flex-shrink:0;display:flex;align-items:center;gap:3px;background:linear-gradient(135deg,var(--gold),var(--orange));color:#000;font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:.08em;padding:.38rem .6rem;border-radius:8px;text-decoration:none;transition:transform .15s;margin-top:2px;}
     .poi-maps:hover{transform:scale(1.06);}
 
-    /* UTILS */
-    .loading{display:flex;flex-direction:column;align-items:center;padding:3rem 1rem;gap:1rem;color:var(--muted);}
-    .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .loading p{font-family:'Barlow Condensed';font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;}
-    .empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-family:'Barlow Condensed';font-size:.88rem;letter-spacing:.1em;}
-    .empty span{display:block;font-size:2.5rem;margin-bottom:.7rem;}
-    .info-box{background:linear-gradient(135deg,rgba(17,138,178,.18),rgba(6,214,160,.08));border:1px solid rgba(17,138,178,.28);border-radius:14px;padding:.9rem 1rem;margin-bottom:1.2rem;font-size:.8rem;color:rgba(6,214,160,.88);line-height:1.55;}
-    .info-box strong{color:var(--green);}
-    .info-box a{color:var(--gold);}
+    /* MODAL INSTALAR */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1.5rem;animation:fadeIn .3s ease;}
+    .modal-content{background:var(--surface);border:1px solid var(--border);border-radius:24px;width:100%;max-width:400px;padding:1.8rem;position:relative;animation:modalIn .4s cubic-bezier(0.34, 1.56, 0.64, 1);}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes modalIn{from{transform:scale(0.9) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+    
+    .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.05);border:none;color:var(--text);width:32px;height:32px;border-radius:50%;font-size:1.2rem;cursor:pointer;}
+    .modal-title{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;margin-bottom:1.2rem;color:var(--gold2);text-align:center;}
+    
+    .install-step{display:flex;gap:1rem;margin-bottom:1.2rem;align-items:flex-start;}
+    .step-num{background:var(--maroon);color:var(--gold);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem;flex-shrink:0;margin-top:2px;}
+    .step-text{font-size:.9rem;line-height:1.4;color:var(--text);}
+    .step-text b{color:var(--gold);}
+    .step-icon{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.1);padding:2px 6px;border-radius:4px;font-size:.8rem;margin:0 2px;}
+
+    .os-toggle{display:flex;background:rgba(0,0,0,.3);padding:4px;border-radius:12px;margin-bottom:1.5rem;}
+    .os-btn{flex:1;padding:.6rem;border:none;background:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;border-radius:8px;transition:all .2s;}
+    .os-btn.active{background:var(--maroon);color:var(--gold2);}
 
     /* SPLASH SCREEN */
     #splash{position:fixed;inset:0;z-index:9999;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;transition:opacity .8s ease, visibility .8s ease;overflow:hidden;}
     #splash.hidden{opacity:0;visibility:hidden;pointer-events:none;}
 
-    /* Partículas de fundo */
     #splash::before{content:'';position:absolute;inset:-50%;background:radial-gradient(ellipse at 50% 50%, rgba(124,10,2,0.35) 0%, transparent 65%), radial-gradient(ellipse at 20% 80%, rgba(245,166,35,0.12) 0%, transparent 50%);animation:splashBgPulse 3s ease-in-out infinite;}
     @keyframes splashBgPulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.05);opacity:1}}
 
@@ -187,11 +197,58 @@
   <div id="splash">
     <div class="splash-rings"></div>
     <div class="splash-logo-wrap">
-      <img src="logo.png" alt="Supercopa" class="splash-logo">
+      <img src="https://www.supercopaafc.com.br/logo.png" alt="Supercopa" class="splash-logo">
       <h1 class="splash-title">SUPERCOPA</h1>
       <div class="splash-loader">
         <div class="splash-loader-bar"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL INSTALAR -->
+  <div id="install-modal" class="modal-overlay" onclick="closeInstallModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeInstallModal(event)">×</button>
+      <h2 class="modal-title">Instalar Aplicativo</h2>
+      
+      <div class="os-toggle">
+        <button id="btn-android" class="os-btn active" onclick="setInstallOS('android')">ANDROID</button>
+        <button id="btn-ios" class="os-btn" onclick="setInstallOS('ios')">IPHONE (iOS)</button>
+      </div>
+
+      <div id="guide-android">
+        <div class="install-step">
+          <div class="step-num">1</div>
+          <div class="step-text">No topo do navegador (Chrome), toque nos <b>três pontinhos</b> <span class="step-icon">⋮</span></div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">2</div>
+          <div class="step-text">Procure e toque na opção <b>"Instalar aplicativo"</b> ou <b>"Adicionar à tela inicial"</b>.</div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">3</div>
+          <div class="step-text">Confirme em <b>"Instalar"</b>. O ícone aparecerá junto com seus outros aplicativos!</div>
+        </div>
+      </div>
+
+      <div id="guide-ios" style="display:none">
+        <div class="install-step">
+          <div class="step-num">1</div>
+          <div class="step-text">No navegador (Safari), toque no botão de <b>Compartilhar</b> <span class="step-icon">⎋</span> (quadrado com seta pra cima).</div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">2</div>
+          <div class="step-text">Role a lista para baixo e toque em <b>"Adicionar à Tela de Início"</b> <span class="step-icon">+</span>.</div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">3</div>
+          <div class="step-text">Toque em <b>"Adicionar"</b> no canto superior. Pronto! O app está na sua tela inicial.</div>
+        </div>
+      </div>
+
+      <p style="text-align:center; font-size:.75rem; color:var(--muted); margin-top:1rem;">
+        Instale para acessar mais rápido e sem precisar digitar o endereço!
+      </p>
     </div>
   </div>
 
@@ -202,7 +259,10 @@
       <div class="hero-lines"></div>
     </div>
     <div class="hero-content">
-      <img src="logo.png" alt="Supercopa Basquete" class="hero-logo-img">
+      <button class="install-trigger" onclick="openInstallModal()">
+        <span>📲</span> Instalar App
+      </button>
+      <img src="https://www.supercopaafc.com.br/logo.png" alt="Supercopa Basquete" class="hero-logo-img">
       <h1 class="hero-title">SUPERCOPA BASQUETE</h1>
     </div>
   </header>
@@ -378,7 +438,7 @@
   };
 
   /* ═══════════════════════════════════════════
-     DADOS DO CAMPEONATO (Extraídos do Site)
+     DADOS DO CAMPEONATO
   ═══════════════════════════════════════════ */
   let DATA = {
     jogos: [
@@ -502,10 +562,6 @@
     }
 
     const rankCls = ['g','s','b'];
-    const statusStyle = {
-      'Classificado': 'background:rgba(6,214,160,.15);color:#06D6A0;',
-      'Eliminado':    'background:rgba(255,107,53,.15);color:#FF6B35;'
-    };
 
     c.innerHTML = `
       <div class="table-wrap">
@@ -564,6 +620,26 @@
   function fillInfo() {
     document.getElementById('info-local').textContent  = CFG.local;
     document.getElementById('info-desc').textContent   = CFG.descricao;
+  }
+
+  /* MODAL LOGIC */
+  function openInstallModal() {
+    document.getElementById('install-modal').style.display = 'flex';
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ipod')) {
+      setInstallOS('ios');
+    } else {
+      setInstallOS('android');
+    }
+  }
+  function closeInstallModal(e) {
+    document.getElementById('install-modal').style.display = 'none';
+  }
+  function setInstallOS(os) {
+    document.getElementById('btn-android').classList.toggle('active', os === 'android');
+    document.getElementById('btn-ios').classList.toggle('active', os === 'ios');
+    document.getElementById('guide-android').style.display = os === 'android' ? 'block' : 'none';
+    document.getElementById('guide-ios').style.display = os === 'ios' ? 'block' : 'none';
   }
 
   window.addEventListener('load', () => {
