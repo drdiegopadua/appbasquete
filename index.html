@@ -543,13 +543,37 @@
       DATA.classificacao = classif;
 
       // --- MATA-MATA ---
+      // Mapeamento da aba "Mata-Mata":
+      //   Semi 1:  B4(1)=TimeA  F4(5)=TimeB  | B5(1)=PlacarA  E5(4)=PlacarB  | H6(7)=Eliminado
+      //   Semi 2:  B9(1)=TimeA  F9(5)=TimeB  | B10(1)=PlacarA E10(4)=PlacarB | H11(7)=Eliminado
+      //   Final:   B15(1)=TimeA F15(5)=TimeB | B16(1)=PlacarA E16(4)=PlacarB | H17(7)=Eliminado
+      //   Campeão: A21(0) ou B21(1)
       const mataRows = await fetchSheetData(GID_MATA_MATA);
       if (mataRows) {
+        const elimStr = (r) => String(r || '');
         DATA.mataMata = {
-          semi1: { timeA: mataRows[3]?.[1]||'A definir', timeB: mataRows[3]?.[8]||'A definir', placarA: mataRows[4]?.[1]||0, placarB: mataRows[4]?.[8]||0, status: (mataRows[5]?.[6]?.includes('Eliminado'))?'finalizado':'agendado' },
-          semi2: { timeA: mataRows[8]?.[1]||'A definir', timeB: mataRows[8]?.[8]||'A definir', placarA: mataRows[9]?.[1]||0, placarB: mataRows[9]?.[8]||0, status: (mataRows[10]?.[6]?.includes('Eliminado'))?'finalizado':'agendado' },
-          final: { timeA: mataRows[14]?.[1]||'A definir', timeB: mataRows[14]?.[8]||'A definir', placarA: mataRows[15]?.[1]||0, placarB: mataRows[15]?.[8]||0, status: (mataRows[16]?.[6]?.includes('Eliminado'))?'finalizado':'agendado' },
-          campeao: mataRows[20]?.[0] || null
+          semi1: {
+            timeA:   String(mataRows[3]?.[1] || 'A definir').trim(),
+            timeB:   String(mataRows[3]?.[5] || 'A definir').trim(),
+            placarA: Number(mataRows[4]?.[1]) || 0,
+            placarB: Number(mataRows[4]?.[4]) || 0,
+            status:  elimStr(mataRows[5]?.[7]).includes('Eliminado') ? 'finalizado' : 'agendado'
+          },
+          semi2: {
+            timeA:   String(mataRows[8]?.[1] || 'A definir').trim(),
+            timeB:   String(mataRows[8]?.[5] || 'A definir').trim(),
+            placarA: Number(mataRows[9]?.[1]) || 0,
+            placarB: Number(mataRows[9]?.[4]) || 0,
+            status:  elimStr(mataRows[10]?.[7]).includes('Eliminado') ? 'finalizado' : 'agendado'
+          },
+          final: {
+            timeA:   String(mataRows[14]?.[1] || 'A definir').trim(),
+            timeB:   String(mataRows[14]?.[5] || 'A definir').trim(),
+            placarA: Number(mataRows[15]?.[1]) || 0,
+            placarB: Number(mataRows[15]?.[4]) || 0,
+            status:  elimStr(mataRows[16]?.[7]).includes('Eliminado') ? 'finalizado' : 'agendado'
+          },
+          campeao: String(mataRows[20]?.[1] || mataRows[20]?.[0] || '').trim() || null
         };
       }
 
