@@ -451,12 +451,26 @@
     const url = `${BASE_URL}&gid=${gid}`;
     try {
       const response = await fetch(url);
-      if (!response.ok) throw new Error("Acesso negado");
+      if (!response.ok) throw new Error("HTTP " + response.status + " - Acesso negado ou planilha não pública");
       const text = await response.text();
-      const json = JSON.parse(text.substring(47).slice(0, -2));
-      return json.table.rows.map(row => row.c.map(cell => cell ? (cell.v || '') : ''));
+      if (!text || text.length < 50) throw new Error("Resposta vazia do Google Sheets");
+      let json;
+      try {
+        json = JSON.parse(text.substring(47).slice(0, -2));
+      } catch(pe) {
+        throw new Error("Erro ao parsear resposta (prefixo inesperado). Primeiros 80 chars: " + text.substring(0,80));
+      }
+      if (!json.table || !json.table.rows) throw new Error("Tabela vazia ou sem linhas no GID " + gid);
+      return json.table.rows.map(row => row.c ? row.c.map(cell => cell ? (cell.v !== null && cell.v !== undefined ? cell.v : '') : '') : []);
     } catch (e) {
-      console.error("Erro no GID " + gid, e);
+      console.error("Erro no GID " + gid + ":", e.message);
+      const c = document.getElementById('games-container');
+      const t = document.getElementById('class-container');
+      const msg = `<div style="background:#1a0a0a;border:1px solid #c0392b;border-radius:12px;padding:1rem;font-family:monospace;font-size:.75rem;color:#e74c3c;margin:.5rem 0">
+        <b>ERRO AO CARREGAR (GID ${gid})</b><br>${e.message}
+      </div>`;
+      if (c) c.innerHTML = msg;
+      if (t) t.innerHTML = msg;
       return null;
     }
   }
