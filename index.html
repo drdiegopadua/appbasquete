@@ -189,14 +189,13 @@
     .splash-loader-bar{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg, var(--maroon), var(--gold), var(--maroon));animation:splashLoading 2s ease-in-out forwards;}
     @keyframes splashLoading{0%{width:0}100%{width:100%}}
 
-    .loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center;color:var(--gold);}
+    /* ERROR BOX */
+    .error-box{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.3);border-radius:12px;padding:1rem;margin:1rem;text-align:center;color:var(--orange);font-size:.8rem;}
+    .error-box b{display:block;margin-bottom:.5rem;font-size:.9rem;}
+    .retry-btn{background:var(--orange);color:#000;border:none;padding:.5rem 1rem;border-radius:8px;font-weight:800;margin-top:.8rem;cursor:pointer;}
   </style>
 </head>
 <body>
-
-  <div id="loading-overlay" class="loading-overlay">
-    <div class="spinner"></div>
-  </div>
 
   <!-- SPLASH SCREEN -->
   <div id="splash">
@@ -288,6 +287,8 @@
   </nav>
 
   <main>
+    <div id="error-display" style="display:none"></div>
+
     <!-- INÍCIO -->
     <section id="inicio" class="section active">
       <div class="cd-grid">
@@ -299,9 +300,9 @@
       <div class="info-card">
         <h2>6ª Edição 2026</h2>
         <div class="info-date">A partir de 25 de Julho</div>
-        <p id="info-desc">Carregando informações...</p>
+        <p id="info-desc">O maior campeonato de basquete de Afonso Cláudio e região está de volta!</p>
         <div class="info-meta">
-          <span>📍 <b id="info-local">...</b></span>
+          <span>📍 <b id="info-local">Quadra Eurico Vieira</b></span>
           <span class="prize">💰 <b>Premiação em Dinheiro</b></span>
         </div>
         <div class="social-row">
@@ -452,59 +453,95 @@
      BUSCA DE DADOS (GOOGLE SHEETS)
   ═══════════════════════════════════════════ */
   async function fetchSheetData(gid) {
-    const response = await fetch(`${BASE_URL}&gid=${gid}`);
-    const text = await response.text();
-    const json = JSON.parse(text.substring(47).slice(0, -2));
-    return json.table.rows.map(row => row.c.map(cell => cell ? (cell.v || '') : ''));
+    const url = `${BASE_URL}&gid=${gid}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Acesso negado");
+      const text = await response.text();
+      const json = JSON.parse(text.substring(47).slice(0, -2));
+      return json.table.rows.map(row => row.c.map(cell => cell ? (cell.v || '') : ''));
+    } catch (e) {
+      console.error("Erro no GID " + gid, e);
+      return null;
+    }
   }
 
   async function loadAllData() {
+    document.getElementById('error-display').style.display = 'none';
+    
+    // Tenta carregar os dados da aba "Fase de Grupos" (GID 745431056)
+    const grupoRows = await fetchSheetData('745431056');
+    
+    if (!grupoRows) {
+      document.getElementById('error-display').innerHTML = `
+        <div class="error-box">
+          <b>⚠️ Planilha Não Publicada</b>
+          O app não conseguiu ler os dados. <br>
+          Na sua planilha, vá em: <br>
+          <b>Arquivo > Compartilhar > Publicar na Web</b> <br>
+          e clique em <b>Publicar</b>.
+          <br>
+          <button class="retry-btn" onclick="location.reload()">Tentar Novamente</button>
+        </div>`;
+      document.getElementById('error-display').style.display = 'block';
+      return;
+    }
+
     try {
-      // 1. Carregar Configurações (GID 0)
-      const configRows = await fetchSheetData('0');
-      // Pega a descrição e local se estiverem lá (exemplo: B10 e B11)
-      // Ajuste conforme sua planilha real
-      
-      // 2. Carregar Fase de Grupos (Jogos e Classificação - GID 745431056)
-      const grupoRows = await fetchSheetData('745431056');
-      
-      // Processar Jogos Grupo A (Linhas 5-7, Colunas A-I)
+      // Processar Jogos
       const jogos = [];
+      // Grupo A (Linhas 5-7 na planilha = índices 4-6)
       for(let i=4; i<=6; i++) {
         const r = grupoRows[i];
-        if(r[1]) jogos.push({id: 'A'+i, data: 'A definir', hora: '00:00', fase: 'Grupo A', timeA: r[1], timeB: r[4], placarA: r[2]||0, placarB: r[3]||0, status: r[8] === 'Empate' ? 'agendado' : 'finalizado'});
+        if(r && r[1]) {
+          jogos.push({
+            id: 'A'+i, data: 'A definir', hora: '00:00', fase: 'Grupo A', 
+            timeA: r[1], timeB: r[4], placarA: r[2]||0, placarB: r[3]||0, 
+            status: (r[8] === 'Empate' || r[8] === '') ? 'agendado' : 'finalizado'
+          });
+        }
       }
-      // Processar Jogos Grupo B (Linhas 5-7, Colunas K-S)
+      // Grupo B (Colunas K-S na planilha = índices 10-18)
       for(let i=4; i<=6; i++) {
         const r = grupoRows[i];
-        if(r[11]) jogos.push({id: 'B'+i, data: 'A definir', hora: '00:00', fase: 'Grupo B', timeA: r[11], timeB: r[14], placarA: r[12]||0, placarB: r[13]||0, status: r[18] === 'Empate' ? 'agendado' : 'finalizado'});
+        if(r && r[11]) {
+          jogos.push({
+            id: 'B'+i, data: 'A definir', hora: '00:00', fase: 'Grupo B', 
+            timeA: r[11], timeB: r[14], placarA: r[12]||0, placarB: r[13]||0, 
+            status: (r[18] === 'Empate' || r[18] === '') ? 'agendado' : 'finalizado'
+          });
+        }
       }
       DATA.jogos = jogos;
 
-      // Processar Classificação Grupo A (Linhas 12-14, Colunas A-I)
+      // Processar Classificação
       const classif = [];
+      // Grupo A (Linhas 12-14 = índices 11-13)
       for(let i=11; i<=13; i++) {
         const r = grupoRows[i];
-        if(r[1]) classif.push({pos: r[0], time: r[1], j: r[2], v: r[3], d: r[4], pts: r[5], sd: r[6], status: r[8], grupo: 'A'});
+        if(r && r[1]) classif.push({pos: r[0], time: r[1], j: r[2], v: r[3], d: r[4], pts: r[5], sd: r[6], status: r[8], grupo: 'A'});
       }
-      // Processar Classificação Grupo B (Linhas 12-14, Colunas K-S)
+      // Grupo B
       for(let i=11; i<=13; i++) {
         const r = grupoRows[i];
-        if(r[11]) classif.push({pos: r[10], time: r[11], j: r[12], v: r[13], d: r[14], pts: r[15], sd: r[16], status: r[18], grupo: 'B'});
+        if(r && r[11]) classif.push({pos: r[10], time: r[11], j: r[12], v: r[13], d: r[14], pts: r[15], sd: r[16], status: r[18], grupo: 'B'});
       }
       DATA.classificacao = classif;
 
-      // 3. Carregar Mata-Mata (GID 1303866170 - Exemplo de GID para Mata-Mata)
-      // Como não vi a aba Mata-Mata detalhada, vou manter um placeholder ou tentar carregar se existir
-      DATA.mataMata = {
-        semi1: {timeA:'A definir', timeB:'A definir', placarA:0, placarB:0, status:'agendado'},
-        semi2: {timeA:'A definir', timeB:'A definir', placarA:0, placarB:0, status:'agendado'},
-        final: {timeA:'A definir', timeB:'A definir', placarA:0, placarB:0, status:'agendado'}
-      };
+      // Mata-Mata (GID 1303866170)
+      const mataRows = await fetchSheetData('1303866170');
+      if (mataRows) {
+        // Exemplo de mapeamento se a aba mata-mata seguir um padrão
+        DATA.mataMata = {
+          semi1: {timeA: mataRows[4]?.[1]||'A definir', timeB: mataRows[4]?.[4]||'A definir', placarA: mataRows[4]?.[2]||0, placarB: mataRows[4]?.[3]||0, status: mataRows[4]?.[8]==='Empate'?'agendado':'finalizado'},
+          semi2: {timeA: mataRows[5]?.[1]||'A definir', timeB: mataRows[5]?.[4]||'A definir', placarA: mataRows[5]?.[2]||0, placarB: mataRows[5]?.[3]||0, status: mataRows[5]?.[8]==='Empate'?'agendado':'finalizado'},
+          final: {timeA: mataRows[7]?.[1]||'A definir', timeB: mataRows[7]?.[4]||'A definir', placarA: mataRows[7]?.[2]||0, placarB: mataRows[7]?.[3]||0, status: mataRows[7]?.[8]==='Empate'?'agendado':'finalizado'}
+        };
+      }
 
       renderAll();
     } catch (err) {
-      console.error("Erro ao carregar dados:", err);
+      console.error("Erro ao processar dados:", err);
     }
   }
 
