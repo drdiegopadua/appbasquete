@@ -466,31 +466,79 @@
     if (!grupoRows) return;
 
     try {
+      /*
+       * MAPEAMENTO DA ABA "Fase de Grupos"
+       * ─────────────────────────────────────────────────────────────────
+       * JOGOS — linhas 5, 6, 7 (índice 4, 5, 6)
+       *   Grupo A: B(1)=TimeA  C(2)=PlacarA  E(4)=PlacarB  F(5)=TimeB  H(7)=Resultado
+       *   Grupo B: L(11)=TimeA M(12)=PlacarA O(14)=PlacarB P(15)=TimeB R(17)=Resultado
+       *
+       * CLASSIFICAÇÃO — linhas 12, 13, 14 (índice 11, 12, 13)
+       *   Grupo A: A(0)=Pos B(1)=Time C(2)=J D(3)=V E(4)=D F(5)=PTS G(6)=SD I(8)=Status
+       *   Grupo B: J(9)=Pos K(10)=Time L(11)=J M(12)=V N(13)=D O(14)=PTS P(15)=SD R(17)=Status
+       * ─────────────────────────────────────────────────────────────────
+       */
+
       // --- JOGOS ---
       const jogos = [];
-      for(let i=4; i<=6; i++) {
+      for (let i = 4; i <= 6; i++) {
         const r = grupoRows[i];
-        if(!r) continue;
-        if(r[1]) jogos.push({
-          id: 'A'+i, data: 'A definir', hora: '00:00', fase: 'Grupo A', 
-          timeA: r[1], timeB: r[5], placarA: r[2]||0, placarB: r[4]||0, 
-          status: (r[8] === 'Empate' || r[8] === '') ? 'agendado' : 'finalizado'
-        });
-        if(r[11]) jogos.push({
-          id: 'B'+i, data: 'A definir', hora: '00:00', fase: 'Grupo B', 
-          timeA: r[11], timeB: r[15], placarA: r[12]||0, placarB: r[14]||0, 
-          status: (r[18] === 'Empate' || r[18] === '') ? 'agendado' : 'finalizado'
-        });
+        if (!r) continue;
+        const numJogo = i - 3;
+
+        // Grupo A
+        const tA_A  = String(r[1]  || '').trim();
+        const tB_A  = String(r[5]  || '').trim();
+        const res_A = String(r[7]  || '').trim();
+        if (tA_A) {
+          const placarA = Number(r[2]) || 0;
+          const placarB = Number(r[4]) || 0;
+          const statusA = (res_A === '' || res_A === 'Empate') ? 'agendado' : 'finalizado';
+          jogos.push({ id:'A'+i, data:'A definir', hora:'00:00', fase:'Grupo A',
+            timeA: tA_A, timeB: tB_A, placarA, placarB, status: statusA, jogo: numJogo });
+        }
+
+        // Grupo B
+        const tA_B  = String(r[11] || '').trim();
+        const tB_B  = String(r[15] || '').trim();
+        const res_B = String(r[17] || '').trim();
+        if (tA_B) {
+          const placarA = Number(r[12]) || 0;
+          const placarB = Number(r[14]) || 0;
+          const statusB = (res_B === '' || res_B === 'Empate') ? 'agendado' : 'finalizado';
+          jogos.push({ id:'B'+i, data:'A definir', hora:'00:00', fase:'Grupo B',
+            timeA: tA_B, timeB: tB_B, placarA, placarB, status: statusB, jogo: numJogo });
+        }
       }
       DATA.jogos = jogos;
 
       // --- CLASSIFICAÇÃO ---
       const classif = [];
-      for(let i=11; i<=13; i++) {
+      for (let i = 11; i <= 13; i++) {
         const r = grupoRows[i];
-        if(!r) continue;
-        if(r[1]) classif.push({pos: r[0], time: r[1], j: r[2], v: r[3], d: r[4], pts: r[5], sd: r[6], status: r[8], grupo: 'A'});
-        if(r[11]) classif.push({pos: r[10], time: r[11], j: r[12], v: r[13], d: r[14], pts: r[15], sd: r[16], status: r[18], grupo: 'B'});
+        if (!r) continue;
+
+        // Grupo A
+        const tA = String(r[1] || '').trim();
+        if (tA) {
+          classif.push({
+            pos: String(r[0] || '').replace(/[^0-9]/g, '') || String(i - 10),
+            time: tA, j: Number(r[2])||0, v: Number(r[3])||0, d: Number(r[4])||0,
+            pts: Number(r[5])||0, sd: Number(r[6])||0,
+            status: String(r[8]||'').trim(), grupo: 'A'
+          });
+        }
+
+        // Grupo B
+        const tB = String(r[10] || '').trim();
+        if (tB) {
+          classif.push({
+            pos: String(r[9] || '').replace(/[^0-9]/g, '') || String(i - 10),
+            time: tB, j: Number(r[11])||0, v: Number(r[12])||0, d: Number(r[13])||0,
+            pts: Number(r[14])||0, sd: Number(r[15])||0,
+            status: String(r[17]||'').trim(), grupo: 'B'
+          });
+        }
       }
       DATA.classificacao = classif;
 
@@ -498,9 +546,9 @@
       const mataRows = await fetchSheetData(GID_MATA_MATA);
       if (mataRows) {
         DATA.mataMata = {
-          semi1: {timeA: mataRows[3]?.[1]||'A definir', timeB: mataRows[3]?.[8]||'A definir', placarA: mataRows[4]?.[1]||0, placarB: mataRows[4]?.[8]||0, status: (mataRows[5]?.[6]?.includes('Eliminado'))?'finalizado':'agendado'},
-          semi2: {timeA: mataRows[8]?.[1]||'A definir', timeB: mataRows[8]?.[8]||'A definir', placarA: mataRows[9]?.[1]||0, placarB: mataRows[9]?.[8]||0, status: (mataRows[10]?.[6]?.includes('Eliminado'))?'finalizado':'agendado'},
-          final: {timeA: mataRows[14]?.[1]||'A definir', timeB: mataRows[14]?.[8]||'A definir', placarA: mataRows[15]?.[1]||0, placarB: mataRows[15]?.[8]||0, status: (mataRows[16]?.[6]?.includes('Eliminado'))?'finalizado':'agendado'},
+          semi1: { timeA: mataRows[3]?.[1]||'A definir', timeB: mataRows[3]?.[8]||'A definir', placarA: mataRows[4]?.[1]||0, placarB: mataRows[4]?.[8]||0, status: (mataRows[5]?.[6]?.includes('Eliminado'))?'finalizado':'agendado' },
+          semi2: { timeA: mataRows[8]?.[1]||'A definir', timeB: mataRows[8]?.[8]||'A definir', placarA: mataRows[9]?.[1]||0, placarB: mataRows[9]?.[8]||0, status: (mataRows[10]?.[6]?.includes('Eliminado'))?'finalizado':'agendado' },
+          final: { timeA: mataRows[14]?.[1]||'A definir', timeB: mataRows[14]?.[8]||'A definir', placarA: mataRows[15]?.[1]||0, placarB: mataRows[15]?.[8]||0, status: (mataRows[16]?.[6]?.includes('Eliminado'))?'finalizado':'agendado' },
           campeao: mataRows[20]?.[0] || null
         };
       }
