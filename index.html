@@ -188,11 +188,6 @@
     .splash-loader{width:140px;height:2px;background:rgba(255,255,255,0.05);margin-top:2rem;position:relative;overflow:hidden;border-radius:10px;}
     .splash-loader-bar{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg, var(--maroon), var(--gold), var(--maroon));animation:splashLoading 2s ease-in-out forwards;}
     @keyframes splashLoading{0%{width:0}100%{width:100%}}
-
-    /* ERROR BOX */
-    .error-box{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.3);border-radius:12px;padding:1rem;margin:1rem;text-align:center;color:var(--orange);font-size:.8rem;}
-    .error-box b{display:block;margin-bottom:.5rem;font-size:.9rem;}
-    .retry-btn{background:var(--orange);color:#000;border:none;padding:.5rem 1rem;border-radius:8px;font-weight:800;margin-top:.8rem;cursor:pointer;}
   </style>
 </head>
 <body>
@@ -287,8 +282,6 @@
   </nav>
 
   <main>
-    <div id="error-display" style="display:none"></div>
-
     <!-- INÍCIO -->
     <section id="inicio" class="section active">
       <div class="cd-grid">
@@ -467,75 +460,61 @@
   }
 
   async function loadAllData() {
-    document.getElementById('error-display').style.display = 'none';
-    
-    // Tenta carregar os dados da aba "Fase de Grupos" (GID 745431056)
+    // Aba "Fase de Grupos" (GID 745431056)
     const grupoRows = await fetchSheetData('745431056');
-    
-    if (!grupoRows) {
-      document.getElementById('error-display').innerHTML = `
-        <div class="error-box">
-          <b>⚠️ Planilha Não Publicada</b>
-          O app não conseguiu ler os dados. <br>
-          Na sua planilha, vá em: <br>
-          <b>Arquivo > Compartilhar > Publicar na Web</b> <br>
-          e clique em <b>Publicar</b>.
-          <br>
-          <button class="retry-btn" onclick="location.reload()">Tentar Novamente</button>
-        </div>`;
-      document.getElementById('error-display').style.display = 'block';
-      return;
-    }
+    if (!grupoRows) return;
 
     try {
-      // Processar Jogos
       const jogos = [];
-      // Grupo A (Linhas 5-7 na planilha = índices 4-6)
+      // GRUPO A: Colunas B(Equipe 1), C(Pts 1), E(Pts 2), F(Equipe 2), I(Resultado)
+      // Linhas 5, 6, 7 (índices 4, 5, 6)
       for(let i=4; i<=6; i++) {
         const r = grupoRows[i];
         if(r && r[1]) {
           jogos.push({
             id: 'A'+i, data: 'A definir', hora: '00:00', fase: 'Grupo A', 
-            timeA: r[1], timeB: r[4], placarA: r[2]||0, placarB: r[3]||0, 
+            timeA: r[1], timeB: r[5], placarA: r[2]||0, placarB: r[4]||0, 
             status: (r[8] === 'Empate' || r[8] === '') ? 'agendado' : 'finalizado'
           });
         }
       }
-      // Grupo B (Colunas K-S na planilha = índices 10-18)
+      // GRUPO B: Colunas L(Equipe 1), M(Pts 1), O(Pts 2), P(Equipe 2), S(Resultado)
+      // Linhas 5, 6, 7 (índices 4, 5, 6)
       for(let i=4; i<=6; i++) {
         const r = grupoRows[i];
         if(r && r[11]) {
           jogos.push({
             id: 'B'+i, data: 'A definir', hora: '00:00', fase: 'Grupo B', 
-            timeA: r[11], timeB: r[14], placarA: r[12]||0, placarB: r[13]||0, 
+            timeA: r[11], timeB: r[15], placarA: r[12]||0, placarB: r[14]||0, 
             status: (r[18] === 'Empate' || r[18] === '') ? 'agendado' : 'finalizado'
           });
         }
       }
       DATA.jogos = jogos;
 
-      // Processar Classificação
+      // CLASSIFICAÇÃO
       const classif = [];
-      // Grupo A (Linhas 12-14 = índices 11-13)
+      // GRUPO A: Linhas 12-14 (índices 11-13)
+      // Colunas: A(Pos), B(Equipe), C(J), D(V), E(D), F(Pts), G(SD), I(Status)
       for(let i=11; i<=13; i++) {
         const r = grupoRows[i];
         if(r && r[1]) classif.push({pos: r[0], time: r[1], j: r[2], v: r[3], d: r[4], pts: r[5], sd: r[6], status: r[8], grupo: 'A'});
       }
-      // Grupo B
+      // GRUPO B: Linhas 12-14 (índices 11-13)
+      // Colunas: K(Pos), L(Equipe), M(J), N(V), O(D), P(Pts), Q(SD), S(Status)
       for(let i=11; i<=13; i++) {
         const r = grupoRows[i];
         if(r && r[11]) classif.push({pos: r[10], time: r[11], j: r[12], v: r[13], d: r[14], pts: r[15], sd: r[16], status: r[18], grupo: 'B'});
       }
       DATA.classificacao = classif;
 
-      // Mata-Mata (GID 1303866170)
+      // MATA-MATA (GID 1303866170)
       const mataRows = await fetchSheetData('1303866170');
       if (mataRows) {
-        // Exemplo de mapeamento se a aba mata-mata seguir um padrão
         DATA.mataMata = {
-          semi1: {timeA: mataRows[4]?.[1]||'A definir', timeB: mataRows[4]?.[4]||'A definir', placarA: mataRows[4]?.[2]||0, placarB: mataRows[4]?.[3]||0, status: mataRows[4]?.[8]==='Empate'?'agendado':'finalizado'},
-          semi2: {timeA: mataRows[5]?.[1]||'A definir', timeB: mataRows[5]?.[4]||'A definir', placarA: mataRows[5]?.[2]||0, placarB: mataRows[5]?.[3]||0, status: mataRows[5]?.[8]==='Empate'?'agendado':'finalizado'},
-          final: {timeA: mataRows[7]?.[1]||'A definir', timeB: mataRows[7]?.[4]||'A definir', placarA: mataRows[7]?.[2]||0, placarB: mataRows[7]?.[3]||0, status: mataRows[7]?.[8]==='Empate'?'agendado':'finalizado'}
+          semi1: {timeA: mataRows[4]?.[1]||'A definir', timeB: mataRows[4]?.[5]||'A definir', placarA: mataRows[4]?.[2]||0, placarB: mataRows[4]?.[4]||0, status: (mataRows[4]?.[8]==='Empate'||!mataRows[4]?.[8])?'agendado':'finalizado'},
+          semi2: {timeA: mataRows[5]?.[1]||'A definir', timeB: mataRows[5]?.[5]||'A definir', placarA: mataRows[5]?.[2]||0, placarB: mataRows[5]?.[4]||0, status: (mataRows[5]?.[8]==='Empate'||!mataRows[5]?.[8])?'agendado':'finalizado'},
+          final: {timeA: mataRows[7]?.[1]||'A definir', timeB: mataRows[7]?.[5]||'A definir', placarA: mataRows[7]?.[2]||0, placarB: mataRows[7]?.[4]||0, status: (mataRows[7]?.[8]==='Empate'||!mataRows[7]?.[8])?'agendado':'finalizado'}
         };
       }
 
