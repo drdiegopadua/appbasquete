@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Supercopa de Basquete | Afonso Cláudio</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="icon" href="https://www.supercopaafc.com.br/logo.png">
+  <link rel="apple-touch-icon" href="https://www.supercopaafc.com.br/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -39,7 +39,6 @@
     .hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 39px,rgba(255,255,255,.015) 40px);pointer-events:none;}
     .hero-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:1.8rem;isolation:isolate;}
     
-    /* LOGO FIX: Usando a URL direta do site para garantir que apareça */
     .hero-logo-img{width:140px;height:auto;margin-bottom:.7rem;background:transparent;mix-blend-mode:normal;filter:drop-shadow(0 4px 24px rgba(245,166,35,.45));animation:logopulse 3s ease-in-out infinite;}
     @keyframes logopulse{0%,100%{filter:drop-shadow(0 4px 24px rgba(245,166,35,.45)) drop-shadow(0 0 60px rgba(124,10,2,.6))}50%{filter:drop-shadow(0 4px 36px rgba(245,166,35,.7)) drop-shadow(0 0 80px rgba(124,10,2,.8))}}
     
@@ -189,9 +188,15 @@
     .splash-loader{width:140px;height:2px;background:rgba(255,255,255,0.05);margin-top:2rem;position:relative;overflow:hidden;border-radius:10px;}
     .splash-loader-bar{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg, var(--maroon), var(--gold), var(--maroon));animation:splashLoading 2s ease-in-out forwards;}
     @keyframes splashLoading{0%{width:0}100%{width:100%}}
+
+    .loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center;color:var(--gold);}
   </style>
 </head>
 <body>
+
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
 
   <!-- SPLASH SCREEN -->
   <div id="splash">
@@ -294,9 +299,9 @@
       <div class="info-card">
         <h2>6ª Edição 2026</h2>
         <div class="info-date">A partir de 25 de Julho</div>
-        <p id="info-desc">O maior campeonato de basquete de Afonso Cláudio e região está de volta!</p>
+        <p id="info-desc">Carregando informações...</p>
         <div class="info-meta">
-          <span>📍 <b id="info-local">Quadra Eurico Vieira</b></span>
+          <span>📍 <b id="info-local">...</b></span>
           <span class="prize">💰 <b>Premiação em Dinheiro</b></span>
         </div>
         <div class="social-row">
@@ -430,43 +435,78 @@
   /* ═══════════════════════════════════════════
      CONFIGURAÇÃO
   ═══════════════════════════════════════════ */
+  const SPREADSHEET_ID = '1S3rUVU18W64c4okkxGOYnSLtW-aSyo47l3tos7u-8j0';
+  const BASE_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+
   const CFG = {
-    sheetsUrl: 'SUA_URL_AQUI',
     dataInicio: '2026-07-25T08:00:00',
-    local:  'Quadra Eurico Vieira de Resende',
-    descricao: 'Prepare-se para o maior espetáculo de basquete da região das montanhas. Talento, garra e muita emoção em cada lance!',
+    local: 'Quadra Eurico Vieira de Resende',
+    descricao: 'O maior campeonato de basquete de Afonso Cláudio e região está de volta!',
   };
 
-  /* ═══════════════════════════════════════════
-     DADOS DO CAMPEONATO
-  ═══════════════════════════════════════════ */
-  let DATA = {
-    jogos: [
-      {id:1,data:'A definir',hora:'00:00',fase:'Grupo A',timeA:'CT DAS MONTANHAS',timeB:'MARLINS',placarA:0,placarB:0,status:'finalizado'},
-      {id:2,data:'A definir',hora:'00:00',fase:'Grupo A',timeA:'CT DAS MONTANHAS',timeB:'EQUIPE 3',placarA:0,placarB:0,status:'finalizado'},
-      {id:3,data:'A definir',hora:'00:00',fase:'Grupo A',timeA:'MARLINS',timeB:'EQUIPE 3',placarA:0,placarB:0,status:'finalizado'},
-      {id:4,data:'A definir',hora:'00:00',fase:'Grupo B',timeA:'EQUIPE 4',timeB:'EQUIPE 5',placarA:0,placarB:0,status:'finalizado'},
-      {id:5,data:'A definir',hora:'00:00',fase:'Grupo B',timeA:'EQUIPE 4',timeB:'EQUIPE 6',placarA:0,placarB:0,status:'finalizado'},
-      {id:6,data:'A definir',hora:'00:00',fase:'Grupo B',timeA:'EQUIPE 5',timeB:'EQUIPE 6',placarA:0,placarB:0,status:'finalizado'},
-    ],
-    classificacao: [
-      {pos:'1º',time:'CT DAS MONTANHAS',j:2,v:0,d:0,sd:0,pts:0,status:'Classificado',grupo:'A'},
-      {pos:'2º',time:'CT DAS MONTANHAS',j:2,v:0,d:0,sd:0,pts:0,status:'Classificado',grupo:'A'},
-      {pos:'3º',time:'CT DAS MONTANHAS',j:2,v:0,d:0,sd:0,pts:0,status:'Eliminado',grupo:'A'},
-      {pos:'1º',time:'EQUIPE 4',j:2,v:0,d:0,sd:0,pts:0,status:'Classificado',grupo:'B'},
-      {pos:'2º',time:'EQUIPE 4',j:2,v:0,d:0,sd:0,pts:0,status:'Classificado',grupo:'B'},
-      {pos:'3º',time:'EQUIPE 4',j:2,v:0,d:0,sd:0,pts:0,status:'Eliminado',grupo:'B'},
-    ],
-    mataMata: {
-      semi1: {timeA:'CT DAS MONTANHAS',timeB:'EQUIPE 4',placarA:0,placarB:0,status:'finalizado',classificado:'A definir'},
-      semi2: {timeA:'EQUIPE 4',timeB:'CT DAS MONTANHAS',placarA:0,placarB:0,status:'finalizado',classificado:'A definir'},
-      final: {timeA:'EQUIPE 4',timeB:'CT DAS MONTANHAS',placarA:0,placarB:0,status:'finalizado'},
-      campeao: 'CT DAS MONTANHAS'
-    }
-  };
-
+  let DATA = { jogos: [], classificacao: [], mataMata: null };
   let filterAtivo = 'todos';
   let classTabAtivo = 'A';
+
+  /* ═══════════════════════════════════════════
+     BUSCA DE DADOS (GOOGLE SHEETS)
+  ═══════════════════════════════════════════ */
+  async function fetchSheetData(gid) {
+    const response = await fetch(`${BASE_URL}&gid=${gid}`);
+    const text = await response.text();
+    const json = JSON.parse(text.substring(47).slice(0, -2));
+    return json.table.rows.map(row => row.c.map(cell => cell ? (cell.v || '') : ''));
+  }
+
+  async function loadAllData() {
+    try {
+      // 1. Carregar Configurações (GID 0)
+      const configRows = await fetchSheetData('0');
+      // Pega a descrição e local se estiverem lá (exemplo: B10 e B11)
+      // Ajuste conforme sua planilha real
+      
+      // 2. Carregar Fase de Grupos (Jogos e Classificação - GID 745431056)
+      const grupoRows = await fetchSheetData('745431056');
+      
+      // Processar Jogos Grupo A (Linhas 5-7, Colunas A-I)
+      const jogos = [];
+      for(let i=4; i<=6; i++) {
+        const r = grupoRows[i];
+        if(r[1]) jogos.push({id: 'A'+i, data: 'A definir', hora: '00:00', fase: 'Grupo A', timeA: r[1], timeB: r[4], placarA: r[2]||0, placarB: r[3]||0, status: r[8] === 'Empate' ? 'agendado' : 'finalizado'});
+      }
+      // Processar Jogos Grupo B (Linhas 5-7, Colunas K-S)
+      for(let i=4; i<=6; i++) {
+        const r = grupoRows[i];
+        if(r[11]) jogos.push({id: 'B'+i, data: 'A definir', hora: '00:00', fase: 'Grupo B', timeA: r[11], timeB: r[14], placarA: r[12]||0, placarB: r[13]||0, status: r[18] === 'Empate' ? 'agendado' : 'finalizado'});
+      }
+      DATA.jogos = jogos;
+
+      // Processar Classificação Grupo A (Linhas 12-14, Colunas A-I)
+      const classif = [];
+      for(let i=11; i<=13; i++) {
+        const r = grupoRows[i];
+        if(r[1]) classif.push({pos: r[0], time: r[1], j: r[2], v: r[3], d: r[4], pts: r[5], sd: r[6], status: r[8], grupo: 'A'});
+      }
+      // Processar Classificação Grupo B (Linhas 12-14, Colunas K-S)
+      for(let i=11; i<=13; i++) {
+        const r = grupoRows[i];
+        if(r[11]) classif.push({pos: r[10], time: r[11], j: r[12], v: r[13], d: r[14], pts: r[15], sd: r[16], status: r[18], grupo: 'B'});
+      }
+      DATA.classificacao = classif;
+
+      // 3. Carregar Mata-Mata (GID 1303866170 - Exemplo de GID para Mata-Mata)
+      // Como não vi a aba Mata-Mata detalhada, vou manter um placeholder ou tentar carregar se existir
+      DATA.mataMata = {
+        semi1: {timeA:'A definir', timeB:'A definir', placarA:0, placarB:0, status:'agendado'},
+        semi2: {timeA:'A definir', timeB:'A definir', placarA:0, placarB:0, status:'agendado'},
+        final: {timeA:'A definir', timeB:'A definir', placarA:0, placarB:0, status:'agendado'}
+      };
+
+      renderAll();
+    } catch (err) {
+      console.error("Erro ao carregar dados:", err);
+    }
+  }
 
   /* ═══════════════════════════════════════════
      LÓGICA DO APP
@@ -483,12 +523,12 @@
     function tick() {
       const d = target - Date.now();
       if (d <= 0) {
-        ['days','hours','mins'].forEach(k => document.getElementById('cd-'+k).textContent = '00');
+        ['days','hours','mins'].forEach(k => { if(document.getElementById('cd-'+k)) document.getElementById('cd-'+k).textContent = '00'; });
         return;
       }
-      document.getElementById('cd-days').textContent  = String(Math.floor(d/864e5)).padStart(2,'0');
-      document.getElementById('cd-hours').textContent = String(Math.floor((d%864e5)/36e5)).padStart(2,'0');
-      document.getElementById('cd-mins').textContent  = String(Math.floor((d%36e5)/6e4)).padStart(2,'0');
+      if(document.getElementById('cd-days')) document.getElementById('cd-days').textContent  = String(Math.floor(d/864e5)).padStart(2,'0');
+      if(document.getElementById('cd-hours')) document.getElementById('cd-hours').textContent = String(Math.floor((d%864e5)/36e5)).padStart(2,'0');
+      if(document.getElementById('cd-mins')) document.getElementById('cd-mins').textContent  = String(Math.floor((d%36e5)/6e4)).padStart(2,'0');
     }
     tick(); setInterval(tick, 1000);
   }
@@ -496,7 +536,7 @@
   function renderAll() { 
     buildFilters(); 
     renderGames(); 
-    renderClass('A'); 
+    renderClass(classTabAtivo); 
     fillInfo();
   }
 
@@ -647,7 +687,7 @@
       document.getElementById('splash').classList.add('hidden');
     }, 2400);
     startCountdown();
-    renderAll();
+    loadAllData();
   });
   </script>
 </body>
