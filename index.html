@@ -430,9 +430,9 @@
      CONFIGURAÇÃO
   ═══════════════════════════════════════════ */
   const SPREADSHEET_ID = '1S3rUVU18W64c4okkxGOYnSLtW-aSyo47l3tos7u-8j0';
-  const GID_GRUPOS = '745431056';
-  const GID_MATA_MATA = '566414247';
-  const BASE_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+  const GOOGLE_API_KEY  = 'AIzaSyBzIsc4TKy_he2P8PcOgOzs8Eor3EVHBzw';
+  const SHEET_NAME      = 'Fase de Grupos';
+  const MATA_MATA_SHEET = 'Mata-Mata';
 
   const CFG = {
     dataInicio: '2026-07-25T08:00:00',
@@ -447,90 +447,118 @@
   /* ═══════════════════════════════════════════
      BUSCA DE DADOS (GOOGLE SHEETS)
   ═══════════════════════════════════════════ */
-  async function fetchSheetData(gid) {
-    const url = `${BASE_URL}&gid=${gid}`;
+  async function fetchSheetData(sheetName, range) {
+    const r = encodeURIComponent(`'${sheetName}'!${range}`);
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${r}?key=${GOOGLE_API_KEY}`;
     try {
       const response = await fetch(url);
-      if (!response.ok) throw new Error("HTTP " + response.status + " - planilha não pública");
-      const text = await response.text();
-      if (!text || text.length < 50) throw new Error("Resposta vazia");
-      const jsonStart = text.indexOf('{');
-      const jsonEnd   = text.lastIndexOf('}');
-      if (jsonStart === -1) throw new Error("JSON não encontrado");
-      const json = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
-      if (!json.table || !json.table.rows) throw new Error("Tabela sem linhas");
-      return json.table.rows.map(row => row.c ? row.c.map(cell => cell ? (cell.v !== null && cell.v !== undefined ? cell.v : '') : '') : []);
+      const result   = await response.json();
+      if (!response.ok) throw new Error(result.error ? result.error.message : response.statusText);
+      return result.values || [];
     } catch (e) {
-      console.error("Erro GID " + gid + ":", e.message);
-      const msg = `<div style="background:#1a0a0a;border:1px solid #c0392b;border-radius:12px;padding:1rem;font-family:monospace;font-size:.75rem;color:#e74c3c;margin:.5rem 0"><b>ERRO (GID ${gid})</b><br>${e.message}</div>`;
-      const c = document.getElementById('games-container');
-      const t = document.getElementById('class-container');
-      if (c) c.innerHTML = msg;
-      if (t) t.innerHTML = msg;
+      console.error("Erro ao buscar " + sheetName, e);
       return null;
     }
   }
 
   async function loadAllData() {
-    const grupoRows = await fetchSheetData(GID_GRUPOS);
-    if (!grupoRows) return;
-
     try {
-      // JOGOS — linhas 5-7 (índice 4-6)
-      // Grupo A: B(1)=TimeA C(2)=PlacarA E(4)=PlacarB F(5)=TimeB H(7)=Resultado
-      // Grupo B: L(11)=TimeA M(12)=PlacarA O(14)=PlacarB P(15)=TimeB R(17)=Resultado
-      const jogos = [];
-      for (let i = 4; i <= 6; i++) {
-        const r = grupoRows[i];
-        if (!r) continue;
-        const tA_A = String(r[1]||'').trim(), tB_A = String(r[5]||'').trim(), res_A = String(r[7]||'').trim();
-        if (tA_A) jogos.push({ id:'A'+i, data:'A definir', hora:'00:00', fase:'Grupo A',
-          timeA:tA_A, timeB:tB_A, placarA:Number(r[2])||0, placarB:Number(r[4])||0,
-          status:(res_A===''||res_A==='Empate')?'agendado':'finalizado' });
-        const tA_B = String(r[11]||'').trim(), tB_B = String(r[15]||'').trim(), res_B = String(r[17]||'').trim();
-        if (tA_B) jogos.push({ id:'B'+i, data:'A definir', hora:'00:00', fase:'Grupo B',
-          timeA:tA_B, timeB:tB_B, placarA:Number(r[12])||0, placarB:Number(r[14])||0,
-          status:(res_B===''||res_B==='Empate')?'agendado':'finalizado' });
-      }
-      DATA.jogos = jogos;
+      // ── FASE DE GRUPOS ──────────────────────────────────────────
+      const rows = await fetchSheetData(SHEET_NAME, 'A1:AC20');
+      if (!rows) return;
 
-      // CLASSIFICAÇÃO — linhas 12-14 (índice 11-13)
-      // Grupo A: A(0)=Pos B(1)=Time C(2)=J D(3)=V E(4)=D F(5)=PTS G(6)=SD I(8)=Status
-      // Grupo B: J(9)=Pos K(10)=Time L(11)=J M(12)=V N(13)=D O(14)=PTS P(15)=SD R(17)=Status
-      const classif = [];
-      for (let i = 11; i <= 13; i++) {
-        const r = grupoRows[i];
-        if (!r) continue;
-        const tA = String(r[1]||'').trim();
-        if (tA) classif.push({ pos:String(r[0]||'').replace(/[^0-9]/g,'')||String(i-10),
-          time:tA, j:Number(r[2])||0, v:Number(r[3])||0, d:Number(r[4])||0,
-          pts:Number(r[5])||0, sd:Number(r[6])||0, status:String(r[8]||'').trim(), grupo:'A' });
-        const tB = String(r[10]||'').trim();
-        if (tB) classif.push({ pos:String(r[9]||'').replace(/[^0-9]/g,'')||String(i-10),
-          time:tB, j:Number(r[11])||0, v:Number(r[12])||0, d:Number(r[13])||0,
-          pts:Number(r[14])||0, sd:Number(r[15])||0, status:String(r[17]||'').trim(), grupo:'B' });
-      }
-      DATA.classificacao = classif;
+      const headerRow3 = rows[3] || [];
+      const headerRow10 = rows[10] || [];
 
-      // MATA-MATA
-      // Semi1: B4(1)=TimeA F4(5)=TimeB | B5(1)=PlacarA E5(4)=PlacarB | H6(7)=Eliminado
-      // Semi2: B9(1)=TimeA F9(5)=TimeB | B10(1)=PlacarA E10(4)=PlacarB | H11(7)=Eliminado
-      // Final: B15(1)=TimeA F15(5)=TimeB | B16(1)=PlacarA E16(4)=PlacarB | H17(7)=Eliminado
-      // Campeão: B21(1)
-      const mataRows = await fetchSheetData(GID_MATA_MATA);
+      function findCol(header, names, fromCol, maxOff) {
+        for (let offset = 0; offset < maxOff; offset++) {
+          const val = (header[fromCol + offset] || '').toString().trim().toUpperCase();
+          for (const name of names) { if (val.includes(name)) return fromCol + offset; }
+        }
+        return -1;
+      }
+
+      // JOGOS (cabeçalho na linha 4 = índice 3)
+      function extractGames(startRow, endRow, startCol, grupo) {
+        const iEq1  = findCol(headerRow3, ['EQUIPE 1','EQUIPE1'], startCol, 10);
+        const iPts1 = findCol(headerRow3, ['PTS 1','PTS1'],       startCol, 10);
+        const iPts2 = findCol(headerRow3, ['PTS 2','PTS2'],       startCol, 10);
+        const iEq2  = findCol(headerRow3, ['EQUIPE 2','EQUIPE2'], startCol, 10);
+        const iRes  = findCol(headerRow3, ['RESULT'],             startCol, 10);
+        const iJogo = findCol(headerRow3, ['JOGO'],               startCol, 10);
+        const data = [];
+        for (let i = startRow; i <= endRow; i++) {
+          const row = rows[i] || [];
+          const res = iRes >= 0 ? (row[iRes]||'') : '';
+          data.push({
+            id: grupo+i, data:'A definir', hora:'00:00', fase: grupo,
+            timeA:  iEq1  >= 0 ? row[iEq1]  || '-' : '-',
+            timeB:  iEq2  >= 0 ? row[iEq2]  || '-' : '-',
+            placarA: iPts1 >= 0 ? row[iPts1] || '0': '0',
+            placarB: iPts2 >= 0 ? row[iPts2] || '0': '0',
+            status: (res === '' || res.toLowerCase().includes('empate')) ? 'agendado' : 'finalizado',
+          });
+        }
+        return data;
+      }
+
+      // CLASSIFICAÇÃO (cabeçalho na linha 11 = índice 10)
+      function extractClassif(startRow, endRow, startCol, grupo) {
+        const iPOS    = findCol(headerRow10, ['POS'],    startCol, 12);
+        const iEQUIPE = findCol(headerRow10, ['EQUIPE'], startCol, 12);
+        const iJ      = findCol(headerRow10, ['J'],      startCol, 12);
+        const iV      = findCol(headerRow10, ['V'],      startCol, 12);
+        const iD      = findCol(headerRow10, ['D'],      startCol, 12);
+        const iPTS    = findCol(headerRow10, ['PTS'],    startCol, 12);
+        const iSD     = findCol(headerRow10, ['SD'],     startCol, 12);
+        const iSTATUS = findCol(headerRow10, ['STATUS'], startCol, 12);
+        const data = [];
+        for (let i = startRow; i <= endRow; i++) {
+          const row = rows[i] || [];
+          data.push({
+            pos:    iPOS    >= 0 ? row[iPOS]    || '-' : '-',
+            time:   iEQUIPE >= 0 ? row[iEQUIPE] || '-' : '-',
+            j:      iJ      >= 0 ? row[iJ]      || '0' : '0',
+            v:      iV      >= 0 ? row[iV]      || '0' : '0',
+            d:      iD      >= 0 ? row[iD]      || '0' : '0',
+            pts:    iPTS    >= 0 ? row[iPTS]    || '0' : '0',
+            sd:     iSD     >= 0 ? row[iSD]     || '0' : '0',
+            status: iSTATUS >= 0 ? row[iSTATUS] || '-' : '-',
+            grupo,
+          });
+        }
+        return data;
+      }
+
+      const jogosA = extractGames(4, 6, 0,  'Grupo A');
+      const jogosB = extractGames(4, 6, 11, 'Grupo B');
+      DATA.jogos = [...jogosA, ...jogosB];
+
+      const classA = extractClassif(11, 13, 0,  'A');
+      const classB = extractClassif(11, 13, 11, 'B');
+      DATA.classificacao = [...classA, ...classB];
+
+      // ── MATA-MATA ──────────────────────────────────────────────
+      const mataRows = await fetchSheetData(MATA_MATA_SHEET, 'A1:N22');
       if (mataRows) {
-        const elim = (r) => String(r||'').includes('Eliminado');
+        const cell = (r, c) => (mataRows[r] && mataRows[r][c]) ? mataRows[r][c].toString().trim() : '';
+        function whoWon(nA, sA, nB, sB) {
+          const a = parseFloat(sA), b = parseFloat(sB);
+          if (isNaN(a) || isNaN(b)) return null;
+          return a > b ? nA : (b > a ? nB : null);
+        }
+        const mkMatch = (rowName, rowScore, colA, colB) => {
+          const nA = cell(rowName, colA), nB = cell(rowName, colB);
+          const sA = cell(rowScore, colA), sB = cell(rowScore, colB);
+          const winner = whoWon(nA, sA, nB, sB);
+          return { timeA: nA||'A definir', timeB: nB||'A definir', placarA: sA||'0', placarB: sB||'0',
+                   status: winner ? 'finalizado' : 'agendado' };
+        };
         DATA.mataMata = {
-          semi1: { timeA:String(mataRows[3]?.[1]||'A definir').trim(), timeB:String(mataRows[3]?.[5]||'A definir').trim(),
-            placarA:Number(mataRows[4]?.[1])||0, placarB:Number(mataRows[4]?.[4])||0,
-            status:elim(mataRows[5]?.[7])?'finalizado':'agendado' },
-          semi2: { timeA:String(mataRows[8]?.[1]||'A definir').trim(), timeB:String(mataRows[8]?.[5]||'A definir').trim(),
-            placarA:Number(mataRows[9]?.[1])||0, placarB:Number(mataRows[9]?.[4])||0,
-            status:elim(mataRows[10]?.[7])?'finalizado':'agendado' },
-          final: { timeA:String(mataRows[14]?.[1]||'A definir').trim(), timeB:String(mataRows[14]?.[5]||'A definir').trim(),
-            placarA:Number(mataRows[15]?.[1])||0, placarB:Number(mataRows[15]?.[4])||0,
-            status:elim(mataRows[16]?.[7])?'finalizado':'agendado' },
-          campeao: String(mataRows[20]?.[1]||mataRows[20]?.[0]||'').trim()||null
+          semi1:   mkMatch(3, 4, 1, 7),
+          semi2:   mkMatch(8, 9, 1, 7),
+          final:   mkMatch(14, 15, 1, 7),
+          campeao: cell(20, 0) || null,
         };
       }
 
