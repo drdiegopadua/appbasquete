@@ -32,14 +32,14 @@
     body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;padding-bottom:96px;overflow-x:hidden;}
 
     /* HERO */
-    .hero{position:relative;height:38vh;min-height:240px;overflow:hidden;}
+    .hero{position:relative;height:38vh;min-height:260px;overflow:visible;}
     .hero-bg{position:absolute;inset:0;}
     .hero-bg-photo{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?w=900&q=80') center 30%/cover no-repeat;filter:grayscale(95%) contrast(1.15) brightness(.6);}
     .hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(80,0,0,0.5) 0%, rgba(100,5,5,0.3) 35%, rgba(0,0,0,0.5) 70%, #0D0D0D 100%);}
     .hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 39px,rgba(255,255,255,.015) 40px);pointer-events:none;}
     .hero-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:1.8rem;isolation:isolate;}
     
-    .hero-logo-img{width:140px;height:auto;max-height:unset;overflow:visible;margin-bottom:.7rem;background:transparent;mix-blend-mode:normal;filter:drop-shadow(0 4px 24px rgba(245,166,35,.45));animation:logopulse 3s ease-in-out infinite;}
+    .hero-logo-img{width:140px;height:auto;max-height:none;overflow:visible;display:block;margin-bottom:.7rem;background:transparent;mix-blend-mode:normal;filter:drop-shadow(0 4px 24px rgba(245,166,35,.45));animation:logopulse 3s ease-in-out infinite;}
     @keyframes logopulse{0%,100%{filter:drop-shadow(0 4px 24px rgba(245,166,35,.45)) drop-shadow(0 0 60px rgba(124,10,2,.6))}50%{filter:drop-shadow(0 4px 36px rgba(245,166,35,.7)) drop-shadow(0 0 80px rgba(124,10,2,.8))}}
     
     .hero-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.22em;color:var(--gold);text-align:center;line-height:1;}
@@ -183,7 +183,7 @@
     .splash-logo-wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;animation:splashLogoIn 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;}
     @keyframes splashLogoIn{from{transform:scale(0.8) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
 
-    .splash-logo{width:120px;height:auto;max-height:unset;overflow:visible;filter:drop-shadow(0 0 30px rgba(245,166,35,0.4));}
+    .splash-logo{width:120px;height:auto;max-height:none;overflow:visible;display:block;filter:drop-shadow(0 0 30px rgba(245,166,35,0.4));}
     .splash-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.25em;color:var(--gold);margin-top:1.2rem;text-shadow:0 0 20px rgba(124,10,2,0.6);}
     .splash-loader{width:140px;height:2px;background:rgba(255,255,255,0.05);margin-top:2rem;position:relative;overflow:hidden;border-radius:10px;}
     .splash-loader-bar{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg, var(--maroon), var(--gold), var(--maroon));animation:splashLoading 2s ease-in-out forwards;}
@@ -430,7 +430,7 @@
      CONFIGURAÇÃO
   ═══════════════════════════════════════════ */
   const SPREADSHEET_ID = '1S3rUVU18W64c4okkxGOYnSLtW-aSyo47l3tos7u-8j0';
-  const GID_GRUPOS   = '745431056';
+  const GID_GRUPOS    = '745431056';
   const GID_MATA_MATA = '566414247';
 
   const CFG = {
@@ -446,88 +446,85 @@
   /* ═══════════════════════════════════════════
      BUSCA DE DADOS (GOOGLE SHEETS)
   ═══════════════════════════════════════════ */
+  // Busca via gviz - sem API key, funciona em qualquer domínio
   async function fetchSheetData(gid) {
-    // Usa export CSV público - não precisa de API key
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      const text = await response.text();
-      // Parsear CSV linha por linha
-      return text.trim().split('\n').map(line => {
-        const cols = [];
-        let cur = '', inQ = false;
-        for (let i = 0; i < line.length; i++) {
-          const ch = line[i];
-          if (ch === '"') { inQ = !inQ; }
-          else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-          else { cur += ch; }
-        }
-        cols.push(cur.trim());
-        return cols;
-      });
-    } catch (e) {
-      console.error('Erro GID ' + gid + ':', e.message);
-      document.getElementById('games-container').innerHTML =
-        '<p style="color:#e74c3c;padding:1rem">❌ ' + e.message + '</p>';
-      return null;
+    const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const text = await response.text();
+    // Detectar início e fim do JSON automaticamente
+    const start = text.indexOf('{');
+    const end   = text.lastIndexOf('}');
+    if (start === -1) throw new Error('Resposta inválida do Sheets');
+    const json = JSON.parse(text.substring(start, end + 1));
+    if (!json.table || !json.table.rows) return [];
+    return json.table.rows.map(row =>
+      (row.c || []).map(cell => (cell && cell.v !== null && cell.v !== undefined) ? String(cell.v) : '')
+    );
+  }
+
+  function extractGames(rows, startRow, endRow, startCol, groupName) {
+    const hdr = rows[3] || [];
+    function fc(names, from) {
+      for (let o = 0; o < 10; o++) {
+        const v = (hdr[from+o]||'').toUpperCase();
+        for (const n of names) { if (v.includes(n)) return from+o; }
+      }
+      return -1;
     }
+    const iEq1=fc(['EQUIPE 1','EQUIPE1'],startCol), iPts1=fc(['PTS 1','PTS1'],startCol);
+    const iPts2=fc(['PTS 2','PTS2'],startCol), iEq2=fc(['EQUIPE 2','EQUIPE2'],startCol);
+    const iRes=fc(['RESULT'],startCol);
+    const data=[];
+    for (let i=startRow; i<=endRow; i++) {
+      const r=rows[i]||[], res=iRes>=0?(r[iRes]||''):'';
+      data.push({ id:groupName+i, data:'A definir', hora:'00:00', fase:groupName,
+        timeA:iEq1>=0?r[iEq1]||'-':'-', timeB:iEq2>=0?r[iEq2]||'-':'-',
+        placarA:iPts1>=0?r[iPts1]||'0':'0', placarB:iPts2>=0?r[iPts2]||'0':'0',
+        status:(res===''||res.toLowerCase().includes('empate'))?'agendado':'finalizado' });
+    }
+    return data;
+  }
+
+  function extractClassif(rows, startRow, endRow, startCol, grupo) {
+    const hdr=rows[10]||[];
+    function fc(names, from) {
+      for (let o=0; o<12; o++) {
+        const v=(hdr[from+o]||'').toUpperCase();
+        for (const n of names) { if (v===n) return from+o; }
+      }
+      return -1;
+    }
+    const iP=fc(['POS'],startCol),iE=fc(['EQUIPE'],startCol),iJ=fc(['J'],startCol);
+    const iV=fc(['V'],startCol),iD=fc(['D'],startCol),iPTS=fc(['PTS'],startCol);
+    const iSD=fc(['SD'],startCol),iST=fc(['STATUS'],startCol);
+    const data=[];
+    for (let i=startRow; i<=endRow; i++) {
+      const r=rows[i]||[];
+      data.push({ pos:iP>=0?r[iP]||'-':'-', time:iE>=0?r[iE]||'-':'-',
+        j:iJ>=0?r[iJ]||'0':'0', v:iV>=0?r[iV]||'0':'0', d:iD>=0?r[iD]||'0':'0',
+        pts:iPTS>=0?r[iPTS]||'0':'0', sd:iSD>=0?r[iSD]||'0':'0',
+        status:iST>=0?r[iST]||'-':'-', grupo });
+    }
+    return data;
   }
 
   async function loadAllData() {
-    const grupoRows = await fetchSheetData(GID_GRUPOS);
-    if (!grupoRows) return;
     try {
-      // JOGOS (linhas 5-7 = índice 4-6)
-      // Grupo A: B(1)=TimeA C(2)=PlacarA E(4)=PlacarB F(5)=TimeB H(7)=Resultado
-      // Grupo B: L(11)=TimeA M(12)=PlacarA O(14)=PlacarB P(15)=TimeB R(17)=Resultado
-      const jogos = [];
-      for (let i = 4; i <= 6; i++) {
-        const r = grupoRows[i]; if (!r) continue;
-        const tA_A = (r[1]||'').trim(), tB_A = (r[5]||'').trim(), res_A = (r[7]||'').trim();
-        if (tA_A && tA_A !== '-') jogos.push({ id:'A'+i, data:'A definir', hora:'00:00', fase:'Grupo A',
-          timeA:tA_A, timeB:tB_A, placarA:r[2]||'0', placarB:r[4]||'0',
-          status:(res_A===''||res_A.toLowerCase().includes('empate'))?'agendado':'finalizado' });
-        const tA_B = (r[11]||'').trim(), tB_B = (r[15]||'').trim(), res_B = (r[17]||'').trim();
-        if (tA_B && tA_B !== '-') jogos.push({ id:'B'+i, data:'A definir', hora:'00:00', fase:'Grupo B',
-          timeA:tA_B, timeB:tB_B, placarA:r[12]||'0', placarB:r[14]||'0',
-          status:(res_B===''||res_B.toLowerCase().includes('empate'))?'agendado':'finalizado' });
-      }
-      DATA.jogos = jogos;
+      const rows = await fetchSheetData(GID_GRUPOS);
+      DATA.jogos         = [...extractGames(rows,4,6,0,'Grupo A'),...extractGames(rows,4,6,11,'Grupo B')];
+      DATA.classificacao = [...extractClassif(rows,11,13,0,'A'),...extractClassif(rows,11,13,11,'B')];
 
-      // CLASSIFICAÇÃO (linhas 12-14 = índice 11-13)
-      // Grupo A: A(0)=Pos B(1)=Time C(2)=J D(3)=V E(4)=D F(5)=PTS G(6)=SD I(8)=Status
-      // Grupo B: J(9)=Pos K(10)=Time L(11)=J M(12)=V N(13)=D O(14)=PTS P(15)=SD R(17)=Status
-      const classif = [];
-      for (let i = 11; i <= 13; i++) {
-        const r = grupoRows[i]; if (!r) continue;
-        const tA = (r[1]||'').trim();
-        if (tA && tA !== '-') classif.push({ pos:(r[0]||'').replace(/[^0-9]/g,'')||String(i-10),
-          time:tA, j:r[2]||'0', v:r[3]||'0', d:r[4]||'0', pts:r[5]||'0', sd:r[6]||'0',
-          status:(r[8]||'').trim(), grupo:'A' });
-        const tB = (r[10]||'').trim();
-        if (tB && tB !== '-') classif.push({ pos:(r[9]||'').replace(/[^0-9]/g,'')||String(i-10),
-          time:tB, j:r[11]||'0', v:r[12]||'0', d:r[13]||'0', pts:r[14]||'0', sd:r[15]||'0',
-          status:(r[17]||'').trim(), grupo:'B' });
-      }
-      DATA.classificacao = classif;
-
-      // MATA-MATA
-      const mataRows = await fetchSheetData(GID_MATA_MATA);
-      if (mataRows) {
-        const c = (r,col) => (mataRows[r]&&mataRows[r][col]) ? mataRows[r][col].toString().trim() : '';
-        const won = (nA,sA,nB,sB) => { const a=parseFloat(sA),b=parseFloat(sB); return (!isNaN(a)&&!isNaN(b)&&(a>0||b>0))?(a>b?nA:(b>a?nB:null)):null; };
-        const mk = (rN,rS,cA,cB) => { const nA=c(rN,cA),nB=c(rN,cB),sA=c(rS,cA),sB=c(rS,cB); return {timeA:nA||'A definir',timeB:nB||'A definir',placarA:sA||'0',placarB:sB||'0',status:won(nA,sA,nB,sB)?'finalizado':'agendado'}; };
-        DATA.mataMata = {
-          semi1:   mk(3,  4,  1, 7),
-          semi2:   mk(8,  9,  1, 7),
-          final:   mk(14, 15, 1, 7),
-          campeao: c(20, 0) || null,
-        };
-      }
+      const m = await fetchSheetData(GID_MATA_MATA);
+      const cv=(r,c)=>(m[r]&&m[r][c])?m[r][c].toString().trim():'';
+      const won=(nA,sA,nB,sB)=>{const a=parseFloat(sA),b=parseFloat(sB);return(!isNaN(a)&&!isNaN(b)&&(a>0||b>0))?(a>b?nA:(b>a?nB:null)):null;};
+      const mk=(rN,rS,cA,cB)=>{const nA=cv(rN,cA),nB=cv(rN,cB),sA=cv(rS,cA),sB=cv(rS,cB);return{timeA:nA||'A definir',timeB:nB||'A definir',placarA:sA||'0',placarB:sB||'0',status:won(nA,sA,nB,sB)?'finalizado':'agendado'};};
+      DATA.mataMata={semi1:mk(3,4,1,7),semi2:mk(8,9,1,7),final:mk(14,15,1,7),campeao:cv(20,0)||null};
       renderAll();
-    } catch (err) {
-      console.error('Erro ao processar dados:', err);
+    } catch(err) {
+      console.error('Erro:',err.message);
+      const el=document.getElementById('games-container');
+      if(el) el.innerHTML=`<p style="color:#e74c3c;padding:1rem;font-size:12px">❌ ${err.message}</p>`;
     }
   }
 
