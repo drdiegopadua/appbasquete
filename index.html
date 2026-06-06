@@ -15,33 +15,33 @@
   --bg:#f8f9fa; --bg2:#ffffff; --bg3:#f1f3f5;
   --gold:#fcc137; --gold2:#bd772b; --gold-dim:rgba(252,193,55,0.15);
   --blue:#671217; --blue2:#500d11; --blue3:#3a090c;
-  --red:#ff4040; --green:#22c55e;
-  --card:#ffffff; --card2:#f8f9fa; --card3:rgba(103,18,23,0.05);
-  --border:rgba(0,0,0,0.08); --border-gold:rgba(252,193,55,0.28); --border-blue:rgba(103,18,23,0.4);
-  --text:#212529; --text2:#495057; --muted:#868e96;
-  --topbar:rgba(255,255,255,0.95); --nav:rgba(255,255,255,0.98);
+	  --red:#ff4040; --green:#22c55e;
+	  --card:#ffffff; --card2:#f8f9fa; --card3:rgba(103,18,23,0.05);
+	  --border:rgba(0,0,0,0.08); --border-gold:rgba(252,193,55,0.28); --border-blue:rgba(103,18,23,0.4);
+	  --text:#212529; --text2:#495057; --muted:#868e96;
+	  --topbar:#671217; --nav:#671217;
   --shadow:0 8px 32px rgba(0,0,0,0.5);
   --r:20px; --r-sm:12px; --r-xs:8px;
 }
 body.day {
-  --bg:#ffffff; --bg2:#f4f6fb; --bg3:#e8edf8;
-  --gold:#F4C542; --gold2:#e8a010; --gold-dim:rgba(244,197,66,0.18);
-  --blue:#671217; --blue2:#500d11; --blue3:#3a090c;
-  --card:#ffffff; --card2:#f4f6fb; --card3:rgba(14,59,120,0.06);
-  --border:rgba(14,59,120,0.13); --border-gold:rgba(244,197,66,0.55); --border-blue:rgba(14,59,120,0.25);
-  --text:#0a1a3e; --text2:#2a3f6e; --muted:#7a8fb0;
-  --topbar:#0E3B78; --nav:#0E3B78;
-  --shadow:0 4px 20px rgba(14,59,120,0.14);
-}
-body.day .topbar { background: #0E3B78 !important; border-bottom: 2px solid #F4C542; }
-body.day .topbar-title { color: #ffffff !important; }
-body.day .icon-btn { color: #ffffff !important; }
-body.day .live-dot-wrap { background: rgba(255,255,255,0.15) !important; color: #ffffff !important; }
-body.day .live-dot { background: #F4C542 !important; }
-body.day .bottom-nav { background: #0E3B78 !important; border-top: 2px solid #F4C542; }
-body.day .nav-btn { color: rgba(255,255,255,0.55) !important; }
-body.day .nav-btn.on { color: #F4C542 !important; }
-body.day .card { background: #ffffff !important; border: 1px solid rgba(14,59,120,0.13) !important; }
+	  --bg:#ffffff; --bg2:#f4f6fb; --bg3:#f8f9fa;
+	  --gold:#fcc137; --gold2:#bd772b; --gold-dim:rgba(252,193,55,0.15);
+	  --blue:#671217; --blue2:#500d11; --blue3:#3a090c;
+	  --card:#ffffff; --card2:#f8f9fa; --card3:rgba(103,18,23,0.05);
+	  --border:rgba(0,0,0,0.08); --border-gold:rgba(252,193,55,0.5); --border-blue:rgba(103,18,23,0.2);
+	  --text:#212529; --text2:#495057; --muted:#868e96;
+	  --topbar:#671217; --nav:#671217;
+	  --shadow:0 4px 20px rgba(103,18,23,0.15);
+	}
+	body.day .topbar { background: #671217 !important; border-bottom: 2px solid #fcc137; }
+	body.day .topbar-title { color: #ffffff !important; }
+	body.day .icon-btn { color: #ffffff !important; }
+	body.day .live-dot-wrap { background: rgba(255,255,255,0.15) !important; color: #ffffff !important; }
+	body.day .live-dot { background: #fcc137 !important; }
+	body.day .bottom-nav { background: #671217 !important; border-top: 2px solid #fcc137; }
+	body.day .nav-btn { color: rgba(255,255,255,0.55) !important; }
+	body.day .nav-btn.on { color: #fcc137 !important; }
+	body.day .card { background: #ffffff !important; border: 1px solid rgba(103,18,23,0.1) !important; }
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
@@ -66,8 +66,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.15}50%{transform:scale(1.06);opacity:.4}}
 .splash-logo-img{width:80px;height:80px;object-fit:contain;position:relative;z-index:1;animation:splashPop .8s cubic-bezier(.34,1.56,.64,1) .2s both;filter:drop-shadow(0 0 30px rgba(244,197,66,.5));border-radius:18px;}
 @keyframes splashPop{from{opacity:0;transform:scale(.3) rotate(-15deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-.splash-name{font-family:'Anton',sans-serif;font-size:28px;letter-spacing:1px;color:#fff;animation:fadeUp .5s ease .9s both;}
-.splash-ed{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:3px;text-transform:uppercase;animation:fadeUp .5s ease 1.05s both;margin-top:4px;}
+	.splash-name{font-family:'Anton',sans-serif;font-size:28px;letter-spacing:1px;color:#fff;animation:fadeUp .5s ease .9s both;}
+	.splash-ed{font-size:11px;color:#fff;opacity:0.7;letter-spacing:3px;text-transform:uppercase;animation:fadeUp .5s ease 1.05s both;margin-top:4px;}
 .splash-track{width:180px;height:3px;background:rgba(255,255,255,.08);border-radius:999px;margin-top:28px;overflow:hidden;animation:fadeUp .4s ease 1.1s both;}
 .splash-fill{height:100%;background:linear-gradient(90deg,var(--gold),#e8a010);border-radius:999px;animation:fillBar 1.5s cubic-bezier(.4,0,.2,1) 1.1s both;}
 @keyframes fillBar{from{width:0}to{width:100%}}
@@ -77,9 +77,9 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .topbar{position:sticky;top:0;z-index:200;min-height:64px;display:flex;align-items:center;justify-content:space-between;padding-left:16px;padding-right:16px;padding-top:max(env(safe-area-inset-top,0px),12px);padding-bottom:12px;background:var(--topbar);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:background .35s;}
 .brand{display:flex;align-items:center;gap:10px;}
 .brand-logo{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(244,197,66,.35));}
-.brand-text small{display:block;font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;text-transform:uppercase;}
-.brand-text h1{font-family:'Anton',sans-serif;font-size:15px;line-height:1.1;}
-.live-pill{display:flex;align-items:center;gap:5px;background:rgba(103,18,23,.08);border:1px solid rgba(103,18,23,.2);padding:5px 11px;border-radius:999px;font-size:11px;font-weight:700;color:var(--blue);}
+	.brand-text small{display:block;font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+	.brand-text h1{font-family:'Anton',sans-serif;font-size:15px;line-height:1.1;color:#fff;}
+	.live-pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,0.3);padding:5px 11px;border-radius:999px;font-size:11px;font-weight:700;color:#fff;}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.4s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:17px;}
@@ -103,20 +103,20 @@ main{position:relative;z-index:1;padding-bottom:160px;}
 .hero-ov{position:absolute;inset:0;background:linear-gradient(160deg,rgba(103,18,23,0.9) 0%,rgba(58,9,12,0.95) 100%);}
 .hero-fade{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,transparent 44%);pointer-events:none;}
 .hero-body{position:relative;z-index:2;padding:28px 24px 24px;}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(103,18,23,.08);border:1px solid rgba(103,18,23,.2);padding:7px 14px;border-radius:999px;margin-bottom:18px;font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.8px;}
+	.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:7px 14px;border-radius:9999px;margin-bottom:18px;font-size:11px;font-weight:700;color:#fff;letter-spacing:.8px;}
 .hero-logorow{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
 .hero-logorow img{width:66px;height:66px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(244,197,66,.5));}
 .hero-logorow-text .ed{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;text-transform:uppercase;}
 .hero-logorow-text .ht{font-family:'Anton',sans-serif;font-size:24px;line-height:1;color:#fff;text-transform:uppercase;}
 .hero h2{font-family:'Anton',sans-serif;font-size:46px;line-height:.93;text-transform:uppercase;color:#fff;margin-bottom:10px;}
 .hero h2 em{color:var(--gold);font-style:normal;}
-.hero-sub{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:22px;line-height:1.5;}
+	.hero-sub{font-size:12px;color:#fff;opacity:0.8;margin-bottom:22px;line-height:1.5;}
 .cdown{display:flex;gap:8px;margin-bottom:24px;}
 .cd{flex:1;background:rgba(103,18,23,.28);border:1px solid var(--border-gold);border-radius:13px;padding:9px 4px 7px;display:flex;flex-direction:column;align-items:center;backdrop-filter:blur(6px);}
 .cd-n{font-family:'Anton',sans-serif;font-size:28px;color:var(--gold);line-height:1;min-width:36px;text-align:center;}
 .cd-n.flipping{animation:cdFlip .22s ease;}
 @keyframes cdFlip{0%{transform:scaleY(1);opacity:1}50%{transform:scaleY(0);opacity:0}100%{transform:scaleY(1);opacity:1}}
-.cd-l{font-size:8px;color:rgba(255,255,255,.4);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+	.cd-l{font-size:8px;color:#fff;opacity:0.7;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
 .cd-sep{display:flex;align-items:center;font-family:'Anton',sans-serif;font-size:22px;color:var(--gold);padding-bottom:2px;opacity:.7;}
 .hero-btns{display:flex;gap:10px;}
 .btn-gold{flex:1;height:48px;border-radius:13px;border:none;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:13px;letter-spacing:.4px;box-shadow:0 6px 20px rgba(103,18,23,0.2);transition:transform .12s;}
@@ -345,11 +345,11 @@ main{position:relative;z-index:1;padding-bottom:160px;}
 
 /* LIVE VIDEO */
 .live-video-card{margin:0 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:background .35s,border .35s;}
-.lv-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
-.lv-header strong{font-size:13px;font-weight:800;}
+	.lv-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
+	.lv-header strong{font-size:13px;font-weight:800;color:var(--text);}
 .lv-placeholder{height:160px;background:linear-gradient(135deg,rgba(103,18,23,.3),rgba(5,8,22,.8));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;}
 .lv-play{width:52px;height:52px;border-radius:50%;background:rgba(244,197,66,.2);border:2px solid var(--border-gold);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold);}
-.lv-sub{font-size:11px;color:var(--muted);text-align:center;}
+	.lv-sub{font-size:11px;color:#fff;opacity:0.8;text-align:center;}
 
 /* FIREWORKS */
 #fireworks{position:fixed;inset:0;z-index:9000;pointer-events:none;}
@@ -613,7 +613,7 @@ input:checked~.th-slider::before{transform:translateX(20px);background:var(--gol
           <div class="ht">BASQUETE<br>AFC</div>
         </div>
       </div>
-      <h2>O MAIOR<br><em>BASQUETE</em><br>DA REGIÃO</h2>
+      <h2 style="font-size:38px;">O MAIOR<br>CAMPEONATO DE<br><em>BASQUETE</em><br>DA REGIÃO</h2>
       <p class="hero-sub">Região das Montanhas · Afonso Cláudio, ES<br>25 e 26 de Julho de 2026</p>
       <div class="cdown">
         <div class="cd"><div class="cd-n" id="cdD">--</div><div class="cd-l">Dias</div></div>
@@ -626,7 +626,7 @@ input:checked~.th-slider::before{transform:translateX(20px);background:var(--gol
       </div>
       <div class="hero-btns">
         <button class="btn-gold" onclick="nav('gamesPage',document.querySelectorAll('.nav-btn')[1])">VER JOGOS</button>
-        <button class="btn-ghost" onclick="nav('tablePage',document.querySelectorAll('.nav-btn')[2])">TABELA</button>
+	        <button class="btn-ghost" style="border:2px solid var(--gold); background:rgba(252,193,55,0.1); color:var(--gold); font-weight:800;" onclick="nav('tablePage',document.querySelectorAll('.nav-btn')[2])">TABELA</button>
       </div>
     </div>
   </section>
@@ -654,11 +654,13 @@ input:checked~.th-slider::before{transform:translateX(20px);background:var(--gol
   <div class="sec" style="padding-top:18px;"><span class="sec-title">Times Inscritos</span><span class="sec-link" onclick="nav('tablePage',document.querySelectorAll('.nav-btn')[2])">VER TODOS →</span></div>
   <p style="font-size:11px;color:var(--muted);padding:0 16px 9px;">👉 Toque para ver o perfil</p>
   <div class="hscroll" id="teamChipsHome">
-    <div class="team-chip gold" onclick="openTeam('CT Montanhas','Afonso Cláudio, ES','🏀',0,0,0)"><div class="tc-av">🏠</div><div><div class="tc-name">CT Montanhas</div><div class="tc-city">Afonso Cláudio, ES</div><div class="tc-badge">EQUIPE DA CASA</div></div></div>
-    <div class="team-chip" style="border-style:dashed;opacity:.6;"><div class="tc-av">❓</div><div><div class="tc-name">Equipe B</div><div class="tc-city">Cidade, ES</div><div class="tc-badge">EM BREVE</div></div></div>
-    <div class="team-chip" style="border-style:dashed;opacity:.6;"><div class="tc-av">❓</div><div><div class="tc-name">Equipe C</div><div class="tc-city">Cidade, RJ</div><div class="tc-badge">EM BREVE</div></div></div>
-    <div class="team-chip" style="border-style:dashed;opacity:.6;"><div class="tc-av">❓</div><div><div class="tc-name">Equipe D</div><div class="tc-city">Cidade, MG</div><div class="tc-badge">EM BREVE</div></div></div>
-  </div>
+	    <div class="team-chip gold" onclick="openTeam('CT das Montanhas','Afonso Cláudio, ES','🏠',0,0,0)"><div class="tc-av">🏠</div><div><div class="tc-name">CT das Montanhas</div><div class="tc-city">Afonso Cláudio, ES</div><div class="tc-badge">EQUIPE DA CASA</div></div></div>
+	    <div class="team-chip" onclick="openTeam('Marlins','Vitória, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Marlins</div><div class="tc-city">Vitória, ES</div><div class="tc-badge">INSCRITO</div></div></div>
+	    <div class="team-chip" onclick="openTeam('Central Serrano','Serra, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Central Serrano</div><div class="tc-city">Serra, ES</div><div class="tc-badge">INSCRITO</div></div></div>
+	    <div class="team-chip" onclick="openTeam('Crossover Basquete','Itapemirim, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Crossover Basquete</div><div class="tc-city">Itapemirim, ES</div><div class="tc-badge">INSCRITO</div></div></div>
+	    <div class="team-chip" onclick="openTeam('Basquete Aracruz','Aracruz, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Basquete Aracruz</div><div class="tc-city">Aracruz, ES</div><div class="tc-badge">INSCRITO</div></div></div>
+	    <div class="team-chip" onclick="openTeam('Basquete São Pedro','Vitória, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Basquete São Pedro</div><div class="tc-city">Vitória, ES</div><div class="tc-badge">INSCRITO</div></div></div>
+	  </div>
 
   <div class="sec" style="padding-top:18px;"><span class="sec-title">🏅 MVP da Partida</span><span class="sec-link">Destaques · 2026</span></div>
   <div class="mvp-strip" id="mvpStrip">
@@ -670,10 +672,10 @@ input:checked~.th-slider::before{transform:translateX(20px);background:var(--gol
   <!-- NEWS -->
   <div class="sec" style="padding-top:18px;"><span class="sec-title">📰 Notícias</span></div>
   <div class="news-list" id="newsList">
-    <div class="news-card"><div class="news-ic">🎉</div><div><div class="news-tag">Evento</div><div class="news-title">Inscrições abertas para o Basquete da Supercopa AFC 2026!</div><div class="news-date">Maio 2026</div></div></div>
-    <div class="news-card"><div class="news-ic">🏀</div><div><div class="news-tag">Competição</div><div class="news-title">Formato: Grupos → Semifinal → Grande Final em 2 dias</div><div class="news-date">Maio 2026</div></div></div>
-    <div class="news-card"><div class="news-ic">📍</div><div><div class="news-tag">Local</div><div class="news-title">Quadra Eurico Vieira de Resende receberá os jogos de basquete</div><div class="news-date">Abril 2026</div></div></div>
-  </div>
+	    <div class="news-card"><div class="news-ic">🗳️</div><div><div class="news-tag">Sorteio</div><div class="news-title">Sorteio dos grupos será dia 01/07 no instagram oficial da supercopa e da secretaria de esportes.</div><div class="news-date">Junho 2026</div></div></div>
+	    <div class="news-card"><div class="news-ic">🥤</div><div><div class="news-tag">Patrocínio</div><div class="news-title">O grupo coroa é patrocinador da Supercopa, Vem muita coisa boa por aí! Fiquem de olho.</div><div class="news-date">Junho 2026</div></div></div>
+	    <div class="news-card"><div class="news-ic">🎁</div><div><div class="news-tag">Especial</div><div class="news-title">Temos um presente especial para todas as equipes no sábado à noite, ja já a gente te conta.</div><div class="news-date">Junho 2026</div></div></div>
+	  </div>
 
 </section>
 
@@ -1342,11 +1344,21 @@ watched.forEach(id=>{const b=document.getElementById('w-'+id);if(b){b.classList.
 
 // ==================== TEAM MODAL ====================
 const teamInfo = {
-  'CT Montanhas': { insta:'@supercopaafc', resp:'Diego Pádua', cap:'A definir', badge:'🏠 EQUIPE DA CASA', av:'🏠' },
-};
-const players = {
-  'CT Montanhas': [{n:5,name:'A definir',pos:'Armador'},{n:8,name:'A definir',pos:'Ala'},{n:15,name:'A definir',pos:'Pivô'}],
-};
+	  'CT das Montanhas': { insta:'@ctdasmontanhas', resp:'Diego Pádua', cap:'Caio', badge:'🏠 EQUIPE DA CASA', av:'🏠' },
+	  'Marlins': { insta:'@marlinsbasquete', resp:'Eduardo', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' },
+	  'Central Serrano': { insta:'@cesbbasquete', resp:'Robson', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' },
+	  'Crossover Basquete': { insta:'a definir', resp:'Carlos Eduardo', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' },
+	  'Basquete Aracruz': { insta:'a definir', resp:'Nicolas', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' },
+	  'Basquete São Pedro': { insta:'a definir', resp:'Márcio', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' }
+	};
+	const players = {
+	  'CT das Montanhas': [{n:10,name:'Caio',pos:'Pivô'},{n:7,name:'Lucas',pos:'Ala'},{n:5,name:'Renan',pos:'Armador'}],
+	  'Marlins': [],
+	  'Central Serrano': [],
+	  'Crossover Basquete': [],
+	  'Basquete Aracruz': [],
+	  'Basquete São Pedro': []
+	};
 
 function openTeam(name, city, av, pj, v, pts) {
   const info = teamInfo[name] || {};
