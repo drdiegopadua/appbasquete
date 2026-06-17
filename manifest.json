@@ -4,8 +4,8 @@
   "description": "Campeonato Municipal de Handebol de 5 de Afonso Cláudio",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1B5E20",
-  "theme_color": "#1B5E20",
+  "background_color": "#1a3a1a",
+  "theme_color": "#1a3a1a",
   "orientation": "portrait",
   "icons": [
     {
