@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1B5E20">
+    <meta name="theme-color" content="#1a3a1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>AfoHand</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -18,24 +18,22 @@
         }
 
         :root {
-            --verde-escuro: #1B5E20;
-            --verde: #2E7D32;
-            --verde-claro: #4CAF50;
-            --verde-fundo: #E8F5E9;
-            --vermelho: #D32F2F;
-            --vermelho-claro: #FFCDD2;
-            --branco: #FFFFFF;
-            --cinza: #F5F5F5;
-            --cinza-texto: #757575;
-            --sombra: 0 4px 20px rgba(0,0,0,0.08);
-            --sombra-card: 0 8px 32px rgba(27, 94, 32, 0.12);
+            --verde-fundo: #1a3a1a;
+            --verde-escuro: #0d280d;
+            --verde-medio: #2d5a2d;
+            --verde-claro: #4a8a4a;
+            --vermelho: #c41e3a;
+            --vermelho-claro: #e85d75;
+            --branco: #ffffff;
+            --branco-suave: rgba(255,255,255,0.9);
+            --amarelo: #f4d03f;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--cinza);
+            background: var(--verde-fundo);
             min-height: 100vh;
-            color: #333;
+            color: var(--branco);
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
@@ -47,76 +45,151 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, var(--verde-escuro) 0%, var(--verde) 100%);
+            background: var(--verde-fundo);
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            justify-content: space-between;
+            padding: 60px 30px 40px;
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         .splash-screen.hidden {
             opacity: 0;
-            transform: translateY(-100%);
+            transform: scale(1.1);
             pointer-events: none;
         }
 
-        .splash-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 65%;
-            background: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80') center/cover;
-            opacity: 0.3;
-            border-radius: 0 0 50% 50% / 0 0 30% 30%;
-        }
-
-        .splash-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 65%;
-            background: linear-gradient(180deg, rgba(27,94,32,0.8) 0%, rgba(46,125,50,0.9) 100%);
-            border-radius: 0 0 50% 50% / 0 0 30% 30%;
-        }
-
-        .splash-content {
-            position: relative;
-            z-index: 2;
+        .splash-top {
             text-align: center;
-            padding: 0 40px;
-            margin-top: -80px;
         }
 
-        .splash-logo {
-            font-size: 2.5em;
-            font-weight: 700;
+        .splash-logo-text {
+            font-size: 3.5em;
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .splash-logo-text .af {
             color: var(--branco);
-            margin-bottom: 8px;
-            letter-spacing: -1px;
         }
 
-        .splash-logo span {
-            color: var(--vermelho-claro);
-            font-weight: 300;
+        .splash-logo-text .hand {
+            color: var(--vermelho);
         }
 
         .splash-subtitle {
-            font-size: 1.1em;
-            color: rgba(255,255,255,0.85);
+            font-size: 1.2em;
             font-weight: 300;
-            margin-bottom: 40px;
+            color: var(--branco-suave);
+            margin-top: 8px;
+            letter-spacing: 3px;
         }
 
-        .splash-description {
+        .splash-map-container {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .splash-map {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            position: relative;
+        }
+
+        .map-blob {
+            position: absolute;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--branco);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .map-blob img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .blob-1 {
+            width: 180px;
+            height: 180px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+        }
+
+        .blob-2 {
+            width: 140px;
+            height: 140px;
+            top: 80px;
+            right: 10px;
+            z-index: 2;
+        }
+
+        .blob-3 {
+            width: 120px;
+            height: 120px;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1;
+        }
+
+        .map-label {
+            position: absolute;
+            background: var(--branco);
+            color: var(--verde-fundo);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .label-1 {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .label-2 {
+            top: 60px;
+            right: 0;
+        }
+
+        .label-3 {
+            bottom: 10px;
+            left: 10px;
+        }
+
+        .splash-bottom {
+            text-align: left;
+        }
+
+        .splash-tagline {
+            font-size: 1.8em;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .splash-tagline span {
+            color: var(--vermelho);
+        }
+
+        .splash-desc {
             font-size: 0.9em;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.6;
-            max-width: 280px;
-            margin: 0 auto 50px;
+            color: var(--branco-suave);
+            line-height: 1.5;
+            margin-bottom: 30px;
         }
 
         .splash-btn {
@@ -127,11 +200,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: transform 0.3s;
             border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
         }
 
         .splash-btn:active {
@@ -141,14 +213,14 @@
         .splash-btn svg {
             width: 24px;
             height: 24px;
-            color: var(--verde-escuro);
+            color: var(--verde-fundo);
         }
 
         /* ===== MAIN APP ===== */
         .app-container {
             display: none;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.5s ease;
         }
 
         .app-container.visible {
@@ -156,9 +228,8 @@
             opacity: 1;
         }
 
-        /* Header */
+        /* App Header */
         .app-header {
-            background: var(--branco);
             padding: 20px 24px;
             display: flex;
             justify-content: space-between;
@@ -166,514 +237,535 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: rgba(26, 58, 26, 0.95);
+            backdrop-filter: blur(10px);
         }
 
-        .app-header .logo {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: var(--verde-escuro);
+        .app-logo {
+            font-size: 1.8em;
+            font-weight: 800;
             letter-spacing: -1px;
         }
 
-        .app-header .logo span {
-            color: var(--vermelho);
-            font-weight: 300;
-        }
+        .app-logo .af { color: var(--branco); }
+        .app-logo .hand { color: var(--vermelho); }
 
         .menu-btn {
             width: 44px;
             height: 44px;
-            border-radius: 12px;
-            background: var(--cinza);
-            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            color: var(--branco);
             cursor: pointer;
         }
 
-        .menu-btn span {
-            display: block;
-            width: 18px;
-            height: 2px;
-            background: var(--verde-escuro);
-            border-radius: 2px;
-        }
-
-        /* Hero Card */
-        .hero-card {
-            margin: 20px 24px;
-            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--verde) 100%);
-            border-radius: 24px;
-            padding: 28px;
-            color: var(--branco);
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--sombra-card);
-        }
-
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 180px;
-            height: 180px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-        }
-
-        .hero-card::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: -30px;
-            width: 120px;
-            height: 120px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 50%;
-        }
-
-        .hero-label {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0.8;
-            margin-bottom: 8px;
+        /* Hero Section */
+        .hero-section {
+            padding: 0 24px 30px;
         }
 
         .hero-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-bottom: 6px;
-            position: relative;
-            z-index: 1;
+            font-size: 2.2em;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .hero-title span {
+            color: var(--vermelho);
         }
 
         .hero-subtitle {
-            font-size: 0.85em;
-            opacity: 0.8;
-            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: var(--branco-suave);
+            margin-bottom: 25px;
+        }
+
+        /* Map Section */
+        .map-section {
             position: relative;
-            z-index: 1;
+            height: 320px;
+            margin: 0 24px 30px;
+            border-radius: 30px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--verde-medio) 0%, var(--verde-claro) 100%);
         }
 
-        .hero-btn {
-            width: 44px;
-            height: 44px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 14px;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+        .map-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            background: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80') center/cover;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, var(--verde-fundo) 100%);
+        }
+
+        .map-content {
             position: relative;
-            z-index: 1;
-            transition: background 0.3s;
-        }
-
-        .hero-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .hero-btn svg {
-            width: 20px;
-            height: 20px;
-            color: var(--branco);
-        }
-
-        /* Filter Tabs */
-        .filter-section {
-            padding: 0 24px;
-            margin-bottom: 20px;
-        }
-
-        .filter-row {
+            z-index: 2;
+            padding: 20px;
+            height: 100%;
             display: flex;
-            gap: 12px;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
 
-        .filter-add {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
+        .map-badge {
             background: var(--branco);
-            border: 2px solid var(--verde-fundo);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            color: var(--verde);
-            cursor: pointer;
-            flex-shrink: 0;
+            color: var(--verde-fundo);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
         }
 
-        .filter-tabs {
+        .map-nav {
             display: flex;
             gap: 10px;
+        }
+
+        .map-nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--branco);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .map-pins {
+            position: relative;
+            flex: 1;
+            margin: 20px 0;
+        }
+
+        .map-pin {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pin-dot {
+            width: 16px;
+            height: 16px;
+            background: var(--vermelho);
+            border-radius: 50%;
+            border: 3px solid var(--branco);
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.5);
+            animation: pulse-pin 2s infinite;
+        }
+
+        .pin-label {
+            background: var(--branco);
+            color: var(--verde-fundo);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.7em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .pin-1 { top: 30%; left: 20%; }
+        .pin-2 { top: 50%; right: 25%; }
+        .pin-3 { bottom: 20%; left: 40%; }
+
+        @keyframes pulse-pin {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .map-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .map-cta {
+            background: var(--branco);
+            color: var(--verde-fundo);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        .map-price {
+            text-align: right;
+        }
+
+        .map-price-label {
+            font-size: 0.75em;
+            opacity: 0.8;
+        }
+
+        .map-price-value {
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        /* Categories */
+        .categories-section {
+            padding: 0 24px 20px;
+        }
+
+        .section-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
+
+        .categories-scroll {
+            display: flex;
+            gap: 15px;
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            padding-bottom: 10px;
         }
 
-        .filter-tabs::-webkit-scrollbar {
+        .categories-scroll::-webkit-scrollbar {
             display: none;
         }
 
-        .filter-tab {
-            padding: 12px 24px;
-            border-radius: 14px;
-            border: none;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.85em;
-            font-weight: 500;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s;
-        }
-
-        .filter-tab.active {
-            background: var(--verde);
-            color: var(--branco);
-            box-shadow: 0 4px 12px rgba(46,125,50,0.3);
-        }
-
-        .filter-tab:not(.active) {
-            background: var(--branco);
-            color: var(--cinza-texto);
-        }
-
-        /* Dropdown */
-        .dropdown-section {
-            padding: 0 24px;
-            margin-bottom: 20px;
-        }
-
-        .dropdown-row {
-            display: flex;
-            gap: 12px;
-        }
-
-        .dropdown-select {
-            flex: 1;
-            padding: 14px 20px;
-            border-radius: 16px;
-            border: none;
-            background: var(--branco);
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9em;
-            color: #333;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23757575' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            box-shadow: var(--sombra);
-            cursor: pointer;
-        }
-
-        .dropdown-add {
-            width: 50px;
-            height: 50px;
-            border-radius: 16px;
-            background: var(--branco);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3em;
-            color: var(--verde);
-            box-shadow: var(--sombra);
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        /* Stats Grid */
-        .stats-section {
-            padding: 0 24px;
-            margin-bottom: 20px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .stat-card {
-            background: var(--branco);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: var(--sombra);
-            text-align: center;
+        .category-card {
+            min-width: 140px;
+            height: 180px;
+            border-radius: 25px;
+            overflow: hidden;
             position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
         }
 
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 1.5em;
+        .category-card:active {
+            transform: scale(0.95);
         }
 
-        .stat-icon.sun { background: #FFF8E1; }
-        .stat-icon.temp { background: #FFEBEE; }
-        .stat-icon.drop { background: #E3F2FD; }
-        .stat-icon.fan { background: #F3E5F5; }
+        .category-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-        .stat-value {
-            font-size: 1.8em;
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .category-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+        }
+
+        .category-name {
+            font-size: 1em;
             font-weight: 700;
-            color: #333;
             margin-bottom: 4px;
         }
 
-        .stat-label {
+        .category-count {
             font-size: 0.75em;
-            color: var(--cinza-texto);
-            font-weight: 500;
+            opacity: 0.8;
         }
 
         /* Games Section */
         .games-section {
             padding: 0 24px;
-            margin-bottom: 100px;
         }
 
-        .section-header {
+        .section-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
-        .section-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #333;
+        .section-title-main {
+            font-size: 1.5em;
+            font-weight: 700;
         }
 
-        .section-link {
-            font-size: 0.8em;
-            color: var(--verde);
+        .see-all {
+            font-size: 0.85em;
+            color: var(--vermelho-claro);
             text-decoration: none;
             font-weight: 500;
         }
 
-        .game-card {
-            background: var(--branco);
-            border-radius: 20px;
+        .game-card-float {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
             padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--sombra);
-            transition: transform 0.2s;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .game-card:active {
-            transform: scale(0.98);
+        .game-card-float:active {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .game-status-row {
+        .game-status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 15px;
         }
 
-        .game-date {
-            font-size: 0.75em;
-            color: var(--cinza-texto);
-            font-weight: 500;
+        .game-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8em;
         }
 
-        .status-badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.7em;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .tag-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
         }
 
-        .status-live {
-            background: var(--vermelho-claro);
-            color: var(--vermelho);
-            animation: pulse 2s infinite;
+        .tag-live {
+            background: var(--vermelho);
+            animation: blink 1.5s infinite;
         }
 
-        .status-scheduled {
-            background: var(--verde-fundo);
-            color: var(--verde);
+        .tag-scheduled {
+            background: var(--amarelo);
         }
 
-        .status-finished {
-            background: #ECEFF1;
-            color: #546E77;
+        .tag-finished {
+            background: var(--verde-claro);
         }
 
-        @keyframes pulse {
+        @keyframes blink {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+            50% { opacity: 0.3; }
         }
 
-        .game-teams {
+        .game-time {
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+
+        .game-teams-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 15px;
         }
 
-        .team-info {
+        .team-block {
             display: flex;
             align-items: center;
             gap: 12px;
             flex: 1;
         }
 
-        .team-info.right {
+        .team-block.right {
             justify-content: flex-end;
         }
 
-        .team-logo {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.9em;
-            color: var(--branco);
-            flex-shrink: 0;
+        .team-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.2);
         }
 
-        .team-name {
-            font-weight: 600;
-            font-size: 0.95em;
-            color: #333;
-        }
-
-        .score-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0 16px;
-        }
-
-        .score {
-            font-size: 1.6em;
-            font-weight: 700;
-            color: var(--verde-escuro);
-        }
-
-        .vs-divider {
-            font-size: 0.7em;
-            color: var(--cinza-texto);
-            font-weight: 500;
-        }
-
-        .game-location {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid var(--cinza);
-            font-size: 0.8em;
-            color: var(--cinza-texto);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* FAB Menu */
-        .fab-container {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 1000;
-        }
-
-        .fab-main {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--verde) 0%, var(--verde-escuro) 100%);
-            border: none;
-            color: var(--branco);
-            font-size: 1.5em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 24px rgba(27, 94, 32, 0.4);
-            cursor: pointer;
-            transition: transform 0.3s;
-            position: relative;
-            z-index: 2;
-        }
-
-        .fab-main.active {
-            transform: rotate(45deg);
-            background: var(--vermelho);
-            box-shadow: 0 6px 24px rgba(211, 47, 47, 0.4);
-        }
-
-        .fab-menu {
-            position: absolute;
-            bottom: 70px;
-            right: 0;
+        .team-info-text {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            opacity: 0;
-            transform: translateY(20px) scale(0.8);
-            pointer-events: none;
-            transition: all 0.3s ease;
         }
 
-        .fab-menu.open {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: all;
+        .team-name-text {
+            font-weight: 600;
+            font-size: 0.95em;
         }
 
-        .fab-item {
+        .team-city {
+            font-size: 0.75em;
+            opacity: 0.6;
+        }
+
+        .score-block {
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .score-display {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--branco);
+        }
+
+        .score-sep {
+            font-size: 0.9em;
+            opacity: 0.5;
+            margin: 0 5px;
+        }
+
+        .vs-text {
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            margin-top: 5px;
+        }
+
+        /* Standing Preview */
+        .standing-preview {
+            padding: 0 24px 30px;
+        }
+
+        .standing-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 20px;
+        }
+
+        .standing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .standing-title {
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+
+        .standing-filter {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-pill.active {
+            background: var(--branco);
+            color: var(--verde-fundo);
+        }
+
+        .filter-pill:not(.active) {
+            background: rgba(255,255,255,0.1);
+            color: var(--branco);
+        }
+
+        .standing-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .standing-row:last-child {
+            border-bottom: none;
+        }
+
+        .standing-pos {
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85em;
+        }
+
+        .pos-gold {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: var(--verde-fundo);
+        }
+
+        .pos-silver {
+            background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+            color: var(--verde-fundo);
+        }
+
+        .pos-bronze {
+            background: linear-gradient(135deg, #CD7F32, #B87333);
+            color: var(--branco);
+        }
+
+        .pos-normal {
+            background: rgba(255,255,255,0.1);
+            color: var(--branco);
+        }
+
+        .standing-team {
+            flex: 1;
             display: flex;
             align-items: center;
             gap: 10px;
-            justify-content: flex-end;
         }
 
-        .fab-item-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .team-mini-photo {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .standing-points {
             font-size: 1.2em;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: transform 0.2s;
-        }
-
-        .fab-item-btn:active {
-            transform: scale(0.9);
-        }
-
-        .fab-item-label {
-            font-size: 0.75em;
-            font-weight: 600;
-            color: var(--cinza-texto);
-            background: var(--branco);
-            padding: 6px 12px;
-            border-radius: 10px;
-            box-shadow: var(--sombra);
+            font-weight: 700;
+            color: var(--amarelo);
         }
 
         /* Bottom Nav */
@@ -682,11 +774,12 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--branco);
+            background: rgba(26, 58, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.1);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0 24px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            padding: 12px 0 30px;
             z-index: 100;
         }
 
@@ -698,7 +791,7 @@
             padding: 8px 16px;
             border: none;
             background: none;
-            color: var(--cinza-texto);
+            color: rgba(255,255,255,0.5);
             font-family: 'Poppins', sans-serif;
             font-size: 0.65em;
             cursor: pointer;
@@ -706,7 +799,7 @@
         }
 
         .nav-item.active {
-            color: var(--verde);
+            color: var(--vermelho);
         }
 
         .nav-item svg {
@@ -714,122 +807,41 @@
             height: 24px;
         }
 
-        /* Sections */
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Standings Table */
-        .standings-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-        }
-
-        .standings-table th {
-            font-size: 0.7em;
-            color: var(--cinza-texto);
-            font-weight: 500;
-            padding: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .standings-table td {
-            background: var(--branco);
-            padding: 16px 8px;
-            font-size: 0.85em;
-        }
-
-        .standings-table tr td:first-child {
-            border-radius: 16px 0 0 16px;
-            padding-left: 16px;
-        }
-
-        .standings-table tr td:last-child {
-            border-radius: 0 16px 16px 0;
-            padding-right: 16px;
-        }
-
-        .pos-badge {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85em;
-        }
-
-        .pos-1 { background: #FFF8E1; color: #F9A825; }
-        .pos-2 { background: #ECEFF1; color: #78909C; }
-        .pos-3 { background: #FFF3E0; color: #EF6C00; }
-
-        .team-cell {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .team-cell .team-logo {
-            width: 36px;
-            height: 36px;
-            font-size: 0.8em;
-        }
-
-        /* News Cards */
-        .news-card {
-            background: var(--branco);
+        /* Org Badge */
+        .org-badge {
+            margin: 0 24px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 16px;
-            box-shadow: var(--sombra);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .news-image {
-            width: 100%;
-            height: 160px;
-            background: linear-gradient(135deg, var(--verde-fundo) 0%, var(--verde-claro) 100%);
+        .org-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--verde-claro), var(--verde-medio));
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3em;
+            font-size: 1.3em;
+            flex-shrink: 0;
         }
 
-        .news-content {
-            padding: 20px;
-        }
-
-        .news-date {
-            font-size: 0.75em;
-            color: var(--verde);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .news-title {
-            font-size: 1em;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
+        .org-text {
+            font-size: 0.8em;
             line-height: 1.4;
+            opacity: 0.9;
         }
 
-        .news-text {
-            font-size: 0.85em;
-            color: var(--cinza-texto);
-            line-height: 1.5;
+        .org-text strong {
+            display: block;
+            font-size: 1.05em;
+            opacity: 1;
+            font-weight: 600;
         }
 
         /* Install Banner */
@@ -838,7 +850,7 @@
             top: 0;
             left: 0;
             right: 0;
-            background: var(--verde-escuro);
+            background: var(--vermelho);
             color: var(--branco);
             padding: 16px 24px;
             display: flex;
@@ -855,7 +867,7 @@
 
         .install-btn {
             background: var(--branco);
-            color: var(--verde-escuro);
+            color: var(--vermelho);
             border: none;
             padding: 8px 20px;
             border-radius: 20px;
@@ -865,41 +877,134 @@
             cursor: pointer;
         }
 
-        /* Org Info */
-        .org-bar {
-            background: linear-gradient(90deg, var(--verde-escuro) 0%, var(--verde) 100%);
-            margin: 0 24px 20px;
-            border-radius: 16px;
-            padding: 16px 20px;
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--vermelho), var(--vermelho-claro));
+            border: none;
             color: var(--branco);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .org-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 12px;
+            font-size: 1.5em;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2em;
-            flex-shrink: 0;
+            box-shadow: 0 8px 30px rgba(196, 30, 58, 0.4);
+            cursor: pointer;
+            z-index: 99;
+            transition: transform 0.3s;
         }
 
-        .org-text {
-            font-size: 0.8em;
-            line-height: 1.4;
-            opacity: 0.9;
+        .fab:active {
+            transform: scale(0.9);
         }
 
-        .org-text strong {
+        /* Content Sections */
+        .content-section {
+            display: none;
+            padding-bottom: 100px;
+        }
+
+        .content-section.active {
             display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* News Cards */
+        .news-float-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .news-image-top {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .news-body {
+            padding: 20px;
+        }
+
+        .news-date {
+            font-size: 0.75em;
+            color: var(--vermelho-claro);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .news-title {
             font-size: 1.1em;
-            opacity: 1;
-            margin-bottom: 2px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .news-text {
+            font-size: 0.85em;
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+
+        /* Full Standing Table */
+        .full-table {
+            padding: 0 24px;
+        }
+
+        .table-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 50px 1fr 50px 50px 50px;
+            gap: 10px;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.05);
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 50px 1fr 50px 50px 50px;
+            gap: 10px;
+            padding: 15px 20px;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 400px) {
+            .splash-logo-text {
+                font-size: 2.5em;
+            }
+            .hero-title {
+                font-size: 1.8em;
+            }
+            .map-section {
+                height: 260px;
+            }
         }
     </style>
 </head>
@@ -907,19 +1012,44 @@
 
     <!-- Install Banner -->
     <div class="install-banner" id="installBanner">
-        <span>📲 Instale o AfoHand no seu celular</span>
+        <span>📲 Instale o AfoHand</span>
         <button class="install-btn" onclick="installApp()">Instalar</button>
     </div>
 
     <!-- Splash Screen -->
     <div class="splash-screen" id="splashScreen">
-        <div class="splash-bg"></div>
-        <div class="splash-overlay"></div>
-        <div class="splash-content">
-            <div class="splash-logo">Afo<span>Hand</span></div>
-            <div class="splash-subtitle">Handebol de 5</div>
-            <div class="splash-description">
-                Acompanhe o campeonato municipal de handebol de Afonso Cláudio em tempo real
+        <div class="splash-top">
+            <div class="splash-logo-text">
+                <span class="af">Afo</span><span class="hand">Hand</span>
+            </div>
+            <div class="splash-subtitle">HANDEBOL DE 5</div>
+        </div>
+
+        <div class="splash-map-container">
+            <div class="splash-map">
+                <div class="map-blob blob-1">
+                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&q=80" alt="Handebol">
+                    <span class="map-label label-1">Ginásio Municipal</span>
+                </div>
+                <div class="map-blob blob-2">
+                    <img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=400&q=80" alt="Equipe">
+                    <span class="map-label label-2">8 Equipes</span>
+                </div>
+                <div class="map-blob blob-3">
+                    <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80" alt="Campeonato">
+                    <span class="map-label label-3">12 Jogos</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="splash-bottom">
+            <div class="splash-tagline">
+                Explore o<br>
+                <span>Campeonato</span><br>
+                de Handebol
+            </div>
+            <div class="splash-desc">
+                Acompanhe todos os jogos do AfoHand 2026 em tempo real. Prefeitura de Afonso Cláudio.
             </div>
             <button class="splash-btn" onclick="enterApp()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -932,266 +1062,375 @@
     <!-- Main App -->
     <div class="app-container" id="appContainer">
         
-        <!-- Header -->
-        <header class="app-header">
-            <div class="logo">Afo<span>Hand</span></div>
-            <button class="menu-btn" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </header>
-
         <!-- HOME SECTION -->
         <div class="content-section active" id="section-home">
             
-            <!-- Hero Card -->
-            <div class="hero-card">
-                <div class="hero-label">Campeonato 2026</div>
-                <div class="hero-title">AfoHand</div>
-                <div class="hero-subtitle">8 equipes, 1 campeão</div>
-                <button class="hero-btn" onclick="showSection('jogos')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path d="M9 18l6-6-6-6"/>
+            <!-- Header -->
+            <header class="app-header">
+                <div class="app-logo">
+                    <span class="af">Afo</span><span class="hand">Hand</span>
+                </div>
+                <button class="menu-btn" onclick="toggleMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
                     </svg>
                 </button>
+            </header>
+
+            <!-- Hero -->
+            <div class="hero-section">
+                <h1 class="hero-title">
+                    Campeonato<br>
+                    <span>Municipal</span>
+                </h1>
+                <p class="hero-subtitle">Afonso Cláudio • 2026</p>
             </div>
 
-            <!-- Org Info -->
-            <div class="org-bar">
+            <!-- Map Section -->
+            <div class="map-section">
+                <div class="map-bg"></div>
+                <div class="map-overlay"></div>
+                <div class="map-content">
+                    <div class="map-header">
+                        <span class="map-badge">🗺️ Mapa dos Jogos</span>
+                        <div class="map-nav">
+                            <button class="map-nav-btn">←</button>
+                            <button class="map-nav-btn">→</button>
+                        </div>
+                    </div>
+                    <div class="map-pins">
+                        <div class="map-pin pin-1">
+                            <div class="pin-dot"></div>
+                            <div class="pin-label">Grupo A</div>
+                        </div>
+                        <div class="map-pin pin-2">
+                            <div class="pin-dot"></div>
+                            <div class="pin-label">Grupo B</div>
+                        </div>
+                        <div class="map-pin pin-3">
+                            <div class="pin-dot"></div>
+                            <div class="pin-label">Final</div>
+                        </div>
+                    </div>
+                    <div class="map-footer">
+                        <button class="map-cta">Ver Calendário</button>
+                        <div class="map-price">
+                            <div class="map-price-label">Rodada Atual</div>
+                            <div class="map-price-value">3ª</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Org Badge -->
+            <div class="org-badge">
                 <div class="org-icon">🏛️</div>
                 <div class="org-text">
-                    <strong>Prefeitura de Afonso Cláudio</strong>
-                    Secretaria Municipal de Esportes e Lazer
+                    <strong>Prefeitura Municipal de Afonso Cláudio</strong>
+                    Secretaria de Esportes e Lazer
                 </div>
             </div>
 
-            <!-- Filter Tabs -->
-            <div class="filter-section">
-                <div class="filter-row">
-                    <button class="filter-add">+</button>
-                    <div class="filter-tabs">
-                        <button class="filter-tab active" onclick="setFilter(this, 'all')">Todos</button>
-                        <button class="filter-tab" onclick="setFilter(this, 'live')">Ao Vivo</button>
-                        <button class="filter-tab" onclick="setFilter(this, 'scheduled')">Agendados</button>
-                        <button class="filter-tab" onclick="setFilter(this, 'finished')">Encerrados</button>
+            <!-- Categories -->
+            <div class="categories-section">
+                <div class="section-label">Categorias</div>
+                <div class="categories-scroll">
+                    <div class="category-card" onclick="showSection('jogos')">
+                        <img class="category-bg" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=300&q=80" alt="Jogos">
+                        <div class="category-overlay"></div>
+                        <div class="category-content">
+                            <div class="category-name">Jogos</div>
+                            <div class="category-count">12 partidas</div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Dropdown -->
-            <div class="dropdown-section">
-                <div class="dropdown-row">
-                    <select class="dropdown-select" onchange="filterByGroup(this.value)">
-                        <option value="all">Todos os Grupos</option>
-                        <option value="A">Grupo A</option>
-                        <option value="B">Grupo B</option>
-                        <option value="playoffs">Mata-Mata</option>
-                    </select>
-                    <button class="dropdown-add">+</button>
-                </div>
-            </div>
-
-            <!-- Stats -->
-            <div class="stats-section">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon sun">⚽</div>
-                        <div class="stat-value">42</div>
-                        <div class="stat-label">Gols Marcados</div>
+                    <div class="category-card" onclick="showSection('classificacao')">
+                        <img class="category-bg" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=300&q=80" alt="Classificação">
+                        <div class="category-overlay"></div>
+                        <div class="category-content">
+                            <div class="category-name">Tabela</div>
+                            <div class="category-count">8 equipes</div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon temp">🏆</div>
-                        <div class="stat-value">8</div>
-                        <div class="stat-label">Equipes</div>
+                    <div class="category-card" onclick="showSection('estatisticas')">
+                        <img class="category-bg" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=300&q=80" alt="Estatísticas">
+                        <div class="category-overlay"></div>
+                        <div class="category-content">
+                            <div class="category-name">Stats</div>
+                            <div class="category-count">156 gols</div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon drop">📅</div>
-                        <div class="stat-value">12</div>
-                        <div class="stat-label">Jogos</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon fan">⭐</div>
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Rodadas</div>
+                    <div class="category-card" onclick="showSection('noticias')">
+                        <img class="category-bg" src="https://images.unsplash.com/photo-1552674605-469523170273?w=300&q=80" alt="Notícias">
+                        <div class="category-overlay"></div>
+                        <div class="category-content">
+                            <div class="category-name">Notícias</div>
+                            <div class="category-count">3 novas</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Games -->
             <div class="games-section">
-                <div class="section-header">
-                    <h3 class="section-title">🏆 Jogos</h3>
-                    <a href="#" class="section-link">Ver todos</a>
+                <div class="section-header-row">
+                    <h2 class="section-title-main">🏆 Jogos</h2>
+                    <a href="#" class="see-all">Ver todos</a>
                 </div>
 
-                <div class="game-card">
-                    <div class="game-status-row">
-                        <span class="game-date">Hoje, 19:00</span>
-                        <span class="status-badge status-live">● Ao Vivo</span>
+                <div class="game-card-float">
+                    <div class="game-status-bar">
+                        <div class="game-tag">
+                            <span class="tag-dot tag-live"></span>
+                            <span>Ao Vivo</span>
+                        </div>
+                        <span class="game-time">Hoje, 19:00</span>
                     </div>
-                    <div class="game-teams">
-                        <div class="team-info">
-                            <div class="team-logo" style="background: linear-gradient(135deg, #1B5E20, #2E7D32);">AC</div>
-                            <span class="team-name">Atlético AC</span>
+                    <div class="game-teams-row">
+                        <div class="team-block">
+                            <img class="team-photo" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=100&q=80" alt="Atlético">
+                            <div class="team-info-text">
+                                <span class="team-name-text">Atlético AC</span>
+                                <span class="team-city">Afonso Cláudio</span>
+                            </div>
                         </div>
-                        <div class="score-area">
-                            <span class="score">12</span>
-                            <span class="vs-divider">vs</span>
-                            <span class="score">10</span>
+                        <div class="score-block">
+                            <div class="score-display">
+                                12 <span class="score-sep">:</span> 10
+                            </div>
+                            <div class="vs-text">vs</div>
                         </div>
-                        <div class="team-info right">
-                            <span class="team-name">Flamengo AC</span>
-                            <div class="team-logo" style="background: linear-gradient(135deg, #D32F2F, #B71C1C);">FL</div>
+                        <div class="team-block right">
+                            <div class="team-info-text" style="text-align: right;">
+                                <span class="team-name-text">Flamengo AC</span>
+                                <span class="team-city">Afonso Cláudio</span>
+                            </div>
+                            <img class="team-photo" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=100&q=80" alt="Flamengo">
                         </div>
-                    </div>
-                    <div class="game-location">
-                        📍 Ginásio Municipal - Afonso Cláudio
-                    </div>
-                </div>
-
-                <div class="game-card">
-                    <div class="game-status-row">
-                        <span class="game-date">Amanhã, 20:00</span>
-                        <span class="status-badge status-scheduled">Agendado</span>
-                    </div>
-                    <div class="game-teams">
-                        <div class="team-info">
-                            <div class="team-logo" style="background: linear-gradient(135deg, #333, #555);">VA</div>
-                            <span class="team-name">Vasco AC</span>
-                        </div>
-                        <div class="score-area">
-                            <span class="score">-</span>
-                            <span class="vs-divider">vs</span>
-                            <span class="score">-</span>
-                        </div>
-                        <div class="team-info right">
-                            <span class="team-name">Sport AC</span>
-                            <div class="team-logo" style="background: linear-gradient(135deg, #FF6B00, #E65100);">SP</div>
-                        </div>
-                    </div>
-                    <div class="game-location">
-                        📍 Ginásio Municipal - Afonso Cláudio
                     </div>
                 </div>
 
-                <div class="game-card">
-                    <div class="game-status-row">
-                        <span class="game-date">18/06, 19:30</span>
-                        <span class="status-badge status-finished">Encerrado</span>
+                <div class="game-card-float">
+                    <div class="game-status-bar">
+                        <div class="game-tag">
+                            <span class="tag-dot tag-scheduled"></span>
+                            <span>Agendado</span>
+                        </div>
+                        <span class="game-time">Amanhã, 20:00</span>
                     </div>
-                    <div class="game-teams">
-                        <div class="team-info">
-                            <div class="team-logo" style="background: linear-gradient(135deg, #2E7D32, #1B5E20);">PA</div>
-                            <span class="team-name">Palmeiras AC</span>
+                    <div class="game-teams-row">
+                        <div class="team-block">
+                            <img class="team-photo" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100&q=80" alt="Vasco">
+                            <div class="team-info-text">
+                                <span class="team-name-text">Vasco AC</span>
+                                <span class="team-city">Afonso Cláudio</span>
+                            </div>
                         </div>
-                        <div class="score-area">
-                            <span class="score">15</span>
-                            <span class="vs-divider">vs</span>
-                            <span class="score">8</span>
+                        <div class="score-block">
+                            <div class="score-display" style="opacity: 0.5;">
+                                - <span class="score-sep">:</span> -
+                            </div>
+                            <div class="vs-text">vs</div>
                         </div>
-                        <div class="team-info right">
-                            <span class="team-name">Corinthians AC</span>
-                            <div class="team-logo" style="background: linear-gradient(135deg, #000, #333);">CO</div>
+                        <div class="team-block right">
+                            <div class="team-info-text" style="text-align: right;">
+                                <span class="team-name-text">Sport AC</span>
+                                <span class="team-city">Afonso Cláudio</span>
+                            </div>
+                            <img class="team-photo" src="https://images.unsplash.com/photo-1552674605-469523170273?w=100&q=80" alt="Sport">
                         </div>
                     </div>
-                    <div class="game-location">
-                        📍 Ginásio Municipal - Afonso Cláudio
+                </div>
+
+                <div class="game-card-float">
+                    <div class="game-status-bar">
+                        <div class="game-tag">
+                            <span class="tag-dot tag-finished"></span>
+                            <span>Encerrado</span>
+                        </div>
+                        <span class="game-time">18/06, 19:30</span>
+                    </div>
+                    <div class="game-teams-row">
+                        <div class="team-block">
+                            <img class="team-photo" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=100&q=80" alt="Palmeiras">
+                            <div class="team-info-text">
+                                <span class="team-name-text">Palmeiras AC</span>
+                                <span class="team-city">Afonso Cláudio</span>
+                            </div>
+                        </div>
+                        <div class="score-block">
+                            <div class="score-display">
+                                15 <span class="score-sep">:</span> 8
+                            </div>
+                            <div class="vs-text">vs</div>
+                        </div>
+                        <div class="team-block right">
+                            <div class="team-info-text" style="text-align: right;">
+                                <span class="team-name-text">Corinthians AC</span>
+                                <span class="team-city">Afonso Cláudio</span>
+                            </div>
+                            <img class="team-photo" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=100&q=80" alt="Corinthians">
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Standing Preview -->
+            <div class="standing-preview">
+                <div class="section-header-row">
+                    <h2 class="section-title-main">📊 Classificação</h2>
+                    <a href="#" class="see-all" onclick="showSection('classificacao'); return false;">Ver tabela</a>
+                </div>
+                <div class="standing-card">
+                    <div class="standing-header">
+                        <span class="standing-title">Grupo A</span>
+                        <div class="standing-filter">
+                            <button class="filter-pill active">A</button>
+                            <button class="filter-pill">B</button>
+                        </div>
+                    </div>
+                    <div class="standing-row">
+                        <div class="standing-pos pos-gold">1</div>
+                        <div class="standing-team">
+                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=100&q=80" alt="Palmeiras">
+                            <span>Palmeiras AC</span>
+                        </div>
+                        <div class="standing-points">9</div>
+                    </div>
+                    <div class="standing-row">
+                        <div class="standing-pos pos-silver">2</div>
+                        <div class="standing-team">
+                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100&q=80" alt="Atlético">
+                            <span>Atlético AC</span>
+                        </div>
+                        <div class="standing-points">6</div>
+                    </div>
+                    <div class="standing-row">
+                        <div class="standing-pos pos-bronze">3</div>
+                        <div class="standing-team">
+                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=100&q=80" alt="Flamengo">
+                            <span>Flamengo AC</span>
+                        </div>
+                        <div class="standing-points">3</div>
+                    </div>
+                    <div class="standing-row">
+                        <div class="standing-pos pos-normal">4</div>
+                        <div class="standing-team">
+                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1552674605-469523170273?w=100&q=80" alt="Vasco">
+                            <span>Vasco AC</span>
+                        </div>
+                        <div class="standing-points">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="height: 80px;"></div>
         </div>
 
         <!-- CLASSIFICATION SECTION -->
         <div class="content-section" id="section-classificacao">
-            <div class="hero-card" style="margin-bottom: 20px;">
-                <div class="hero-label">Tabela</div>
-                <div class="hero-title">Classificação</div>
-                <div class="hero-subtitle">Grupo A - 1ª Fase</div>
+            <header class="app-header">
+                <div class="app-logo">
+                    <span class="af">Afo</span><span class="hand">Hand</span>
+                </div>
+                <button class="menu-btn" onclick="toggleMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="hero-section">
+                <h1 class="hero-title">
+                    Tabela de<br>
+                    <span>Classificação</span>
+                </h1>
             </div>
 
-            <div style="padding: 0 24px;">
-                <table class="standings-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th style="text-align: left;">Time</th>
-                            <th>P</th>
-                            <th>J</th>
-                            <th>V</th>
-                            <th>SG</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><div class="pos-badge pos-1">1</div></td>
-                            <td>
-                                <div class="team-cell">
-                                    <div class="team-logo" style="background: linear-gradient(135deg, #2E7D32, #1B5E20);">PA</div>
-                                    <span style="font-weight: 600;">Palmeiras AC</span>
-                                </div>
-                            </td>
-                            <td><strong>9</strong></td>
-                            <td>3</td>
-                            <td>3</td>
-                            <td>+14</td>
-                        </tr>
-                        <tr>
-                            <td><div class="pos-badge pos-2">2</div></td>
-                            <td>
-                                <div class="team-cell">
-                                    <div class="team-logo" style="background: linear-gradient(135deg, #1B5E20, #2E7D32);">AC</div>
-                                    <span style="font-weight: 600;">Atlético AC</span>
-                                </div>
-                            </td>
-                            <td><strong>6</strong></td>
-                            <td>3</td>
-                            <td>2</td>
-                            <td>+6</td>
-                        </tr>
-                        <tr>
-                            <td><div class="pos-badge pos-3">3</div></td>
-                            <td>
-                                <div class="team-cell">
-                                    <div class="team-logo" style="background: linear-gradient(135deg, #D32F2F, #B71C1C);">FL</div>
-                                    <span style="font-weight: 600;">Flamengo AC</span>
-                                </div>
-                            </td>
-                            <td><strong>3</strong></td>
-                            <td>3</td>
-                            <td>1</td>
-                            <td>-3</td>
-                        </tr>
-                        <tr>
-                            <td><div class="pos-badge" style="background: #ECEFF1; color: #78909C;">4</div></td>
-                            <td>
-                                <div class="team-cell">
-                                    <div class="team-logo" style="background: linear-gradient(135deg, #333, #555);">VA</div>
-                                    <span style="font-weight: 600;">Vasco AC</span>
-                                </div>
-                            </td>
-                            <td><strong>0</strong></td>
-                            <td>3</td>
-                            <td>0</td>
-                            <td>-17</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="full-table">
+                <div class="table-card">
+                    <div class="table-header">
+                        <div>#</div>
+                        <div>Time</div>
+                        <div style="text-align: center;">P</div>
+                        <div style="text-align: center;">J</div>
+                        <div style="text-align: center;">V</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="standing-pos pos-gold" style="width: 30px; height: 30px; font-size: 0.8em;">1</div>
+                        <div class="standing-team">
+                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=100&q=80" alt="Palmeiras">
+                            <span style="font-size: 0.9em;">Palmeiras AC</span>
+                        </div>
+                        <div style="text-align: center; font-weight: 700;">9</div>
+                        <div style="text-align: center; opacity: 0.7;">3</div>
+                        <div style="text-align: center; opacity: 0.7;">3</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="standing-pos pos-silver" style="width: 30px; height: 30px; font-size: 0.8em;">2</div>
+                        <div class="standing-team">
+                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100&q=80" alt="Atlético">
+                            <span style="font-size: 0.9em;">Atlético AC</span>
+                        </div>
+                        <div style="text-align: center; font-weight: 700;">6</div>
+                        <div style="text-align: center; opacity: 0.7;">3</div>
+                        <div style="text-align: center; opacity: 0.7;">2</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="standing-pos pos-bronze" style="width: 30px; height: 30px; font-size: 0.8em;">3</div>
+                        <div class="standing-team">
+                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=100&q=80" alt="Flamengo">
+                            <span style="font-size: 0.9em;">Flamengo AC</span>
+                        </div>
+                        <div style="text-align: center; font-weight: 700;">3</div>
+                        <div style="text-align: center; opacity: 0.7;">3</div>
+                        <div style="text-align: center; opacity: 0.7;">1</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="standing-pos pos-normal" style="width: 30px; height: 30px; font-size: 0.8em;">4</div>
+                        <div class="standing-team">
+                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1552674605-469523170273?w=100&q=80" alt="Vasco">
+                            <span style="font-size: 0.9em;">Vasco AC</span>
+                        </div>
+                        <div style="text-align: center; font-weight: 700;">0</div>
+                        <div style="text-align: center; opacity: 0.7;">3</div>
+                        <div style="text-align: center; opacity: 0.7;">0</div>
+                    </div>
+                </div>
             </div>
+
+            <div style="height: 80px;"></div>
         </div>
 
         <!-- NEWS SECTION -->
         <div class="content-section" id="section-noticias">
-            <div class="hero-card" style="margin-bottom: 20px;">
-                <div class="hero-label">Atualizações</div>
-                <div class="hero-title">Notícias</div>
-                <div class="hero-subtitle">Fique por dentro do campeonato</div>
+            <header class="app-header">
+                <div class="app-logo">
+                    <span class="af">Afo</span><span class="hand">Hand</span>
+                </div>
+                <button class="menu-btn" onclick="toggleMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="hero-section">
+                <h1 class="hero-title">
+                    Últimas<br>
+                    <span>Notícias</span>
+                </h1>
             </div>
 
             <div style="padding: 0 24px;">
-                <div class="news-card">
-                    <div class="news-image">🏆</div>
-                    <div class="news-content">
+                <div class="news-float-card">
+                    <img class="news-image-top" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80" alt="Abertura">
+                    <div class="news-body">
                         <div class="news-date">16 de Junho de 2026</div>
                         <div class="news-title">Abertura do AfoHand 2026!</div>
                         <div class="news-text">
@@ -1200,9 +1439,9 @@
                     </div>
                 </div>
 
-                <div class="news-card">
-                    <div class="news-image" style="background: linear-gradient(135deg, #FFEBEE, #FFCDD2);">📋</div>
-                    <div class="news-content">
+                <div class="news-float-card">
+                    <img class="news-image-top" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&q=80" alt="Regulamento">
+                    <div class="news-body">
                         <div class="news-date">15 de Junho de 2026</div>
                         <div class="news-title">Regulamento Oficial Publicado</div>
                         <div class="news-text">
@@ -1211,9 +1450,9 @@
                     </div>
                 </div>
 
-                <div class="news-card">
-                    <div class="news-image" style="background: linear-gradient(135deg, #E3F2FD, #BBDEFB);">🏗️</div>
-                    <div class="news-content">
+                <div class="news-float-card">
+                    <img class="news-image-top" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=600&q=80" alt="Reforma">
+                    <div class="news-body">
                         <div class="news-date">10 de Junho de 2026</div>
                         <div class="news-title">Reforma do Ginásio Concluída</div>
                         <div class="news-text">
@@ -1222,130 +1461,144 @@
                     </div>
                 </div>
             </div>
+
+            <div style="height: 80px;"></div>
         </div>
 
         <!-- STATS SECTION -->
         <div class="content-section" id="section-estatisticas">
-            <div class="hero-card" style="margin-bottom: 20px;">
-                <div class="hero-label">Números</div>
-                <div class="hero-title">Estatísticas</div>
-                <div class="hero-subtitle">Dados do campeonato</div>
+            <header class="app-header">
+                <div class="app-logo">
+                    <span class="af">Afo</span><span class="hand">Hand</span>
+                </div>
+                <button class="menu-btn" onclick="toggleMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="hero-section">
+                <h1 class="hero-title">
+                    Estatísticas<br>
+                    <span>do Campeonato</span>
+                </h1>
             </div>
 
-            <div class="stats-section" style="padding: 0 24px;">
-                <div class="stats-grid" style="margin-bottom: 20px;">
-                    <div class="stat-card">
-                        <div class="stat-icon sun">⚽</div>
-                        <div class="stat-value">156</div>
-                        <div class="stat-label">Gols Totais</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon temp">🎯</div>
-                        <div class="stat-value">13.0</div>
-                        <div class="stat-label">Média/Jogo</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon drop">🟨</div>
-                        <div class="stat-value">24</div>
-                        <div class="stat-label">Cartões</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon fan">👥</div>
-                        <div class="stat-value">120</div>
-                        <div class="stat-label">Atletas</div>
-                    </div>
-                </div>
-
-                <h3 style="font-size: 1.1em; font-weight: 600; margin-bottom: 16px; color: #333;">🏅 Artilheiros</h3>
-                
-                <div class="game-card">
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <div class="pos-badge pos-1" style="width: 40px; height: 40px; font-size: 1em;">1</div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; color: #333;">João Silva</div>
-                            <div style="font-size: 0.8em; color: var(--cinza-texto);">Palmeiras AC</div>
+            <div class="categories-section">
+                <div class="section-label">Números</div>
+                <div class="categories-scroll">
+                    <div class="category-card">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #2d5a2d, #4a8a4a);"></div>
+                        <div class="category-overlay"></div>
+                        <div class="category-content">
+                            <div class="category-name" style="font-size: 2em;">156</div>
+                            <div class="category-count">Gols Totais</div>
                         </div>
-                        <div style="font-size: 1.4em; font-weight: 700; color: var(--verde-escuro);">18</div>
                     </div>
-                </div>
-
-                <div class="game-card">
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <div class="pos-badge pos-2" style="width: 40px; height: 40px; font-size: 1em;">2</div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; color: #333;">Pedro Santos</div>
-                            <div style="font-size: 0.8em; color: var(--cinza-texto);">Atlético AC</div>
+                    <div class="category-card">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #c41e3a, #e85d75);"></div>
+                        <div class="category-overlay"></div>
+                        <div class="category-content">
+                            <div class="category-name" style="font-size: 2em;">13.0</div>
+                            <div class="category-count">Média/Jogo</div>
                         </div>
-                        <div style="font-size: 1.4em; font-weight: 700; color: var(--verde-escuro);">15</div>
                     </div>
-                </div>
-
-                <div class="game-card">
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <div class="pos-badge pos-3" style="width: 40px; height: 40px; font-size: 1em;">3</div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; color: #333;">Carlos Lima</div>
-                            <div style="font-size: 0.8em; color: var(--cinza-texto);">Flamengo AC</div>
+                    <div class="category-card">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1a3a1a, #2d5a2d);"></div>
+                        <div class="category-overlay"></div>
+                        <div class="category-content">
+                            <div class="category-name" style="font-size: 2em;">120</div>
+                            <div class="category-count">Atletas</div>
                         </div>
-                        <div style="font-size: 1.4em; font-weight: 700; color: var(--verde-escuro);">12</div>
                     </div>
                 </div>
             </div>
+
+            <div class="games-section">
+                <div class="section-header-row">
+                    <h2 class="section-title-main">🏅 Artilheiros</h2>
+                </div>
+
+                <div class="game-card-float">
+                    <div class="game-teams-row">
+                        <div class="team-block">
+                            <div class="standing-pos pos-gold" style="width: 40px; height: 40px; font-size: 1em;">1</div>
+                            <div class="team-info-text">
+                                <span class="team-name-text">João Silva</span>
+                                <span class="team-city">Palmeiras AC</span>
+                            </div>
+                        </div>
+                        <div class="standing-points" style="font-size: 1.5em;">18 gols</div>
+                    </div>
+                </div>
+
+                <div class="game-card-float">
+                    <div class="game-teams-row">
+                        <div class="team-block">
+                            <div class="standing-pos pos-silver" style="width: 40px; height: 40px; font-size: 1em;">2</div>
+                            <div class="team-info-text">
+                                <span class="team-name-text">Pedro Santos</span>
+                                <span class="team-city">Atlético AC</span>
+                            </div>
+                        </div>
+                        <div class="standing-points" style="font-size: 1.5em;">15 gols</div>
+                    </div>
+                </div>
+
+                <div class="game-card-float">
+                    <div class="game-teams-row">
+                        <div class="team-block">
+                            <div class="standing-pos pos-bronze" style="width: 40px; height: 40px; font-size: 1em;">3</div>
+                            <div class="team-info-text">
+                                <span class="team-name-text">Carlos Lima</span>
+                                <span class="team-city">Flamengo AC</span>
+                            </div>
+                        </div>
+                        <div class="standing-points" style="font-size: 1.5em;">12 gols</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="height: 80px;"></div>
         </div>
 
-        <!-- Spacer for bottom nav -->
-        <div style="height: 100px;"></div>
-    </div>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="showSection('home')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Início
+            </button>
+            <button class="nav-item" onclick="showSection('classificacao')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 20V10M18 20V4M6 20v-4"/>
+                </svg>
+                Tabela
+            </button>
+            <button class="nav-item" onclick="showSection('estatisticas')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+                Stats
+            </button>
+            <button class="nav-item" onclick="showSection('noticias')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                News
+            </button>
+        </nav>
 
-    <!-- FAB Menu -->
-    <div class="fab-container" id="fabContainer">
-        <div class="fab-menu" id="fabMenu">
-            <div class="fab-item">
-                <span class="fab-item-label">Notificações</span>
-                <button class="fab-item-btn" style="background: #FFF8E1; color: #F9A825;">🔔</button>
-            </div>
-            <div class="fab-item">
-                <span class="fab-item-label">Compartilhar</span>
-                <button class="fab-item-btn" style="background: #E3F2FD; color: #1976D2;">📤</button>
-            </div>
-            <div class="fab-item">
-                <span class="fab-item-label">Configurações</span>
-                <button class="fab-item-btn" style="background: #F3E5F5; color: #7B1FA2;">⚙️</button>
-            </div>
-        </div>
-        <button class="fab-main" id="fabMain" onclick="toggleFab()">+</button>
+        <!-- FAB -->
+        <button class="fab" onclick="shareApp()">+</button>
     </div>
-
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav" id="bottomNav">
-        <button class="nav-item active" onclick="showSection('home')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            Início
-        </button>
-        <button class="nav-item" onclick="showSection('classificacao')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 20V10M18 20V4M6 20v-4"/>
-            </svg>
-            Tabela
-        </button>
-        <button class="nav-item" onclick="showSection('estatisticas')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 6v6l4 2"/>
-            </svg>
-            Stats
-        </button>
-        <button class="nav-item" onclick="showSection('noticias')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-            </svg>
-            News
-        </button>
-    </nav>
 
     <script>
         // Splash Screen
@@ -1353,75 +1606,54 @@
             document.getElementById('splashScreen').classList.add('hidden');
             setTimeout(() => {
                 document.getElementById('appContainer').classList.add('visible');
-            }, 300);
+            }, 400);
         }
 
-        // Auto-enter after 3 seconds
+        // Auto-enter after 4 seconds
         setTimeout(() => {
             if (!document.getElementById('splashScreen').classList.contains('hidden')) {
                 enterApp();
             }
-        }, 3000);
+        }, 4000);
 
         // Section Navigation
         function showSection(sectionId) {
-            // Hide all sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Show target section
             const target = document.getElementById('section-' + sectionId);
             if (target) target.classList.add('active');
             
-            // Update nav items
-            document.querySelectorAll('.nav-item').forEach((item, index) => {
+            document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // Update active nav
             const navMap = { 'home': 0, 'classificacao': 1, 'estatisticas': 2, 'noticias': 3 };
             const navIndex = navMap[sectionId];
             if (navIndex !== undefined) {
                 document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
             }
             
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Filter Tabs
-        function setFilter(btn, filter) {
-            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
-            btn.classList.add('active');
-            // Here you would filter the games
-        }
-
-        function filterByGroup(group) {
-            // Here you would filter by group
-        }
-
-        // FAB Menu
-        function toggleFab() {
-            const fabMain = document.getElementById('fabMain');
-            const fabMenu = document.getElementById('fabMenu');
-            fabMain.classList.toggle('active');
-            fabMenu.classList.toggle('open');
-        }
-
-        // Close FAB when clicking outside
-        document.addEventListener('click', (e) => {
-            const fabContainer = document.getElementById('fabContainer');
-            if (!fabContainer.contains(e.target)) {
-                document.getElementById('fabMain').classList.remove('active');
-                document.getElementById('fabMenu').classList.remove('open');
-            }
-        });
-
-        // Menu button
+        // Menu
         function toggleMenu() {
-            // Could open a side menu
-            alert('Menu em breve!');
+            alert('Menu em desenvolvimento!');
+        }
+
+        // Share
+        function shareApp() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AfoHand - Handebol de 5',
+                    text: 'Acompanhe o campeonato municipal de handebol de Afonso Cláudio!',
+                    url: window.location.href
+                });
+            } else {
+                alert('Compartilhe o AfoHand com seus amigos!');
+            }
         }
 
         // PWA Install
@@ -1432,7 +1664,7 @@
             deferredPrompt = e;
             setTimeout(() => {
                 document.getElementById('installBanner').classList.add('show');
-            }, 2000);
+            }, 3000);
         });
 
         function installApp() {
@@ -1455,7 +1687,7 @@
                 .catch(err => console.log('SW erro:', err));
         }
 
-        // Hide install banner on scroll
+        // Hide banner on scroll
         let lastScroll = 0;
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
