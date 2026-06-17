@@ -2,11 +2,14 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#006400">
-    <title>AfoHand - Handebol de 5</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1B5E20">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>AfoHand</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,124 +18,708 @@
         }
 
         :root {
-            --verde: #006400;
-            --verde-claro: #228B22;
-            --vermelho: #CC0000;
-            --vermelho-escuro: #8B0000;
+            --verde-escuro: #1B5E20;
+            --verde: #2E7D32;
+            --verde-claro: #4CAF50;
+            --verde-fundo: #E8F5E9;
+            --vermelho: #D32F2F;
+            --vermelho-claro: #FFCDD2;
             --branco: #FFFFFF;
-            --cinza-claro: #f5f5f5;
+            --cinza: #F5F5F5;
+            --cinza-texto: #757575;
+            --sombra: 0 4px 20px rgba(0,0,0,0.08);
+            --sombra-card: 0 8px 32px rgba(27, 94, 32, 0.12);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
+            font-family: 'Poppins', sans-serif;
+            background: var(--cinza);
             min-height: 100vh;
-            color: var(--branco);
+            color: #333;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            padding: 30px 0;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border: 2px solid var(--vermelho);
-        }
-
-        .logo-area {
+        /* ===== SPLASH SCREEN ===== */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, var(--verde-escuro) 0%, var(--verde) 100%);
+            z-index: 9999;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        .ball-icon {
+        .splash-screen.hidden {
+            opacity: 0;
+            transform: translateY(-100%);
+            pointer-events: none;
+        }
+
+        .splash-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 65%;
+            background: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80') center/cover;
+            opacity: 0.3;
+            border-radius: 0 0 50% 50% / 0 0 30% 30%;
+        }
+
+        .splash-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 65%;
+            background: linear-gradient(180deg, rgba(27,94,32,0.8) 0%, rgba(46,125,50,0.9) 100%);
+            border-radius: 0 0 50% 50% / 0 0 30% 30%;
+        }
+
+        .splash-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 40px;
+            margin-top: -80px;
+        }
+
+        .splash-logo {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--branco);
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .splash-logo span {
+            color: var(--vermelho-claro);
+            font-weight: 300;
+        }
+
+        .splash-subtitle {
+            font-size: 1.1em;
+            color: rgba(255,255,255,0.85);
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        .splash-description {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+            max-width: 280px;
+            margin: 0 auto 50px;
+        }
+
+        .splash-btn {
             width: 60px;
             height: 60px;
-            background: var(--vermelho);
+            background: var(--branco);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
-            border: 3px solid var(--branco);
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: none;
         }
 
-        h1 {
-            font-size: 2.2em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .splash-btn:active {
+            transform: scale(0.9);
         }
 
-        .subtitle {
-            font-size: 1.1em;
-            opacity: 0.9;
-            margin-top: 5px;
+        .splash-btn svg {
+            width: 24px;
+            height: 24px;
+            color: var(--verde-escuro);
         }
 
-        .org-info {
+        /* ===== MAIN APP ===== */
+        .app-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .app-container.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Header */
+        .app-header {
             background: var(--branco);
-            color: var(--verde);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            border-left: 5px solid var(--vermelho);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .org-info h3 {
+        .app-header .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--verde-escuro);
+            letter-spacing: -1px;
+        }
+
+        .app-header .logo span {
             color: var(--vermelho);
-            margin-bottom: 5px;
+            font-weight: 300;
         }
 
-        .nav-tabs {
+        .menu-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--cinza);
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--verde-escuro);
+            border-radius: 2px;
+        }
+
+        /* Hero Card */
+        .hero-card {
+            margin: 20px 24px;
+            background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--verde) 100%);
+            border-radius: 24px;
+            padding: 28px;
+            color: var(--branco);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--sombra-card);
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 180px;
+            height: 180px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+        }
+
+        .hero-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .hero-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 14px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            transition: background 0.3s;
+        }
+
+        .hero-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .hero-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--branco);
+        }
+
+        /* Filter Tabs */
+        .filter-section {
+            padding: 0 24px;
+            margin-bottom: 20px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-add {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: var(--branco);
+            border: 2px solid var(--verde-fundo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: var(--verde);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .filter-tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
             overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        .nav-tab {
+        .filter-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            border-radius: 14px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85em;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .filter-tab.active {
+            background: var(--verde);
+            color: var(--branco);
+            box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+        }
+
+        .filter-tab:not(.active) {
+            background: var(--branco);
+            color: var(--cinza-texto);
+        }
+
+        /* Dropdown */
+        .dropdown-section {
+            padding: 0 24px;
+            margin-bottom: 20px;
+        }
+
+        .dropdown-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .dropdown-select {
             flex: 1;
-            padding: 15px;
-            background: rgba(255,255,255,0.2);
+            padding: 14px 20px;
+            border-radius: 16px;
+            border: none;
+            background: var(--branco);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9em;
+            color: #333;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23757575' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            box-shadow: var(--sombra);
+            cursor: pointer;
+        }
+
+        .dropdown-add {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: var(--branco);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            color: var(--verde);
+            box-shadow: var(--sombra);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* Stats Grid */
+        .stats-section {
+            padding: 0 24px;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--branco);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--sombra);
+            text-align: center;
+            position: relative;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.5em;
+        }
+
+        .stat-icon.sun { background: #FFF8E1; }
+        .stat-icon.temp { background: #FFEBEE; }
+        .stat-icon.drop { background: #E3F2FD; }
+        .stat-icon.fan { background: #F3E5F5; }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: var(--cinza-texto);
+            font-weight: 500;
+        }
+
+        /* Games Section */
+        .games-section {
+            padding: 0 24px;
+            margin-bottom: 100px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .section-link {
+            font-size: 0.8em;
+            color: var(--verde);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .game-card {
+            background: var(--branco);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--sombra);
+            transition: transform 0.2s;
+        }
+
+        .game-card:active {
+            transform: scale(0.98);
+        }
+
+        .game-status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .game-date {
+            font-size: 0.75em;
+            color: var(--cinza-texto);
+            font-weight: 500;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-live {
+            background: var(--vermelho-claro);
+            color: var(--vermelho);
+            animation: pulse 2s infinite;
+        }
+
+        .status-scheduled {
+            background: var(--verde-fundo);
+            color: var(--verde);
+        }
+
+        .status-finished {
+            background: #ECEFF1;
+            color: #546E77;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .game-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .team-info.right {
+            justify-content: flex-end;
+        }
+
+        .team-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+            color: var(--branco);
+            flex-shrink: 0;
+        }
+
+        .team-name {
+            font-weight: 600;
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        .score-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 16px;
+        }
+
+        .score {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--verde-escuro);
+        }
+
+        .vs-divider {
+            font-size: 0.7em;
+            color: var(--cinza-texto);
+            font-weight: 500;
+        }
+
+        .game-location {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--cinza);
+            font-size: 0.8em;
+            color: var(--cinza-texto);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* FAB Menu */
+        .fab-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .fab-main {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--verde) 0%, var(--verde-escuro) 100%);
             border: none;
             color: var(--branco);
-            border-radius: 10px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 24px rgba(27, 94, 32, 0.4);
             cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s;
-            min-width: 120px;
+            transition: transform 0.3s;
+            position: relative;
+            z-index: 2;
         }
 
-        .nav-tab.active {
+        .fab-main.active {
+            transform: rotate(45deg);
             background: var(--vermelho);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+            box-shadow: 0 6px 24px rgba(211, 47, 47, 0.4);
         }
 
-        .nav-tab:hover {
-            background: var(--vermelho-escuro);
+        .fab-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            pointer-events: none;
+            transition: all 0.3s ease;
         }
 
-        .section {
-            display: none;
+        .fab-menu.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: all;
+        }
+
+        .fab-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .fab-item-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+
+        .fab-item-btn:active {
+            transform: scale(0.9);
+        }
+
+        .fab-item-label {
+            font-size: 0.75em;
+            font-weight: 600;
+            color: var(--cinza-texto);
             background: var(--branco);
-            color: #333;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            padding: 6px 12px;
+            border-radius: 10px;
+            box-shadow: var(--sombra);
         }
 
-        .section.active {
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--branco);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 24px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            color: var(--cinza-texto);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.65em;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-item.active {
+            color: var(--verde);
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
             display: block;
             animation: fadeIn 0.3s ease;
         }
@@ -142,567 +729,710 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .section-title {
-            color: var(--verde);
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid var(--vermelho);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .game-card {
-            background: var(--cinza-claro);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--verde);
-            transition: transform 0.2s;
-        }
-
-        .game-card:hover {
-            transform: translateX(5px);
-        }
-
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .game-date {
-            background: var(--verde);
-            color: var(--branco);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-        }
-
-        .game-status {
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: bold;
-        }
-
-        .status-live {
-            background: var(--vermelho);
-            color: var(--branco);
-            animation: pulse 1.5s infinite;
-        }
-
-        .status-finished {
-            background: #666;
-            color: var(--branco);
-        }
-
-        .status-scheduled {
-            background: #f0ad4e;
-            color: var(--branco);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .teams {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-
-        .team {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-        }
-
-        .team-logo {
-            width: 40px;
-            height: 40px;
-            background: var(--verde);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--branco);
-            font-weight: bold;
-        }
-
-        .score {
-            font-size: 2em;
-            color: var(--vermelho);
-            padding: 0 20px;
-        }
-
-        .vs {
-            color: #999;
-            font-size: 0.9em;
-        }
-
+        /* Standings Table */
         .standings-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0 8px;
         }
 
         .standings-table th {
-            background: var(--verde);
-            color: var(--branco);
-            padding: 12px;
-            text-align: center;
+            font-size: 0.7em;
+            color: var(--cinza-texto);
+            font-weight: 500;
+            padding: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .standings-table td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
+            background: var(--branco);
+            padding: 16px 8px;
+            font-size: 0.85em;
         }
 
-        .standings-table tr:nth-child(even) {
-            background: var(--cinza-claro);
+        .standings-table tr td:first-child {
+            border-radius: 16px 0 0 16px;
+            padding-left: 16px;
         }
 
-        .standings-table tr:hover {
-            background: #e8f5e9;
+        .standings-table tr td:last-child {
+            border-radius: 0 16px 16px 0;
+            padding-right: 16px;
         }
 
-        .position {
-            font-weight: bold;
-            color: var(--verde);
+        .pos-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85em;
         }
 
-        .position-1 { color: #FFD700; }
-        .position-2 { color: #C0C0C0; }
-        .position-3 { color: #CD7F32; }
+        .pos-1 { background: #FFF8E1; color: #F9A825; }
+        .pos-2 { background: #ECEFF1; color: #78909C; }
+        .pos-3 { background: #FFF3E0; color: #EF6C00; }
 
         .team-cell {
             display: flex;
             align-items: center;
             gap: 10px;
-            justify-content: flex-start;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+        .team-cell .team-logo {
+            width: 36px;
+            height: 36px;
+            font-size: 0.8em;
         }
 
-        .stat-card {
-            background: linear-gradient(135deg, var(--verde), var(--verde-claro));
-            color: var(--branco);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-
+        /* News Cards */
         .news-card {
-            background: var(--cinza-claro);
-            border-radius: 10px;
+            background: var(--branco);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: var(--sombra);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, var(--verde-fundo) 0%, var(--verde-claro) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+        }
+
+        .news-content {
             padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--vermelho);
         }
 
         .news-date {
-            color: #666;
-            font-size: 0.85em;
-            margin-bottom: 5px;
-        }
-
-        .news-title {
+            font-size: 0.75em;
             color: var(--verde);
-            font-size: 1.1em;
-            font-weight: bold;
+            font-weight: 600;
             margin-bottom: 8px;
         }
 
+        .news-title {
+            font-size: 1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
         .news-text {
-            color: #555;
+            font-size: 0.85em;
+            color: var(--cinza-texto);
             line-height: 1.5;
         }
 
-        .btn-primary {
-            background: var(--vermelho);
-            color: var(--branco);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary:hover {
-            background: var(--vermelho-escuro);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
-        }
-
+        /* Install Banner */
         .install-banner {
-            display: none;
-            background: var(--vermelho);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--verde-escuro);
             color: var(--branco);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1001;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
         }
 
         .install-banner.show {
-            display: block;
-            animation: slideDown 0.3s ease;
+            transform: translateY(0);
         }
 
-        @keyframes slideDown {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .install-btn {
+            background: var(--branco);
+            color: var(--verde-escuro);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85em;
+            cursor: pointer;
         }
 
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: rgba(255,255,255,0.8);
-            font-size: 0.9em;
+        /* Org Info */
+        .org-bar {
+            background: linear-gradient(90deg, var(--verde-escuro) 0%, var(--verde) 100%);
+            margin: 0 24px 20px;
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: var(--branco);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .footer-logo {
-            margin-bottom: 10px;
+        .org-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.2em;
+            flex-shrink: 0;
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 1.5em; }
-            .teams { font-size: 1em; }
-            .score { font-size: 1.5em; }
-            .nav-tab { padding: 10px; font-size: 0.9em; }
+        .org-text {
+            font-size: 0.8em;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .org-text strong {
+            display: block;
+            font-size: 1.1em;
+            opacity: 1;
+            margin-bottom: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo-area">
-                <div class="ball-icon">🤾</div>
-                <div>
-                    <h1>AfoHand</h1>
-                    <div class="subtitle">Handebol de 5</div>
-                </div>
-            </div>
-            <div style="margin-top: 15px; font-size: 0.9em; opacity: 0.8;">
-                Campeonato Municipal
-            </div>
-        </header>
 
-        <div class="org-info">
-            <h3>🏛️ Realização</h3>
-            <p><strong>Prefeitura Municipal de Afonso Cláudio</strong></p>
-            <p>Secretaria Municipal de Esportes e Lazer</p>
-        </div>
-
-        <div class="install-banner" id="installBanner">
-            <p>📲 Instale o AfoHand em seu celular!</p>
-            <button class="btn-primary" onclick="installApp()">Instalar App</button>
-        </div>
-
-        <nav class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('jogos')">🏆 Jogos</button>
-            <button class="nav-tab" onclick="showSection('classificacao')">📊 Classificação</button>
-            <button class="nav-tab" onclick="showSection('estatisticas')">📈 Estatísticas</button>
-            <button class="nav-tab" onclick="showSection('noticias')">📰 Notícias</button>
-        </nav>
-
-        <!-- Seção Jogos -->
-        <section id="jogos" class="section active">
-            <h2 class="section-title">🏆 Jogos do Campeonato</h2>
-            
-            <div class="game-card">
-                <div class="game-header">
-                    <span class="game-date">📅 20/06/2026 - 19:00</span>
-                    <span class="game-status status-live">● AO VIVO</span>
-                </div>
-                <div class="teams">
-                    <div class="team">
-                        <div class="team-logo">A</div>
-                        <span>Atlético AC</span>
-                    </div>
-                    <div class="score">12 <span class="vs">vs</span> 10</div>
-                    <div class="team" style="justify-content: flex-end;">
-                        <span>Flamengo AC</span>
-                        <div class="team-logo" style="background: var(--vermelho);">F</div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 10px; color: #666; font-size: 0.9em;">
-                    Ginásio Municipal - Afonso Cláudio
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="game-header">
-                    <span class="game-date">📅 22/06/2026 - 20:00</span>
-                    <span class="game-status status-scheduled">AGENDADO</span>
-                </div>
-                <div class="teams">
-                    <div class="team">
-                        <div class="team-logo" style="background: #333;">V</div>
-                        <span>Vasco AC</span>
-                    </div>
-                    <div class="score">- <span class="vs">vs</span> -</div>
-                    <div class="team" style="justify-content: flex-end;">
-                        <span>Sport AC</span>
-                        <div class="team-logo" style="background: #FF6B00;">S</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="game-header">
-                    <span class="game-date">📅 18/06/2026 - 19:30</span>
-                    <span class="game-status status-finished">ENCERRADO</span>
-                </div>
-                <div class="teams">
-                    <div class="team">
-                        <div class="team-logo">P</div>
-                        <span>Palmeiras AC</span>
-                    </div>
-                    <div class="score">15 <span class="vs">vs</span> 8</div>
-                    <div class="team" style="justify-content: flex-end;">
-                        <span>Corinthians AC</span>
-                        <div class="team-logo" style="background: #000;">C</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção Classificação -->
-        <section id="classificacao" class="section">
-            <h2 class="section-title">📊 Classificação</h2>
-            <table class="standings-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th style="text-align: left;">Time</th>
-                        <th>P</th>
-                        <th>J</th>
-                        <th>V</th>
-                        <th>D</th>
-                        <th>GP</th>
-                        <th>GC</th>
-                        <th>SG</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="position position-1">1º</td>
-                        <td class="team-cell">
-                            <div class="team-logo" style="width: 30px; height: 30px; font-size: 0.8em;">P</div>
-                            Palmeiras AC
-                        </td>
-                        <td><strong>9</strong></td>
-                        <td>3</td>
-                        <td>3</td>
-                        <td>0</td>
-                        <td>42</td>
-                        <td>28</td>
-                        <td>+14</td>
-                    </tr>
-                    <tr>
-                        <td class="position position-2">2º</td>
-                        <td class="team-cell">
-                            <div class="team-logo" style="width: 30px; height: 30px; font-size: 0.8em;">A</div>
-                            Atlético AC
-                        </td>
-                        <td><strong>6</strong></td>
-                        <td>3</td>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>38</td>
-                        <td>32</td>
-                        <td>+6</td>
-                    </tr>
-                    <tr>
-                        <td class="position position-3">3º</td>
-                        <td class="team-cell">
-                            <div class="team-logo" style="width: 30px; height: 30px; font-size: 0.8em; background: var(--vermelho);">F</div>
-                            Flamengo AC
-                        </td>
-                        <td><strong>3</strong></td>
-                        <td>3</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>35</td>
-                        <td>38</td>
-                        <td>-3</td>
-                    </tr>
-                    <tr>
-                        <td class="position">4º</td>
-                        <td class="team-cell">
-                            <div class="team-logo" style="width: 30px; height: 30px; font-size: 0.8em; background: #333;">V</div>
-                            Vasco AC
-                        </td>
-                        <td><strong>0</strong></td>
-                        <td>3</td>
-                        <td>0</td>
-                        <td>3</td>
-                        <td>25</td>
-                        <td>42</td>
-                        <td>-17</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Seção Estatísticas -->
-        <section id="estatisticas" class="section">
-            <h2 class="section-title">📈 Estatísticas do Campeonato</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total de Jogos</div>
-                    <div class="stat-number">12</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Gols Marcados</div>
-                    <div class="stat-number">156</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Média de Gols/Jogo</div>
-                    <div class="stat-number">13.0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Times Participantes</div>
-                    <div class="stat-number">8</div>
-                </div>
-            </div>
-
-            <h3 style="margin-top: 30px; color: var(--verde); margin-bottom: 15px;">Artilheiros</h3>
-            <div class="game-card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div class="team-cell">
-                        <div class="team-logo" style="width: 35px; height: 35px;">1</div>
-                        <div>
-                            <div style="font-weight: bold;">João Silva</div>
-                            <div style="font-size: 0.85em; color: #666;">Palmeiras AC</div>
-                        </div>
-                    </div>
-                    <div style="font-size: 1.5em; color: var(--vermelho); font-weight: bold;">18 gols</div>
-                </div>
-            </div>
-            <div class="game-card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div class="team-cell">
-                        <div class="team-logo" style="width: 35px; height: 35px; background: #666;">2</div>
-                        <div>
-                            <div style="font-weight: bold;">Pedro Santos</div>
-                            <div style="font-size: 0.85em; color: #666;">Atlético AC</div>
-                        </div>
-                    </div>
-                    <div style="font-size: 1.5em; color: var(--vermelho); font-weight: bold;">15 gols</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção Notícias -->
-        <section id="noticias" class="section">
-            <h2 class="section-title">📰 Notícias</h2>
-            
-            <div class="news-card">
-                <div class="news-date">📅 16/06/2026</div>
-                <div class="news-title">Abertura do AfoHand 2026!</div>
-                <div class="news-text">
-                    A Prefeitura de Afonso Cláudio, através da Secretaria de Esportes, 
-                    inaugura nesta semana o campeonato municipal de handebol de 5. 
-                    O evento conta com 8 equipes e promete grandes emoções.
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-date">📅 15/06/2026</div>
-                <div class="news-title">Regulamento Oficial Publicado</div>
-                <div class="news-text">
-                    Confira o regulamento completo do campeonato no site da prefeitura. 
-                    As inscrições foram encerradas com recorde de participação.
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-date">📅 10/06/2026</div>
-                <div class="news-title">Reforma do Ginásio Municipal Concluída</div>
-                <div class="news-text">
-                    A Secretaria de Esportes finalizou a reforma do ginásio municipal, 
-                    que receberá todos os jogos do campeonato com nova pintura e piso renovado.
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="footer-logo">🏛️ Prefeitura Municipal de Afonso Cláudio</div>
-            <p>Secretaria Municipal de Esportes e Lazer</p>
-            <p style="margin-top: 10px; font-size: 0.8em;">© 2026 AfoHand - Todos os direitos reservados</p>
-        </footer>
+    <!-- Install Banner -->
+    <div class="install-banner" id="installBanner">
+        <span>📲 Instale o AfoHand no seu celular</span>
+        <button class="install-btn" onclick="installApp()">Instalar</button>
     </div>
 
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-bg"></div>
+        <div class="splash-overlay"></div>
+        <div class="splash-content">
+            <div class="splash-logo">Afo<span>Hand</span></div>
+            <div class="splash-subtitle">Handebol de 5</div>
+            <div class="splash-description">
+                Acompanhe o campeonato municipal de handebol de Afonso Cláudio em tempo real
+            </div>
+            <button class="splash-btn" onclick="enterApp()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container" id="appContainer">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">Afo<span>Hand</span></div>
+            <button class="menu-btn" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </header>
+
+        <!-- HOME SECTION -->
+        <div class="content-section active" id="section-home">
+            
+            <!-- Hero Card -->
+            <div class="hero-card">
+                <div class="hero-label">Campeonato 2026</div>
+                <div class="hero-title">AfoHand</div>
+                <div class="hero-subtitle">8 equipes, 1 campeão</div>
+                <button class="hero-btn" onclick="showSection('jogos')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Org Info -->
+            <div class="org-bar">
+                <div class="org-icon">🏛️</div>
+                <div class="org-text">
+                    <strong>Prefeitura de Afonso Cláudio</strong>
+                    Secretaria Municipal de Esportes e Lazer
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-section">
+                <div class="filter-row">
+                    <button class="filter-add">+</button>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" onclick="setFilter(this, 'all')">Todos</button>
+                        <button class="filter-tab" onclick="setFilter(this, 'live')">Ao Vivo</button>
+                        <button class="filter-tab" onclick="setFilter(this, 'scheduled')">Agendados</button>
+                        <button class="filter-tab" onclick="setFilter(this, 'finished')">Encerrados</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dropdown -->
+            <div class="dropdown-section">
+                <div class="dropdown-row">
+                    <select class="dropdown-select" onchange="filterByGroup(this.value)">
+                        <option value="all">Todos os Grupos</option>
+                        <option value="A">Grupo A</option>
+                        <option value="B">Grupo B</option>
+                        <option value="playoffs">Mata-Mata</option>
+                    </select>
+                    <button class="dropdown-add">+</button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon sun">⚽</div>
+                        <div class="stat-value">42</div>
+                        <div class="stat-label">Gols Marcados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon temp">🏆</div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Equipes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon drop">📅</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Jogos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon fan">⭐</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Rodadas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Games -->
+            <div class="games-section">
+                <div class="section-header">
+                    <h3 class="section-title">🏆 Jogos</h3>
+                    <a href="#" class="section-link">Ver todos</a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-status-row">
+                        <span class="game-date">Hoje, 19:00</span>
+                        <span class="status-badge status-live">● Ao Vivo</span>
+                    </div>
+                    <div class="game-teams">
+                        <div class="team-info">
+                            <div class="team-logo" style="background: linear-gradient(135deg, #1B5E20, #2E7D32);">AC</div>
+                            <span class="team-name">Atlético AC</span>
+                        </div>
+                        <div class="score-area">
+                            <span class="score">12</span>
+                            <span class="vs-divider">vs</span>
+                            <span class="score">10</span>
+                        </div>
+                        <div class="team-info right">
+                            <span class="team-name">Flamengo AC</span>
+                            <div class="team-logo" style="background: linear-gradient(135deg, #D32F2F, #B71C1C);">FL</div>
+                        </div>
+                    </div>
+                    <div class="game-location">
+                        📍 Ginásio Municipal - Afonso Cláudio
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-status-row">
+                        <span class="game-date">Amanhã, 20:00</span>
+                        <span class="status-badge status-scheduled">Agendado</span>
+                    </div>
+                    <div class="game-teams">
+                        <div class="team-info">
+                            <div class="team-logo" style="background: linear-gradient(135deg, #333, #555);">VA</div>
+                            <span class="team-name">Vasco AC</span>
+                        </div>
+                        <div class="score-area">
+                            <span class="score">-</span>
+                            <span class="vs-divider">vs</span>
+                            <span class="score">-</span>
+                        </div>
+                        <div class="team-info right">
+                            <span class="team-name">Sport AC</span>
+                            <div class="team-logo" style="background: linear-gradient(135deg, #FF6B00, #E65100);">SP</div>
+                        </div>
+                    </div>
+                    <div class="game-location">
+                        📍 Ginásio Municipal - Afonso Cláudio
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-status-row">
+                        <span class="game-date">18/06, 19:30</span>
+                        <span class="status-badge status-finished">Encerrado</span>
+                    </div>
+                    <div class="game-teams">
+                        <div class="team-info">
+                            <div class="team-logo" style="background: linear-gradient(135deg, #2E7D32, #1B5E20);">PA</div>
+                            <span class="team-name">Palmeiras AC</span>
+                        </div>
+                        <div class="score-area">
+                            <span class="score">15</span>
+                            <span class="vs-divider">vs</span>
+                            <span class="score">8</span>
+                        </div>
+                        <div class="team-info right">
+                            <span class="team-name">Corinthians AC</span>
+                            <div class="team-logo" style="background: linear-gradient(135deg, #000, #333);">CO</div>
+                        </div>
+                    </div>
+                    <div class="game-location">
+                        📍 Ginásio Municipal - Afonso Cláudio
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLASSIFICATION SECTION -->
+        <div class="content-section" id="section-classificacao">
+            <div class="hero-card" style="margin-bottom: 20px;">
+                <div class="hero-label">Tabela</div>
+                <div class="hero-title">Classificação</div>
+                <div class="hero-subtitle">Grupo A - 1ª Fase</div>
+            </div>
+
+            <div style="padding: 0 24px;">
+                <table class="standings-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th style="text-align: left;">Time</th>
+                            <th>P</th>
+                            <th>J</th>
+                            <th>V</th>
+                            <th>SG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="pos-badge pos-1">1</div></td>
+                            <td>
+                                <div class="team-cell">
+                                    <div class="team-logo" style="background: linear-gradient(135deg, #2E7D32, #1B5E20);">PA</div>
+                                    <span style="font-weight: 600;">Palmeiras AC</span>
+                                </div>
+                            </td>
+                            <td><strong>9</strong></td>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>+14</td>
+                        </tr>
+                        <tr>
+                            <td><div class="pos-badge pos-2">2</div></td>
+                            <td>
+                                <div class="team-cell">
+                                    <div class="team-logo" style="background: linear-gradient(135deg, #1B5E20, #2E7D32);">AC</div>
+                                    <span style="font-weight: 600;">Atlético AC</span>
+                                </div>
+                            </td>
+                            <td><strong>6</strong></td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>+6</td>
+                        </tr>
+                        <tr>
+                            <td><div class="pos-badge pos-3">3</div></td>
+                            <td>
+                                <div class="team-cell">
+                                    <div class="team-logo" style="background: linear-gradient(135deg, #D32F2F, #B71C1C);">FL</div>
+                                    <span style="font-weight: 600;">Flamengo AC</span>
+                                </div>
+                            </td>
+                            <td><strong>3</strong></td>
+                            <td>3</td>
+                            <td>1</td>
+                            <td>-3</td>
+                        </tr>
+                        <tr>
+                            <td><div class="pos-badge" style="background: #ECEFF1; color: #78909C;">4</div></td>
+                            <td>
+                                <div class="team-cell">
+                                    <div class="team-logo" style="background: linear-gradient(135deg, #333, #555);">VA</div>
+                                    <span style="font-weight: 600;">Vasco AC</span>
+                                </div>
+                            </td>
+                            <td><strong>0</strong></td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>-17</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- NEWS SECTION -->
+        <div class="content-section" id="section-noticias">
+            <div class="hero-card" style="margin-bottom: 20px;">
+                <div class="hero-label">Atualizações</div>
+                <div class="hero-title">Notícias</div>
+                <div class="hero-subtitle">Fique por dentro do campeonato</div>
+            </div>
+
+            <div style="padding: 0 24px;">
+                <div class="news-card">
+                    <div class="news-image">🏆</div>
+                    <div class="news-content">
+                        <div class="news-date">16 de Junho de 2026</div>
+                        <div class="news-title">Abertura do AfoHand 2026!</div>
+                        <div class="news-text">
+                            A Prefeitura de Afonso Cláudio, através da Secretaria de Esportes, inaugura o campeonato municipal de handebol de 5 com 8 equipes participantes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image" style="background: linear-gradient(135deg, #FFEBEE, #FFCDD2);">📋</div>
+                    <div class="news-content">
+                        <div class="news-date">15 de Junho de 2026</div>
+                        <div class="news-title">Regulamento Oficial Publicado</div>
+                        <div class="news-text">
+                            Confira o regulamento completo no site da prefeitura. As inscrições foram encerradas com recorde de participação.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image" style="background: linear-gradient(135deg, #E3F2FD, #BBDEFB);">🏗️</div>
+                    <div class="news-content">
+                        <div class="news-date">10 de Junho de 2026</div>
+                        <div class="news-title">Reforma do Ginásio Concluída</div>
+                        <div class="news-text">
+                            A Secretaria de Esportes finalizou a reforma do ginásio municipal com nova pintura e piso renovado.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS SECTION -->
+        <div class="content-section" id="section-estatisticas">
+            <div class="hero-card" style="margin-bottom: 20px;">
+                <div class="hero-label">Números</div>
+                <div class="hero-title">Estatísticas</div>
+                <div class="hero-subtitle">Dados do campeonato</div>
+            </div>
+
+            <div class="stats-section" style="padding: 0 24px;">
+                <div class="stats-grid" style="margin-bottom: 20px;">
+                    <div class="stat-card">
+                        <div class="stat-icon sun">⚽</div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Gols Totais</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon temp">🎯</div>
+                        <div class="stat-value">13.0</div>
+                        <div class="stat-label">Média/Jogo</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon drop">🟨</div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Cartões</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon fan">👥</div>
+                        <div class="stat-value">120</div>
+                        <div class="stat-label">Atletas</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.1em; font-weight: 600; margin-bottom: 16px; color: #333;">🏅 Artilheiros</h3>
+                
+                <div class="game-card">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <div class="pos-badge pos-1" style="width: 40px; height: 40px; font-size: 1em;">1</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #333;">João Silva</div>
+                            <div style="font-size: 0.8em; color: var(--cinza-texto);">Palmeiras AC</div>
+                        </div>
+                        <div style="font-size: 1.4em; font-weight: 700; color: var(--verde-escuro);">18</div>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <div class="pos-badge pos-2" style="width: 40px; height: 40px; font-size: 1em;">2</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #333;">Pedro Santos</div>
+                            <div style="font-size: 0.8em; color: var(--cinza-texto);">Atlético AC</div>
+                        </div>
+                        <div style="font-size: 1.4em; font-weight: 700; color: var(--verde-escuro);">15</div>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <div class="pos-badge pos-3" style="width: 40px; height: 40px; font-size: 1em;">3</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #333;">Carlos Lima</div>
+                            <div style="font-size: 0.8em; color: var(--cinza-texto);">Flamengo AC</div>
+                        </div>
+                        <div style="font-size: 1.4em; font-weight: 700; color: var(--verde-escuro);">12</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spacer for bottom nav -->
+        <div style="height: 100px;"></div>
+    </div>
+
+    <!-- FAB Menu -->
+    <div class="fab-container" id="fabContainer">
+        <div class="fab-menu" id="fabMenu">
+            <div class="fab-item">
+                <span class="fab-item-label">Notificações</span>
+                <button class="fab-item-btn" style="background: #FFF8E1; color: #F9A825;">🔔</button>
+            </div>
+            <div class="fab-item">
+                <span class="fab-item-label">Compartilhar</span>
+                <button class="fab-item-btn" style="background: #E3F2FD; color: #1976D2;">📤</button>
+            </div>
+            <div class="fab-item">
+                <span class="fab-item-label">Configurações</span>
+                <button class="fab-item-btn" style="background: #F3E5F5; color: #7B1FA2;">⚙️</button>
+            </div>
+        </div>
+        <button class="fab-main" id="fabMain" onclick="toggleFab()">+</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" onclick="showSection('home')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            Início
+        </button>
+        <button class="nav-item" onclick="showSection('classificacao')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20V10M18 20V4M6 20v-4"/>
+            </svg>
+            Tabela
+        </button>
+        <button class="nav-item" onclick="showSection('estatisticas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            Stats
+        </button>
+        <button class="nav-item" onclick="showSection('noticias')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            News
+        </button>
+    </nav>
+
     <script>
-        // Navegação entre seções
+        // Splash Screen
+        function enterApp() {
+            document.getElementById('splashScreen').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('appContainer').classList.add('visible');
+            }, 300);
+        }
+
+        // Auto-enter after 3 seconds
+        setTimeout(() => {
+            if (!document.getElementById('splashScreen').classList.contains('hidden')) {
+                enterApp();
+            }
+        }, 3000);
+
+        // Section Navigation
         function showSection(sectionId) {
-            // Esconde todas as seções
-            document.querySelectorAll('.section').forEach(section => {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Remove active de todos os tabs
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
+            // Show target section
+            const target = document.getElementById('section-' + sectionId);
+            if (target) target.classList.add('active');
+            
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach((item, index) => {
+                item.classList.remove('active');
             });
             
-            // Mostra a seção selecionada
-            document.getElementById(sectionId).classList.add('active');
+            // Update active nav
+            const navMap = { 'home': 0, 'classificacao': 1, 'estatisticas': 2, 'noticias': 3 };
+            const navIndex = navMap[sectionId];
+            if (navIndex !== undefined) {
+                document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+            }
             
-            // Ativa o tab correspondente
-            event.target.classList.add('active');
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Registro do Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('SW registrado:', registration);
-                    })
-                    .catch(error => {
-                        console.log('SW falhou:', error);
-                    });
-            });
+        // Filter Tabs
+        function setFilter(btn, filter) {
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            btn.classList.add('active');
+            // Here you would filter the games
         }
 
-        // Instalação do PWA
+        function filterByGroup(group) {
+            // Here you would filter by group
+        }
+
+        // FAB Menu
+        function toggleFab() {
+            const fabMain = document.getElementById('fabMain');
+            const fabMenu = document.getElementById('fabMenu');
+            fabMain.classList.toggle('active');
+            fabMenu.classList.toggle('open');
+        }
+
+        // Close FAB when clicking outside
+        document.addEventListener('click', (e) => {
+            const fabContainer = document.getElementById('fabContainer');
+            if (!fabContainer.contains(e.target)) {
+                document.getElementById('fabMain').classList.remove('active');
+                document.getElementById('fabMenu').classList.remove('open');
+            }
+        });
+
+        // Menu button
+        function toggleMenu() {
+            // Could open a side menu
+            alert('Menu em breve!');
+        }
+
+        // PWA Install
         let deferredPrompt;
         
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            document.getElementById('installBanner').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('installBanner').classList.add('show');
+            }, 2000);
         });
 
         function installApp() {
@@ -710,13 +1440,31 @@
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        console.log('Usuário instalou o app');
+                        console.log('App instalado');
                     }
                     deferredPrompt = null;
-                    document.getElementById('installBanner').style.display = 'none';
+                    document.getElementById('installBanner').classList.remove('show');
                 });
             }
         }
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SW registrado'))
+                .catch(err => console.log('SW erro:', err));
+        }
+
+        // Hide install banner on scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const banner = document.getElementById('installBanner');
+            if (currentScroll > 100 && banner.classList.contains('show')) {
+                banner.classList.remove('show');
+            }
+            lastScroll = currentScroll;
+        });
     </script>
 </body>
 </html>
