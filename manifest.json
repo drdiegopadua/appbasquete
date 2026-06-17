@@ -1,24 +1,103 @@
 {
-  "name": "AfoHand - Handebol de 5",
-  "short_name": "AfoHand",
-  "description": "Campeonato Municipal de Handebol de 5 de Afonso Cláudio",
+  "name": "Instituto Cultural das Montanhas",
+  "short_name": "ICM",
+  "description": "Educação, esporte e arte para comunidades em situação de vulnerabilidade social.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a3a1a",
-  "theme_color": "#1a3a1a",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "orientation": "portrait",
+  "scope": "/",
+  "lang": "pt-BR",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "categories": ["education", "social", "lifestyle"],
+  "screenshots": [
+    {
+      "src": "screenshot-home.png",
+      "sizes": "430x932",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Página inicial do ICM"
+    },
+    {
+      "src": "screenshot-projetos.png",
+      "sizes": "430x932",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Projetos do Instituto"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Projetos",
+      "short_name": "Projetos",
+      "description": "Ver projetos ativos do ICM",
+      "url": "/?page=projetos",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Doar",
+      "short_name": "Doar",
+      "description": "Faça uma doação para o Instituto",
+      "url": "/?page=contato",
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }
