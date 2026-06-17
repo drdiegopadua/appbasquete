@@ -1,1702 +1,759 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1a3a1a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>AfoHand</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --verde-fundo: #1a3a1a;
-            --verde-escuro: #0d280d;
-            --verde-medio: #2d5a2d;
-            --verde-claro: #4a8a4a;
-            --vermelho: #c41e3a;
-            --vermelho-claro: #e85d75;
-            --branco: #ffffff;
-            --branco-suave: rgba(255,255,255,0.9);
-            --amarelo: #f4d03f;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--verde-fundo);
-            min-height: 100vh;
-            color: var(--branco);
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* ===== SPLASH SCREEN ===== */
-        .splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--verde-fundo);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 60px 30px 40px;
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .splash-screen.hidden {
-            opacity: 0;
-            transform: scale(1.1);
-            pointer-events: none;
-        }
-
-        .splash-top {
-            text-align: center;
-        }
-
-        .splash-logo-text {
-            font-size: 3.5em;
-            font-weight: 800;
-            letter-spacing: -2px;
-            line-height: 1;
-        }
-
-        .splash-logo-text .af {
-            color: var(--branco);
-        }
-
-        .splash-logo-text .hand {
-            color: var(--vermelho);
-        }
-
-        .splash-subtitle {
-            font-size: 1.2em;
-            font-weight: 300;
-            color: var(--branco-suave);
-            margin-top: 8px;
-            letter-spacing: 3px;
-        }
-
-        .splash-map-container {
-            position: relative;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .splash-map {
-            width: 100%;
-            max-width: 400px;
-            height: 300px;
-            position: relative;
-        }
-
-        .map-blob {
-            position: absolute;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid var(--branco);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-
-        .map-blob img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .blob-1 {
-            width: 180px;
-            height: 180px;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
-        }
-
-        .blob-2 {
-            width: 140px;
-            height: 140px;
-            top: 80px;
-            right: 10px;
-            z-index: 2;
-        }
-
-        .blob-3 {
-            width: 120px;
-            height: 120px;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1;
-        }
-
-        .map-label {
-            position: absolute;
-            background: var(--branco);
-            color: var(--verde-fundo);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 600;
-            white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .label-1 {
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .label-2 {
-            top: 60px;
-            right: 0;
-        }
-
-        .label-3 {
-            bottom: 10px;
-            left: 10px;
-        }
-
-        .splash-bottom {
-            text-align: left;
-        }
-
-        .splash-tagline {
-            font-size: 1.8em;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 10px;
-        }
-
-        .splash-tagline span {
-            color: var(--vermelho);
-        }
-
-        .splash-desc {
-            font-size: 0.9em;
-            color: var(--branco-suave);
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-
-        .splash-btn {
-            width: 60px;
-            height: 60px;
-            background: var(--branco);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
-        }
-
-        .splash-btn:active {
-            transform: scale(0.9);
-        }
-
-        .splash-btn svg {
-            width: 24px;
-            height: 24px;
-            color: var(--verde-fundo);
-        }
-
-        /* ===== MAIN APP ===== */
-        .app-container {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .app-container.visible {
-            display: block;
-            opacity: 1;
-        }
-
-        /* App Header */
-        .app-header {
-            padding: 20px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(26, 58, 26, 0.95);
-            backdrop-filter: blur(10px);
-        }
-
-        .app-logo {
-            font-size: 1.8em;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        .app-logo .af { color: var(--branco); }
-        .app-logo .hand { color: var(--vermelho); }
-
-        .menu-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--branco);
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero-section {
-            padding: 0 24px 30px;
-        }
-
-        .hero-title {
-            font-size: 2.2em;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 8px;
-        }
-
-        .hero-title span {
-            color: var(--vermelho);
-        }
-
-        .hero-subtitle {
-            font-size: 0.9em;
-            color: var(--branco-suave);
-            margin-bottom: 25px;
-        }
-
-        /* Map Section */
-        .map-section {
-            position: relative;
-            height: 320px;
-            margin: 0 24px 30px;
-            border-radius: 30px;
-            overflow: hidden;
-            background: linear-gradient(135deg, var(--verde-medio) 0%, var(--verde-claro) 100%);
-        }
-
-        .map-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.3;
-            background: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80') center/cover;
-        }
-
-        .map-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, transparent 0%, var(--verde-fundo) 100%);
-        }
-
-        .map-content {
-            position: relative;
-            z-index: 2;
-            padding: 20px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .map-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .map-badge {
-            background: var(--branco);
-            color: var(--verde-fundo);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-
-        .map-nav {
-            display: flex;
-            gap: 10px;
-        }
-
-        .map-nav-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: var(--branco);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .map-pins {
-            position: relative;
-            flex: 1;
-            margin: 20px 0;
-        }
-
-        .map-pin {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .pin-dot {
-            width: 16px;
-            height: 16px;
-            background: var(--vermelho);
-            border-radius: 50%;
-            border: 3px solid var(--branco);
-            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.5);
-            animation: pulse-pin 2s infinite;
-        }
-
-        .pin-label {
-            background: var(--branco);
-            color: var(--verde-fundo);
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.7em;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .pin-1 { top: 30%; left: 20%; }
-        .pin-2 { top: 50%; right: 25%; }
-        .pin-3 { bottom: 20%; left: 40%; }
-
-        @keyframes pulse-pin {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        .map-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .map-cta {
-            background: var(--branco);
-            color: var(--verde-fundo);
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 0.85em;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-        }
-
-        .map-price {
-            text-align: right;
-        }
-
-        .map-price-label {
-            font-size: 0.75em;
-            opacity: 0.8;
-        }
-
-        .map-price-value {
-            font-size: 1.5em;
-            font-weight: 700;
-        }
-
-        /* Categories */
-        .categories-section {
-            padding: 0 24px 20px;
-        }
-
-        .section-label {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0.7;
-            margin-bottom: 15px;
-        }
-
-        .categories-scroll {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding-bottom: 10px;
-        }
-
-        .categories-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .category-card {
-            min-width: 140px;
-            height: 180px;
-            border-radius: 25px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .category-card:active {
-            transform: scale(0.95);
-        }
-
-        .category-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .category-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8) 100%);
-        }
-
-        .category-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 15px;
-        }
-
-        .category-name {
-            font-size: 1em;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .category-count {
-            font-size: 0.75em;
-            opacity: 0.8;
-        }
-
-        /* Games Section */
-        .games-section {
-            padding: 0 24px;
-        }
-
-        .section-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .section-title-main {
-            font-size: 1.5em;
-            font-weight: 700;
-        }
-
-        .see-all {
-            font-size: 0.85em;
-            color: var(--vermelho-claro);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .game-card-float {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 25px;
-            padding: 20px;
-            margin-bottom: 15px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .game-card-float:active {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .game-status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .game-tag {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8em;
-        }
-
-        .tag-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .tag-live {
-            background: var(--vermelho);
-            animation: blink 1.5s infinite;
-        }
-
-        .tag-scheduled {
-            background: var(--amarelo);
-        }
-
-        .tag-finished {
-            background: var(--verde-claro);
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .game-time {
-            font-size: 0.8em;
-            opacity: 0.7;
-        }
-
-        .game-teams-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .team-block {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .team-block.right {
-            justify-content: flex-end;
-        }
-
-        .team-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 15px;
-            object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-
-        .team-info-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .team-name-text {
-            font-weight: 600;
-            font-size: 0.95em;
-        }
-
-        .team-city {
-            font-size: 0.75em;
-            opacity: 0.6;
-        }
-
-        .score-block {
-            text-align: center;
-            min-width: 80px;
-        }
-
-        .score-display {
-            font-size: 2em;
-            font-weight: 800;
-            color: var(--branco);
-        }
-
-        .score-sep {
-            font-size: 0.9em;
-            opacity: 0.5;
-            margin: 0 5px;
-        }
-
-        .vs-text {
-            font-size: 0.7em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0.5;
-            margin-top: 5px;
-        }
-
-        /* Standing Preview */
-        .standing-preview {
-            padding: 0 24px 30px;
-        }
-
-        .standing-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 25px;
-            padding: 20px;
-        }
-
-        .standing-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .standing-title {
-            font-size: 1.1em;
-            font-weight: 700;
-        }
-
-        .standing-filter {
-            display: flex;
-            gap: 10px;
-        }
-
-        .filter-pill {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .filter-pill.active {
-            background: var(--branco);
-            color: var(--verde-fundo);
-        }
-
-        .filter-pill:not(.active) {
-            background: rgba(255,255,255,0.1);
-            color: var(--branco);
-        }
-
-        .standing-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .standing-row:last-child {
-            border-bottom: none;
-        }
-
-        .standing-pos {
-            width: 30px;
-            height: 30px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85em;
-        }
-
-        .pos-gold {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: var(--verde-fundo);
-        }
-
-        .pos-silver {
-            background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
-            color: var(--verde-fundo);
-        }
-
-        .pos-bronze {
-            background: linear-gradient(135deg, #CD7F32, #B87333);
-            color: var(--branco);
-        }
-
-        .pos-normal {
-            background: rgba(255,255,255,0.1);
-            color: var(--branco);
-        }
-
-        .standing-team {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .team-mini-photo {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        .standing-points {
-            font-size: 1.2em;
-            font-weight: 700;
-            color: var(--amarelo);
-        }
-
-        /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(26, 58, 26, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0 30px;
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 8px 16px;
-            border: none;
-            background: none;
-            color: rgba(255,255,255,0.5);
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.65em;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .nav-item.active {
-            color: var(--vermelho);
-        }
-
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        /* Org Badge */
-        .org-badge {
-            margin: 0 24px 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .org-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--verde-claro), var(--verde-medio));
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3em;
-            flex-shrink: 0;
-        }
-
-        .org-text {
-            font-size: 0.8em;
-            line-height: 1.4;
-            opacity: 0.9;
-        }
-
-        .org-text strong {
-            display: block;
-            font-size: 1.05em;
-            opacity: 1;
-            font-weight: 600;
-        }
-
-        /* Install Banner */
-        .install-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--vermelho);
-            color: var(--branco);
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1001;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .install-banner.show {
-            transform: translateY(0);
-        }
-
-        .install-btn {
-            background: var(--branco);
-            color: var(--vermelho);
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 0.85em;
-            cursor: pointer;
-        }
-
-        /* Floating Action Button */
-        .fab {
-            position: fixed;
-            bottom: 100px;
-            right: 24px;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--vermelho), var(--vermelho-claro));
-            border: none;
-            color: var(--branco);
-            font-size: 1.5em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 30px rgba(196, 30, 58, 0.4);
-            cursor: pointer;
-            z-index: 99;
-            transition: transform 0.3s;
-        }
-
-        .fab:active {
-            transform: scale(0.9);
-        }
-
-        /* Content Sections */
-        .content-section {
-            display: none;
-            padding-bottom: 100px;
-        }
-
-        .content-section.active {
-            display: block;
-            animation: fadeInUp 0.4s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* News Cards */
-        .news-float-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 25px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .news-image-top {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .news-body {
-            padding: 20px;
-        }
-
-        .news-date {
-            font-size: 0.75em;
-            color: var(--vermelho-claro);
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .news-title {
-            font-size: 1.1em;
-            font-weight: 700;
-            margin-bottom: 10px;
-            line-height: 1.3;
-        }
-
-        .news-text {
-            font-size: 0.85em;
-            opacity: 0.7;
-            line-height: 1.5;
-        }
-
-        /* Full Standing Table */
-        .full-table {
-            padding: 0 24px;
-        }
-
-        .table-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 25px;
-            overflow: hidden;
-        }
-
-        .table-header {
-            display: grid;
-            grid-template-columns: 50px 1fr 50px 50px 50px;
-            gap: 10px;
-            padding: 15px 20px;
-            background: rgba(255,255,255,0.05);
-            font-size: 0.7em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.7;
-            font-weight: 600;
-        }
-
-        .table-row {
-            display: grid;
-            grid-template-columns: 50px 1fr 50px 50px 50px;
-            gap: 10px;
-            padding: 15px 20px;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .table-row:last-child {
-            border-bottom: none;
-        }
-
-        @media (max-width: 400px) {
-            .splash-logo-text {
-                font-size: 2.5em;
-            }
-            .hero-title {
-                font-size: 1.8em;
-            }
-            .map-section {
-                height: 260px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#000000"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="ICM"/>
+  <title>Instituto Cultural das Montanhas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --c0:#000000; --c1:#1a1a1a; --c2:#333333; --c3:#666666; --c4:#999999; --c5:#CCCCCC; --c6:#E8E8E8; --c7:#F5F5F5; --c8:#FAFAFA;
+  --bg:#FFFFFF; --bg2:#F5F5F5;
+  --r8:8px;--r12:12px;--r16:16px;--r20:20px;--r24:24px;--r99:99px;
+  --font:'Inter',system-ui,sans-serif;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg:0 8px 24px rgba(0,0,0,0.12);
+}
+html,body{height:100%;width:100%;font-family:var(--font);background:var(--c0);overflow:hidden;}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--c0);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .55s ease,visibility .55s ease;}
+#splash.out{opacity:0;visibility:hidden;pointer-events:none;}
+.spl-logo{animation:spl-drop .8s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes spl-drop{from{opacity:0;transform:translateY(-16px) scale(.9)}to{opacity:1;transform:none}}
+.spl-sub{color:var(--c4);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;margin-top:16px;font-weight:500;}
+
+/* APP */
+#app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--bg);max-width:430px;margin:0 auto;opacity:0;transition:opacity .4s ease;overflow:hidden;}
+#app.ready{opacity:1;}
+.safe-t{height:env(safe-area-inset-top,0px);background:var(--c0);flex-shrink:0;}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--c0);flex-shrink:0;min-height:56px;position:relative;z-index:10;}
+.hdr-l{display:flex;align-items:center;justify-content:flex-start;gap:12px;}
+.burger{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:4px;}
+.burger span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;transition:all .3s ease;}
+.burger span:nth-child(2){width:14px;}
+.avt{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;transition:background .2s;}
+.avt:active{background:rgba(255,255,255,0.25);}
+.hdr-logo{color:#fff;font-size:1.1rem;font-weight:800;letter-spacing:-0.02em;}
+
+/* DRAWER */
+.ovl{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:49;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
+.ovl.open{opacity:1;pointer-events:all;}
+.drw{position:fixed;top:0;left:0;bottom:0;width:80%;max-width:300px;background:var(--c0);z-index:50;transform:translateX(-100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow-y:auto;}
+.drw.open{transform:translateX(0);}
+.drw-hd{padding:calc(env(safe-area-inset-top,0px)+24px) 24px 20px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;}
+.drw-logo{color:#fff;font-size:1.3rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:4px;}
+.drw-sub-label{color:var(--c4);font-size:.65rem;letter-spacing:.05em;font-weight:400;}
+.drw-nav{list-style:none;padding:8px 0;flex:1;}
+.drw-nav a{display:flex;align-items:center;gap:14px;padding:14px 24px;color:rgba(255,255,255,.55);text-decoration:none;font-size:.88rem;font-weight:500;cursor:pointer;transition:color .15s,background .15s;border-radius:0;}
+.drw-nav a.on,.drw-nav a:active{color:#fff;background:rgba(255,255,255,.06);}
+.ni{font-size:1rem;width:20px;text-align:center;}
+.drw-ft{padding:16px 24px calc(env(safe-area-inset-bottom,0px)+16px);border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:10px;}
+.drw-btn{display:block;text-align:center;background:#fff;color:var(--c0);padding:14px;border-radius:var(--r12);text-decoration:none;font-weight:700;font-size:.85rem;cursor:pointer;border:none;font-family:var(--font);width:100%;transition:transform .15s,opacity .15s;}
+.drw-btn:active{transform:scale(.98);opacity:.9;}
+.drw-btn.sec{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.25);}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(env(safe-area-inset-bottom,0px)+80px);background:var(--bg);}
+.page{display:none;animation:pIn .25s cubic-bezier(.4,0,.2,1);}
+.page.active{display:block;}
+@keyframes pIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* BOTTOM NAV */
+.bnv{display:flex;background:var(--bg);border-top:1px solid var(--c6);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -4px 20px rgba(0,0,0,.05);}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 4px;background:none;border:none;cursor:pointer;color:var(--c4);font-family:var(--font);font-size:.6rem;font-weight:600;transition:color .2s;}
+.bn.on{color:var(--c0);}
+.bn svg{transition:stroke-width .2s;}
+.bn.on svg{stroke-width:2.5;}
+
+/* HOME HERO */
+.hero{background:var(--c0);padding:28px 24px 0;position:relative;}
+.hero-ey{display:inline-flex;align-items:center;gap:6px;color:var(--c4);font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;}
+.hero-dot{width:5px;height:5px;border-radius:50%;background:var(--c5);flex-shrink:0;}
+.hero-h{font-size:2.4rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1.05;margin-bottom:14px;}
+.hero-p{color:var(--c5);font-size:.82rem;line-height:1.7;margin-bottom:24px;max-width:320px;}
+.hero-acts{display:flex;gap:10px;padding-bottom:36px;}
+.bh{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:var(--r12);font-size:.82rem;font-weight:700;text-decoration:none;cursor:pointer;border:none;font-family:var(--font);transition:transform .15s,opacity .15s;}
+.bh:active{transform:scale(.97);}
+.bh.f{background:#fff;color:var(--c0);}
+.bh.g{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.25);}
+.hero-sep{display:block;width:100%;height:32px;background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%);}
+
+/* SECTIONS */
+.sec{padding:20px 24px 4px;}
+.sec-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
+.sec-t{font-size:1rem;font-weight:800;color:var(--c0);letter-spacing:-.02em;}
+.sec-more{font-size:.72rem;font-weight:600;color:var(--c3);cursor:pointer;background:none;border:none;font-family:var(--font);transition:color .2s;}
+.sec-more:hover{color:var(--c0);}
+
+/* project cards */
+.pscroll{display:flex;gap:12px;overflow-x:auto;padding:2px 24px 16px;margin:0 -24px;scrollbar-width:none;}
+.pscroll::-webkit-scrollbar{display:none;}
+.pc{flex:0 0 150px;background:var(--bg);border-radius:var(--r16);padding:18px 16px;cursor:pointer;border:1.5px solid var(--c6);transition:transform .15s,border-color .2s,box-shadow .2s;}
+.pc:active{transform:scale(.97);}
+.pc:hover{border-color:var(--c5);}
+.pc-ic{width:44px;height:44px;border-radius:var(--r12);background:var(--c0);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:12px;}
+.pc h4{font-size:.78rem;font-weight:700;color:var(--c0);line-height:1.35;margin-bottom:4px;}
+.pc p{font-size:.65rem;color:var(--c3);font-weight:500;}
+
+/* event rows */
+.evl{display:flex;flex-direction:column;gap:10px;}
+.evr{display:flex;align-items:center;gap:14px;background:var(--bg);border:1.5px solid var(--c6);border-radius:var(--r16);padding:14px 16px;cursor:pointer;transition:transform .15s,border-color .2s,background .2s;}
+.evr:active{transform:scale(.98);background:var(--c7);}
+.evb{min-width:48px;height:48px;border-radius:var(--r12);background:var(--c0);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.evb .ei{font-size:1.2rem;line-height:1;}
+.evb .el{font-size:.5rem;color:var(--c5);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+.evinfo{flex:1;}
+.evinfo h4{font-size:.88rem;font-weight:700;color:var(--c0);margin-bottom:3px;}
+.evinfo p{font-size:.7rem;color:var(--c3);font-weight:500;}
+.evarr{color:var(--c4);font-size:1.1rem;font-weight:300;}
+
+/* stats */
+.stats{display:flex;background:var(--c0);border-radius:var(--r20);margin:20px 24px;padding:22px 0;box-shadow:var(--shadow-md);}
+.st{flex:1;text-align:center;border-right:1px solid rgba(255,255,255,.1);}
+.st:last-child{border-right:none;}
+.stn{font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.04em;display:block;line-height:1;}
+.stl{font-size:.55rem;color:var(--c5);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-top:6px;display:block;}
+
+/* PAGE HEADER */
+.pgh{padding:24px 24px 16px;border-bottom:1px solid var(--c6);}
+.pg-ey{font-size:.62rem;font-weight:700;color:var(--c3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;}
+.pg-t{font-size:1.7rem;font-weight:900;color:var(--c0);letter-spacing:-.03em;line-height:1.1;margin-bottom:6px;}
+.pg-d{font-size:.82rem;color:var(--c3);line-height:1.6;}
+
+/* ITEM ROW */
+.ilist{padding:12px 24px 20px;display:flex;flex-direction:column;gap:10px;}
+.irow{display:flex;align-items:center;gap:14px;background:var(--bg);border:1.5px solid var(--c6);border-radius:var(--r16);padding:14px 16px;cursor:pointer;transition:transform .15s,border-color .2s,background .2s;}
+.irow:active{transform:scale(.98);background:var(--c7);}
+.iic{width:44px;height:44px;border-radius:var(--r12);background:var(--c7);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.iic.dk{background:var(--c0);color:#fff;}
+.ibody{flex:1;}
+.ibody h4{font-size:.88rem;font-weight:700;color:var(--c0);margin-bottom:3px;}
+.ibody p{font-size:.72rem;color:var(--c3);line-height:1.4;font-weight:500;}
+.iarr{color:var(--c4);font-size:1.1rem;}
+
+/* DETAIL VIEW */
+.detail{display:none;position:absolute;inset:0;background:var(--bg);z-index:100;overflow-y:auto;animation:pIn .25s cubic-bezier(.4,0,.2,1);}
+.detail.open{display:block;}
+.detail-hdr{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1.5px solid var(--c6);background:var(--bg);position:sticky;top:0;z-index:5;}
+.back-btn{background:none;border:none;cursor:pointer;color:var(--c0);font-size:1.5rem;line-height:1;padding:2px 6px 2px 0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s;}
+.back-btn:active{background:var(--c7);}
+.detail-hdr-title{font-size:.92rem;font-weight:700;color:var(--c0);}
+.detail-hero{background:var(--c0);padding:32px 24px;}
+.detail-hero .di{font-size:2.8rem;margin-bottom:16px;}
+.detail-hero h2{font-size:1.7rem;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.1;margin-bottom:12px;}
+.detail-hero p{color:var(--c5);font-size:.85rem;line-height:1.7;}
+.detail-sep{display:block;width:100%;height:28px;background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%);}
+.detail-body{padding:12px 24px 36px;}
+.detail-section{margin-bottom:24px;}
+.detail-section h3{font-size:.72rem;font-weight:700;color:var(--c3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;}
+.detail-section p{font-size:.86rem;color:var(--c2);line-height:1.75;font-weight:400;}
+.detail-section ul, .detail-section ol{padding-left:20px;}
+.detail-section ul li, .detail-section ol li{font-size:.85rem;color:var(--c2);line-height:1.9;margin-bottom:8px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.tag{background:var(--c7);border:1px solid var(--c6);border-radius:var(--r99);padding:6px 14px;font-size:.73rem;color:var(--c2);font-weight:600;}
+.tag.dark{background:var(--c0);color:var(--c6);border-color:var(--c0);}
+
+/* EVENTO CARDS */
+.evcards{padding:12px 24px 20px;display:flex;flex-direction:column;gap:12px;}
+.evc{border-radius:var(--r20);padding:22px;cursor:pointer;display:block;transition:transform .15s;}
+.evc:active{transform:scale(.98);}
+.evc.lt{background:var(--bg);border:1.5px solid var(--c6);}
+.evc.dk{background:var(--c0);box-shadow:var(--shadow-md);}
+.evc-tag{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;}
+.evc.lt .evc-tag{color:var(--c3);}
+.evc.dk .evc-tag{color:var(--c5);}
+.evc h3{font-size:1.15rem;font-weight:900;letter-spacing:-.02em;line-height:1.2;margin-bottom:8px;}
+.evc.lt h3{color:var(--c0);}
+.evc.dk h3{color:#fff;}
+.evc p{font-size:.78rem;line-height:1.6;margin-bottom:14px;}
+.evc.lt p{color:var(--c2);}
+.evc.dk p{color:var(--c5);}
+.evc-cta{font-size:.75rem;font-weight:700;}
+.evc.lt .evc-cta{color:var(--c0);}
+.evc.dk .evc-cta{color:var(--c6);}
+
+/* SOBRE */
+.swrap{padding:12px 24px 28px;}
+.sq{background:var(--c0);border-radius:var(--r20);padding:24px;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:var(--shadow-md);}
+.sq-logo-bg{position:absolute;right:-10px;bottom:-10px;opacity:.06;}
+.sq-mk{font-size:2.2rem;color:var(--c4);line-height:.8;margin-bottom:10px;font-family:Georgia,serif;}
+.sq-tx{font-size:.95rem;font-weight:700;color:#fff;line-height:1.55;}
+.infc{background:var(--bg);border-radius:var(--r16);padding:16px 18px;margin-bottom:10px;border:1.5px solid var(--c6);}
+.infl{font-size:.6rem;font-weight:700;color:var(--c3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.infv{font-size:.84rem;color:var(--c0);line-height:1.6;font-weight:600;}
+.slinks{display:flex;flex-direction:column;margin-bottom:14px;}
+.slink{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1.5px solid var(--c6);cursor:pointer;color:var(--c0);font-size:.88rem;font-weight:600;transition:color .2s;}
+.slink:last-child{border-bottom:none;}
+.slink:active{color:var(--c3);}
+.cnpj-tag{text-align:center;font-size:.68rem;color:var(--c3);padding:10px;background:var(--c7);border-radius:var(--r12);border:1px solid var(--c6);font-weight:500;}
+
+/* CONTATO */
+.ctwrap{padding:12px 24px 28px;}
+.socgrid{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.socc{display:flex;align-items:center;gap:14px;background:var(--bg);border:1.5px solid var(--c6);border-radius:var(--r16);padding:14px 16px;text-decoration:none;color:var(--c0);transition:transform .15s,border-color .2s,background .2s;}
+.socc:active{transform:scale(.98);background:var(--c7);}
+.socic{width:44px;height:44px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;}
+.socbody{flex:1;}
+.socbody h4{font-size:.88rem;font-weight:700;margin-bottom:3px;}
+.socbody p{font-size:.72rem;color:var(--c3);font-weight:500;}
+.donatecta{background:var(--c0);border-radius:var(--r20);padding:24px 22px;text-align:center;box-shadow:var(--shadow-md);}
+.donatecta p{color:var(--c5);font-size:.8rem;margin-bottom:16px;line-height:1.6;}
+.btn-donate{display:block;background:#fff;color:var(--c0);font-weight:800;font-size:.9rem;padding:14px;border-radius:var(--r12);text-decoration:none;transition:transform .15s,opacity .15s;}
+.btn-donate:active{transform:scale(.98);opacity:.9;}
+
+/* NOTICIAS */
+.nwrap{padding:12px 24px 28px;}
+.news-card{background:var(--bg);border:1.5px solid var(--c6);border-radius:var(--r20);padding:20px;margin-bottom:12px;cursor:pointer;transition:transform .15s,border-color .2s,background .2s;}
+.news-card:active{transform:scale(.98);background:var(--c7);}
+.news-tag{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--c3);margin-bottom:8px;}
+.news-card h4{font-size:.95rem;font-weight:800;color:var(--c0);margin-bottom:8px;line-height:1.35;}
+.news-card p{font-size:.78rem;color:var(--c2);line-height:1.55;}
+.news-card .news-more{font-size:.74rem;font-weight:700;color:var(--c0);margin-top:12px;display:block;}
+
+/* TRANSPARÊNCIA */
+.twrap{padding:12px 24px 28px;display:flex;flex-direction:column;gap:12px;}
+.tcard{background:var(--bg);border-radius:var(--r20);padding:22px;border:1.5px solid var(--c6);cursor:pointer;transition:transform .15s,border-color .2s,background .2s;}
+.tcard:active{transform:scale(.98);background:var(--c7);}
+.tc-ic{font-size:1.8rem;margin-bottom:10px;}
+.tcard h4{font-size:.95rem;font-weight:800;color:var(--c0);margin-bottom:5px;}
+.tcard p{font-size:.78rem;color:var(--c2);line-height:1.55;margin-bottom:12px;}
+.tcard-arr{font-size:.78rem;font-weight:700;color:var(--c0);}
+  </style>
 </head>
 <body>
 
-    <!-- Install Banner -->
-    <div class="install-banner" id="installBanner">
-        <span>📲 Instale o AfoHand</span>
-        <button class="install-btn" onclick="installApp()">Instalar</button>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="spl-logo">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <rect x="8" y="8" width="64" height="64" rx="16" fill="white"/>
+      <path d="M28 28h8v24h-8zM44 28h8v24h-8z" fill="black"/>
+      <circle cx="32" cy="56" r="4" fill="black"/>
+      <circle cx="48" cy="56" r="4" fill="black"/>
+    </svg>
+  </div>
+  <p class="spl-sub">Instituto Cultural das Montanhas</p>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="safe-t"></div>
+
+  <header class="hdr">
+    <div class="hdr-l">
+      <button class="burger" onclick="toggleDrawer()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <span class="hdr-logo">ICM</span>
     </div>
+    <button class="avt" onclick="go('contato')" aria-label="Contato">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+  </header>
 
-    <!-- Splash Screen -->
-    <div class="splash-screen" id="splashScreen">
-        <div class="splash-top">
-            <div class="splash-logo-text">
-                <span class="af">Afo</span><span class="hand">Hand</span>
-            </div>
-            <div class="splash-subtitle">HANDEBOL DE 5</div>
-        </div>
-
-        <div class="splash-map-container">
-            <div class="splash-map">
-                <div class="map-blob blob-1">
-                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&q=80" alt="Handebol">
-                    <span class="map-label label-1">Ginásio Municipal</span>
-                </div>
-                <div class="map-blob blob-2">
-                    <img src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=400&q=80" alt="Equipe">
-                    <span class="map-label label-2">8 Equipes</span>
-                </div>
-                <div class="map-blob blob-3">
-                    <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80" alt="Campeonato">
-                    <span class="map-label label-3">12 Jogos</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="splash-bottom">
-            <div class="splash-tagline">
-                Explore o<br>
-                <span>Campeonato</span><br>
-                de Handebol
-            </div>
-            <div class="splash-desc">
-                Acompanhe todos os jogos do AfoHand 2026 em tempo real. Prefeitura de Afonso Cláudio.
-            </div>
-            <button class="splash-btn" onclick="enterApp()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M9 18l6-6-6-6"/>
-                </svg>
-            </button>
-        </div>
+  <div id="ovl" class="ovl" onclick="toggleDrawer()"></div>
+  <nav id="drw" class="drw">
+    <div class="drw-hd">
+      <div class="drw-logo">ICM</div>
+      <p class="drw-sub-label">Instituto Cultural das Montanhas</p>
     </div>
-
-    <!-- Main App -->
-    <div class="app-container" id="appContainer">
-        
-        <!-- HOME SECTION -->
-        <div class="content-section active" id="section-home">
-            
-            <!-- Header -->
-            <header class="app-header">
-                <div class="app-logo">
-                    <span class="af">Afo</span><span class="hand">Hand</span>
-                </div>
-                <button class="menu-btn" onclick="toggleMenu()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                </button>
-            </header>
-
-            <!-- Hero -->
-            <div class="hero-section">
-                <h1 class="hero-title">
-                    Campeonato<br>
-                    <span>Municipal</span>
-                </h1>
-                <p class="hero-subtitle">Afonso Cláudio • 2026</p>
-            </div>
-
-            <!-- Map Section -->
-            <div class="map-section">
-                <div class="map-bg"></div>
-                <div class="map-overlay"></div>
-                <div class="map-content">
-                    <div class="map-header">
-                        <span class="map-badge">🗺️ Mapa dos Jogos</span>
-                        <div class="map-nav">
-                            <button class="map-nav-btn">←</button>
-                            <button class="map-nav-btn">→</button>
-                        </div>
-                    </div>
-                    <div class="map-pins">
-                        <div class="map-pin pin-1">
-                            <div class="pin-dot"></div>
-                            <div class="pin-label">Grupo A</div>
-                        </div>
-                        <div class="map-pin pin-2">
-                            <div class="pin-dot"></div>
-                            <div class="pin-label">Grupo B</div>
-                        </div>
-                        <div class="map-pin pin-3">
-                            <div class="pin-dot"></div>
-                            <div class="pin-label">Final</div>
-                        </div>
-                    </div>
-                    <div class="map-footer">
-                        <button class="map-cta">Ver Calendário</button>
-                        <div class="map-price">
-                            <div class="map-price-label">Rodada Atual</div>
-                            <div class="map-price-value">3ª</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Org Badge -->
-            <div class="org-badge">
-                <div class="org-icon">🏛️</div>
-                <div class="org-text">
-                    <strong>Prefeitura Municipal de Afonso Cláudio</strong>
-                    Secretaria de Esportes e Lazer
-                </div>
-            </div>
-
-            <!-- Categories -->
-            <div class="categories-section">
-                <div class="section-label">Categorias</div>
-                <div class="categories-scroll">
-                    <div class="category-card" onclick="showSection('jogos')">
-                        <img class="category-bg" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=300&q=80" alt="Jogos">
-                        <div class="category-overlay"></div>
-                        <div class="category-content">
-                            <div class="category-name">Jogos</div>
-                            <div class="category-count">12 partidas</div>
-                        </div>
-                    </div>
-                    <div class="category-card" onclick="showSection('classificacao')">
-                        <img class="category-bg" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=300&q=80" alt="Classificação">
-                        <div class="category-overlay"></div>
-                        <div class="category-content">
-                            <div class="category-name">Tabela</div>
-                            <div class="category-count">8 equipes</div>
-                        </div>
-                    </div>
-                    <div class="category-card" onclick="showSection('estatisticas')">
-                        <img class="category-bg" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=300&q=80" alt="Estatísticas">
-                        <div class="category-overlay"></div>
-                        <div class="category-content">
-                            <div class="category-name">Stats</div>
-                            <div class="category-count">156 gols</div>
-                        </div>
-                    </div>
-                    <div class="category-card" onclick="showSection('noticias')">
-                        <img class="category-bg" src="https://images.unsplash.com/photo-1552674605-469523170273?w=300&q=80" alt="Notícias">
-                        <div class="category-overlay"></div>
-                        <div class="category-content">
-                            <div class="category-name">Notícias</div>
-                            <div class="category-count">3 novas</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Games -->
-            <div class="games-section">
-                <div class="section-header-row">
-                    <h2 class="section-title-main">🏆 Jogos</h2>
-                    <a href="#" class="see-all">Ver todos</a>
-                </div>
-
-                <div class="game-card-float">
-                    <div class="game-status-bar">
-                        <div class="game-tag">
-                            <span class="tag-dot tag-live"></span>
-                            <span>Ao Vivo</span>
-                        </div>
-                        <span class="game-time">Hoje, 19:00</span>
-                    </div>
-                    <div class="game-teams-row">
-                        <div class="team-block">
-                            <img class="team-photo" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=100&q=80" alt="Atlético">
-                            <div class="team-info-text">
-                                <span class="team-name-text">Atlético AC</span>
-                                <span class="team-city">Afonso Cláudio</span>
-                            </div>
-                        </div>
-                        <div class="score-block">
-                            <div class="score-display">
-                                12 <span class="score-sep">:</span> 10
-                            </div>
-                            <div class="vs-text">vs</div>
-                        </div>
-                        <div class="team-block right">
-                            <div class="team-info-text" style="text-align: right;">
-                                <span class="team-name-text">Flamengo AC</span>
-                                <span class="team-city">Afonso Cláudio</span>
-                            </div>
-                            <img class="team-photo" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=100&q=80" alt="Flamengo">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="game-card-float">
-                    <div class="game-status-bar">
-                        <div class="game-tag">
-                            <span class="tag-dot tag-scheduled"></span>
-                            <span>Agendado</span>
-                        </div>
-                        <span class="game-time">Amanhã, 20:00</span>
-                    </div>
-                    <div class="game-teams-row">
-                        <div class="team-block">
-                            <img class="team-photo" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100&q=80" alt="Vasco">
-                            <div class="team-info-text">
-                                <span class="team-name-text">Vasco AC</span>
-                                <span class="team-city">Afonso Cláudio</span>
-                            </div>
-                        </div>
-                        <div class="score-block">
-                            <div class="score-display" style="opacity: 0.5;">
-                                - <span class="score-sep">:</span> -
-                            </div>
-                            <div class="vs-text">vs</div>
-                        </div>
-                        <div class="team-block right">
-                            <div class="team-info-text" style="text-align: right;">
-                                <span class="team-name-text">Sport AC</span>
-                                <span class="team-city">Afonso Cláudio</span>
-                            </div>
-                            <img class="team-photo" src="https://images.unsplash.com/photo-1552674605-469523170273?w=100&q=80" alt="Sport">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="game-card-float">
-                    <div class="game-status-bar">
-                        <div class="game-tag">
-                            <span class="tag-dot tag-finished"></span>
-                            <span>Encerrado</span>
-                        </div>
-                        <span class="game-time">18/06, 19:30</span>
-                    </div>
-                    <div class="game-teams-row">
-                        <div class="team-block">
-                            <img class="team-photo" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=100&q=80" alt="Palmeiras">
-                            <div class="team-info-text">
-                                <span class="team-name-text">Palmeiras AC</span>
-                                <span class="team-city">Afonso Cláudio</span>
-                            </div>
-                        </div>
-                        <div class="score-block">
-                            <div class="score-display">
-                                15 <span class="score-sep">:</span> 8
-                            </div>
-                            <div class="vs-text">vs</div>
-                        </div>
-                        <div class="team-block right">
-                            <div class="team-info-text" style="text-align: right;">
-                                <span class="team-name-text">Corinthians AC</span>
-                                <span class="team-city">Afonso Cláudio</span>
-                            </div>
-                            <img class="team-photo" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=100&q=80" alt="Corinthians">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Standing Preview -->
-            <div class="standing-preview">
-                <div class="section-header-row">
-                    <h2 class="section-title-main">📊 Classificação</h2>
-                    <a href="#" class="see-all" onclick="showSection('classificacao'); return false;">Ver tabela</a>
-                </div>
-                <div class="standing-card">
-                    <div class="standing-header">
-                        <span class="standing-title">Grupo A</span>
-                        <div class="standing-filter">
-                            <button class="filter-pill active">A</button>
-                            <button class="filter-pill">B</button>
-                        </div>
-                    </div>
-                    <div class="standing-row">
-                        <div class="standing-pos pos-gold">1</div>
-                        <div class="standing-team">
-                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=100&q=80" alt="Palmeiras">
-                            <span>Palmeiras AC</span>
-                        </div>
-                        <div class="standing-points">9</div>
-                    </div>
-                    <div class="standing-row">
-                        <div class="standing-pos pos-silver">2</div>
-                        <div class="standing-team">
-                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100&q=80" alt="Atlético">
-                            <span>Atlético AC</span>
-                        </div>
-                        <div class="standing-points">6</div>
-                    </div>
-                    <div class="standing-row">
-                        <div class="standing-pos pos-bronze">3</div>
-                        <div class="standing-team">
-                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=100&q=80" alt="Flamengo">
-                            <span>Flamengo AC</span>
-                        </div>
-                        <div class="standing-points">3</div>
-                    </div>
-                    <div class="standing-row">
-                        <div class="standing-pos pos-normal">4</div>
-                        <div class="standing-team">
-                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1552674605-469523170273?w=100&q=80" alt="Vasco">
-                            <span>Vasco AC</span>
-                        </div>
-                        <div class="standing-points">0</div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="height: 80px;"></div>
-        </div>
-
-        <!-- CLASSIFICATION SECTION -->
-        <div class="content-section" id="section-classificacao">
-            <header class="app-header">
-                <div class="app-logo">
-                    <span class="af">Afo</span><span class="hand">Hand</span>
-                </div>
-                <button class="menu-btn" onclick="toggleMenu()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                </button>
-            </header>
-
-            <div class="hero-section">
-                <h1 class="hero-title">
-                    Tabela de<br>
-                    <span>Classificação</span>
-                </h1>
-            </div>
-
-            <div class="full-table">
-                <div class="table-card">
-                    <div class="table-header">
-                        <div>#</div>
-                        <div>Time</div>
-                        <div style="text-align: center;">P</div>
-                        <div style="text-align: center;">J</div>
-                        <div style="text-align: center;">V</div>
-                    </div>
-                    <div class="table-row">
-                        <div class="standing-pos pos-gold" style="width: 30px; height: 30px; font-size: 0.8em;">1</div>
-                        <div class="standing-team">
-                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=100&q=80" alt="Palmeiras">
-                            <span style="font-size: 0.9em;">Palmeiras AC</span>
-                        </div>
-                        <div style="text-align: center; font-weight: 700;">9</div>
-                        <div style="text-align: center; opacity: 0.7;">3</div>
-                        <div style="text-align: center; opacity: 0.7;">3</div>
-                    </div>
-                    <div class="table-row">
-                        <div class="standing-pos pos-silver" style="width: 30px; height: 30px; font-size: 0.8em;">2</div>
-                        <div class="standing-team">
-                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100&q=80" alt="Atlético">
-                            <span style="font-size: 0.9em;">Atlético AC</span>
-                        </div>
-                        <div style="text-align: center; font-weight: 700;">6</div>
-                        <div style="text-align: center; opacity: 0.7;">3</div>
-                        <div style="text-align: center; opacity: 0.7;">2</div>
-                    </div>
-                    <div class="table-row">
-                        <div class="standing-pos pos-bronze" style="width: 30px; height: 30px; font-size: 0.8em;">3</div>
-                        <div class="standing-team">
-                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=100&q=80" alt="Flamengo">
-                            <span style="font-size: 0.9em;">Flamengo AC</span>
-                        </div>
-                        <div style="text-align: center; font-weight: 700;">3</div>
-                        <div style="text-align: center; opacity: 0.7;">3</div>
-                        <div style="text-align: center; opacity: 0.7;">1</div>
-                    </div>
-                    <div class="table-row">
-                        <div class="standing-pos pos-normal" style="width: 30px; height: 30px; font-size: 0.8em;">4</div>
-                        <div class="standing-team">
-                            <img class="team-mini-photo" src="https://images.unsplash.com/photo-1552674605-469523170273?w=100&q=80" alt="Vasco">
-                            <span style="font-size: 0.9em;">Vasco AC</span>
-                        </div>
-                        <div style="text-align: center; font-weight: 700;">0</div>
-                        <div style="text-align: center; opacity: 0.7;">3</div>
-                        <div style="text-align: center; opacity: 0.7;">0</div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="height: 80px;"></div>
-        </div>
-
-        <!-- NEWS SECTION -->
-        <div class="content-section" id="section-noticias">
-            <header class="app-header">
-                <div class="app-logo">
-                    <span class="af">Afo</span><span class="hand">Hand</span>
-                </div>
-                <button class="menu-btn" onclick="toggleMenu()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                </button>
-            </header>
-
-            <div class="hero-section">
-                <h1 class="hero-title">
-                    Últimas<br>
-                    <span>Notícias</span>
-                </h1>
-            </div>
-
-            <div style="padding: 0 24px;">
-                <div class="news-float-card">
-                    <img class="news-image-top" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80" alt="Abertura">
-                    <div class="news-body">
-                        <div class="news-date">16 de Junho de 2026</div>
-                        <div class="news-title">Abertura do AfoHand 2026!</div>
-                        <div class="news-text">
-                            A Prefeitura de Afonso Cláudio, através da Secretaria de Esportes, inaugura o campeonato municipal de handebol de 5 com 8 equipes participantes.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="news-float-card">
-                    <img class="news-image-top" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&q=80" alt="Regulamento">
-                    <div class="news-body">
-                        <div class="news-date">15 de Junho de 2026</div>
-                        <div class="news-title">Regulamento Oficial Publicado</div>
-                        <div class="news-text">
-                            Confira o regulamento completo no site da prefeitura. As inscrições foram encerradas com recorde de participação.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="news-float-card">
-                    <img class="news-image-top" src="https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=600&q=80" alt="Reforma">
-                    <div class="news-body">
-                        <div class="news-date">10 de Junho de 2026</div>
-                        <div class="news-title">Reforma do Ginásio Concluída</div>
-                        <div class="news-text">
-                            A Secretaria de Esportes finalizou a reforma do ginásio municipal com nova pintura e piso renovado.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="height: 80px;"></div>
-        </div>
-
-        <!-- STATS SECTION -->
-        <div class="content-section" id="section-estatisticas">
-            <header class="app-header">
-                <div class="app-logo">
-                    <span class="af">Afo</span><span class="hand">Hand</span>
-                </div>
-                <button class="menu-btn" onclick="toggleMenu()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                </button>
-            </header>
-
-            <div class="hero-section">
-                <h1 class="hero-title">
-                    Estatísticas<br>
-                    <span>do Campeonato</span>
-                </h1>
-            </div>
-
-            <div class="categories-section">
-                <div class="section-label">Números</div>
-                <div class="categories-scroll">
-                    <div class="category-card">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #2d5a2d, #4a8a4a);"></div>
-                        <div class="category-overlay"></div>
-                        <div class="category-content">
-                            <div class="category-name" style="font-size: 2em;">156</div>
-                            <div class="category-count">Gols Totais</div>
-                        </div>
-                    </div>
-                    <div class="category-card">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #c41e3a, #e85d75);"></div>
-                        <div class="category-overlay"></div>
-                        <div class="category-content">
-                            <div class="category-name" style="font-size: 2em;">13.0</div>
-                            <div class="category-count">Média/Jogo</div>
-                        </div>
-                    </div>
-                    <div class="category-card">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1a3a1a, #2d5a2d);"></div>
-                        <div class="category-overlay"></div>
-                        <div class="category-content">
-                            <div class="category-name" style="font-size: 2em;">120</div>
-                            <div class="category-count">Atletas</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="games-section">
-                <div class="section-header-row">
-                    <h2 class="section-title-main">🏅 Artilheiros</h2>
-                </div>
-
-                <div class="game-card-float">
-                    <div class="game-teams-row">
-                        <div class="team-block">
-                            <div class="standing-pos pos-gold" style="width: 40px; height: 40px; font-size: 1em;">1</div>
-                            <div class="team-info-text">
-                                <span class="team-name-text">João Silva</span>
-                                <span class="team-city">Palmeiras AC</span>
-                            </div>
-                        </div>
-                        <div class="standing-points" style="font-size: 1.5em;">18 gols</div>
-                    </div>
-                </div>
-
-                <div class="game-card-float">
-                    <div class="game-teams-row">
-                        <div class="team-block">
-                            <div class="standing-pos pos-silver" style="width: 40px; height: 40px; font-size: 1em;">2</div>
-                            <div class="team-info-text">
-                                <span class="team-name-text">Pedro Santos</span>
-                                <span class="team-city">Atlético AC</span>
-                            </div>
-                        </div>
-                        <div class="standing-points" style="font-size: 1.5em;">15 gols</div>
-                    </div>
-                </div>
-
-                <div class="game-card-float">
-                    <div class="game-teams-row">
-                        <div class="team-block">
-                            <div class="standing-pos pos-bronze" style="width: 40px; height: 40px; font-size: 1em;">3</div>
-                            <div class="team-info-text">
-                                <span class="team-name-text">Carlos Lima</span>
-                                <span class="team-city">Flamengo AC</span>
-                            </div>
-                        </div>
-                        <div class="standing-points" style="font-size: 1.5em;">12 gols</div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="height: 80px;"></div>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <button class="nav-item active" onclick="showSection('home')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-                    <polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-                Início
-            </button>
-            <button class="nav-item" onclick="showSection('classificacao')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 20V10M18 20V4M6 20v-4"/>
-                </svg>
-                Tabela
-            </button>
-            <button class="nav-item" onclick="showSection('estatisticas')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 6v6l4 2"/>
-                </svg>
-                Stats
-            </button>
-            <button class="nav-item" onclick="showSection('noticias')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                    <polyline points="22,6 12,13 2,6"/>
-                </svg>
-                News
-            </button>
-        </nav>
-
-        <!-- FAB -->
-        <button class="fab" onclick="shareApp()">+</button>
+    <ul class="drw-nav">
+      <li><a onclick="go('home');toggleDrawer()" id="dl-home" class="on"><span class="ni">◈</span> Início</a></li>
+      <li><a onclick="go('projetos');toggleDrawer()" id="dl-projetos"><span class="ni">◎</span> Projetos</a></li>
+      <li><a onclick="go('eventos');toggleDrawer()" id="dl-eventos"><span class="ni">◉</span> Eventos</a></li>
+      <li><a onclick="go('noticias');toggleDrawer()" id="dl-noticias"><span class="ni">◆</span> Notícias</a></li>
+      <li><a onclick="go('sobre');toggleDrawer()" id="dl-sobre"><span class="ni">◇</span> Sobre</a></li>
+      <li><a onclick="go('transparencia');toggleDrawer()" id="dl-transparencia"><span class="ni">▣</span> Transparência</a></li>
+      <li><a onclick="go('contato');toggleDrawer()" id="dl-contato"><span class="ni">☎</span> Contato</a></li>
+    </ul>
+    <div class="drw-ft">
+      <button onclick="go('contato');toggleDrawer();" class="drw-btn">Quero Doar</button>
+      <button onclick="openDetail('install-app');toggleDrawer();" class="drw-btn sec">Instalar App</button>
     </div>
+  </nav>
 
-    <script>
-        // Splash Screen
-        function enterApp() {
-            document.getElementById('splashScreen').classList.add('hidden');
-            setTimeout(() => {
-                document.getElementById('appContainer').classList.add('visible');
-            }, 400);
-        }
+  <main class="main" id="main">
 
-        // Auto-enter after 4 seconds
-        setTimeout(() => {
-            if (!document.getElementById('splashScreen').classList.contains('hidden')) {
-                enterApp();
-            }
-        }, 4000);
+    <!-- HOME -->
+    <section id="page-home" class="page active">
+      <div class="hero">
+        <div class="hero-ey"><span class="hero-dot"></span>Org. sem fins lucrativos</div>
+        <h2 class="hero-h">Cultura<br>que trans&shy;forma.</h2>
+        <p class="hero-p">Educação, esporte e arte para comunidades em situação de vulnerabilidade social.</p>
+        <div class="hero-acts">
+          <button onclick="go('contato')" class="bh f">Apoiar →</button>
+          <button onclick="go('sobre')" class="bh g">Conheça</button>
+        </div>
+      </div>
+      <div class="hero-sep"></div>
+      <div class="sec">
+        <div class="sec-row"><span class="sec-t">Projetos</span><button onclick="go('projetos')" class="sec-more">Ver todos ›</button></div>
+        <div class="pscroll">
+          <div class="pc" onclick="openDetail('proj-orquestra')"><div class="pc-ic">🎻</div><h4>Orquestra Jônice Tristão</h4><p>Cordas e sopros</p></div>
+          <div class="pc" onclick="openDetail('proj-corais')"><div class="pc-ic">🎤</div><h4>Corais das Montanhas</h4><p>Canto coral</p></div>
+          <div class="pc" onclick="openDetail('proj-ct')"><div class="pc-ic">🏐</div><h4>Centro de Treinamento</h4><p>Alto rendimento</p></div>
+          <div class="pc" onclick="openDetail('proj-musical')"><div class="pc-ic">🌱</div><h4>Musicalização Agrícola</h4><p>Arte no campo</p></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-row"><span class="sec-t">Eventos</span><button onclick="go('eventos')" class="sec-more">Ver todos ›</button></div>
+        <div class="evl">
+          <div class="evr" onclick="openDetail('ev-vijazz')"><div class="evb"><span class="ei">🎷</span><span class="el">Jazz</span></div><div class="evinfo"><h4>VIJAZZ</h4><p>Festival de Jazz nas Montanhas</p></div><span class="evarr">›</span></div>
+          <div class="evr" onclick="openDetail('ev-volei')"><div class="evb"><span class="ei">🏐</span><span class="el">Copa</span></div><div class="evinfo"><h4>Supercopa Voleibol</h4><p>Competição regional</p></div><span class="evarr">›</span></div>
+          <div class="evr" onclick="openDetail('ev-basquete')"><div class="evb"><span class="ei">🏀</span><span class="el">Copa</span></div><div class="evinfo"><h4>Supercopa Basquete</h4><p>Competição regional</p></div><span class="evarr">›</span></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="st"><span class="stn">125mil</span><span class="stl">Bolsa Auxílio</span></div>
+        <div class="st"><span class="stn">5+</span><span class="stl">Toneladas de alimentos</span></div>
+        <div class="st"><span class="stn">500+</span><span class="stl">Famílias atendidas</span></div>
+      </div>
+    </section>
 
-        // Section Navigation
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            const target = document.getElementById('section-' + sectionId);
-            if (target) target.classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            const navMap = { 'home': 0, 'classificacao': 1, 'estatisticas': 2, 'noticias': 3 };
-            const navIndex = navMap[sectionId];
-            if (navIndex !== undefined) {
-                document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
-            }
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    <!-- PROJETOS -->
+    <section id="page-projetos" class="page">
+      <div class="pgh">
+        <p class="pg-ey">Nossas frentes</p>
+        <h2 class="pg-t">Projetos Ativos</h2>
+        <p class="pg-d">Transformação através da música, esporte e educação.</p>
+      </div>
+      <div class="ilist">
+        <div class="irow" onclick="openDetail('proj-orquestra')"><div class="iic dk">🎻</div><div class="ibody"><h4>Orquestra Jônice Tristão</h4><p>Ensino de instrumentos de cordas e sopros.</p></div><span class="iarr">›</span></div>
+        <div class="irow" onclick="openDetail('proj-corais')"><div class="iic">🎤</div><div class="ibody"><h4>Corais das Montanhas</h4><p>Canto coral para diversas faixas etárias.</p></div><span class="iarr">›</span></div>
+        <div class="irow" onclick="openDetail('proj-ct')"><div class="iic dk">🏐</div><div class="ibody"><h4>Centro de Treinamento</h4><p>Esporte de alto rendimento e cidadania.</p></div><span class="iarr">›</span></div>
+        <div class="irow" onclick="openDetail('proj-musical')"><div class="iic">🌱</div><div class="ibody"><h4>Musicalização Agrícola</h4><p>Arte e cultura para comunidades rurais.</p></div><span class="iarr">›</span></div>
+      </div>
+    </section>
 
-        // Menu
-        function toggleMenu() {
-            alert('Menu em desenvolvimento!');
-        }
+    <!-- EVENTOS -->
+    <section id="page-eventos" class="page">
+      <div class="pgh">
+        <p class="pg-ey">Agenda</p>
+        <h2 class="pg-t">Próximos Eventos</h2>
+        <p class="pg-d">Participe e prestigie nossas apresentações e competições.</p>
+      </div>
+      <div class="evcards">
+        <div class="evc dk" onclick="openDetail('ev-vijazz')">
+          <span class="evc-tag">Festival • Outubro</span>
+          <h3>VIJAZZ 2024</h3>
+          <p>O maior festival de jazz da região serrana com artistas nacionais e internacionais.</p>
+          <span class="evc-cta">Ver detalhes ›</span>
+        </div>
+        <div class="evc lt" onclick="openDetail('ev-volei')">
+          <span class="evc-tag">Esporte • Julho</span>
+          <h3>Supercopa de Voleibol</h3>
+          <p>Competição que reúne talentos regionais em busca do título serrano.</p>
+          <span class="evc-cta">Ver detalhes ›</span>
+        </div>
+        <div class="evc lt" onclick="openDetail('ev-basquete')">
+          <span class="evc-tag">Esporte • Agosto</span>
+          <h3>Supercopa de Basquete</h3>
+          <p>A emoção do basquete nas montanhas com os melhores times da região.</p>
+          <span class="evc-cta">Ver detalhes ›</span>
+        </div>
+      </div>
+    </section>
 
-        // Share
-        function shareApp() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'AfoHand - Handebol de 5',
-                    text: 'Acompanhe o campeonato municipal de handebol de Afonso Cláudio!',
-                    url: window.location.href
-                });
-            } else {
-                alert('Compartilhe o AfoHand com seus amigos!');
-            }
-        }
+    <!-- NOTICIAS -->
+    <section id="page-noticias" class="page">
+      <div class="pgh">
+        <p class="pg-ey">Atualizações</p>
+        <h2 class="pg-t">Notícias</h2>
+        <p class="pg-d">Fique por dentro de tudo o que acontece no Instituto.</p>
+      </div>
+      <div class="nwrap">
+        <div class="news-card" onclick="openDetail('news-1')">
+          <span class="news-tag">Destaque</span>
+          <h4>Inscrições abertas para a Orquestra</h4>
+          <p>Novas vagas para violino, viola e violoncelo. Venha aprender música conosco.</p>
+          <span class="news-more">Ler mais ›</span>
+        </div>
+        <div class="news-card" onclick="openDetail('news-2')">
+          <span class="news-tag">Esporte</span>
+          <h4>CT ICM brilha em torneio estadual</h4>
+          <p>Nossos atletas conquistaram 5 medalhas no último campeonato de voleibol.</p>
+          <span class="news-more">Ler mais ›</span>
+        </div>
+      </div>
+    </section>
 
-        // PWA Install
-        let deferredPrompt;
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            setTimeout(() => {
-                document.getElementById('installBanner').classList.add('show');
-            }, 3000);
-        });
+    <!-- SOBRE -->
+    <section id="page-sobre" class="page">
+      <div class="pgh">
+        <p class="pg-ey">Quem somos</p>
+        <h2 class="pg-t">O Instituto</h2>
+        <p class="pg-d">Conheça nossa história, missão e como impactamos a região.</p>
+      </div>
+      <div class="swrap">
+        <div class="sq">
+          <div class="sq-logo-bg"><svg width="100" height="100" viewBox="0 0 80 80" fill="white"><rect x="8" y="8" width="64" height="64" rx="16"/><path d="M28 28h8v24h-8zM44 28h8v24h-8z" fill="black"/><circle cx="32" cy="56" r="4" fill="black"/><circle cx="48" cy="56" r="4" fill="black"/></svg></div>
+          <div class="sq-mk">"</div>
+          <p class="sq-tx">Nossa missão é promover a inclusão social e o desenvolvimento humano através da cultura, arte e esporte.</p>
+        </div>
+        <div class="infc">
+          <p class="infl">Sede Administrativa</p>
+          <p class="infv">Rua Alcino Martins de Souza, 110<br>Afonso Cláudio — ES, 29600-000</p>
+        </div>
+        <div class="slinks">
+          <div class="slink" onclick="openDetail('sobre-atendidos')"><span>Perfil dos Atendidos</span><span>›</span></div>
+          <div class="slink" onclick="openDetail('sobre-voluntario')"><span>Seja Voluntário</span><span>›</span></div>
+          <div class="slink" onclick="openDetail('sobre-patrocinadores')"><span>Patrocinadores</span><span>›</span></div>
+        </div>
+        <div class="cnpj-tag">CNPJ: 51.892.817/0001-52</div>
+      </div>
+    </section>
 
-        function installApp() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('App instalado');
-                    }
-                    deferredPrompt = null;
-                    document.getElementById('installBanner').classList.remove('show');
-                });
-            }
-        }
+    <!-- TRANSPARÊNCIA -->
+    <section id="page-transparencia" class="page">
+      <div class="pgh">
+        <p class="pg-ey">Gestão</p>
+        <h2 class="pg-t">Transparência</h2>
+        <p class="pg-d">Acompanhe nossas contas, relatórios e governança.</p>
+      </div>
+      <div class="twrap">
+        <div class="tcard" onclick="openDetail('trans-relatorios')">
+          <div class="tc-ic">◈</div>
+          <h4>Relatórios e Atas</h4>
+          <p>Documentos institucionais e prestação de contas anual.</p>
+          <span class="tcard-arr">Ver documentos ›</span>
+        </div>
+        <div class="tcard" onclick="openDetail('trans-fornecedores')">
+          <div class="tc-ic">◎</div>
+          <h4>Fornecedores</h4>
+          <p>Editais e cadastro para fornecimento de bens e serviços.</p>
+          <span class="tcard-arr">Saiba mais ›</span>
+        </div>
+        <div class="tcard" onclick="openDetail('trans-ouvidoria')">
+          <div class="tc-ic">◉</div>
+          <h4>Ouvidoria</h4>
+          <p>Canal direto para sugestões, críticas ou elogios.</p>
+          <span class="tcard-arr">Falar com a ouvidoria ›</span>
+        </div>
+      </div>
+    </section>
 
-        // Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('SW registrado'))
-                .catch(err => console.log('SW erro:', err));
-        }
+    <!-- CONTATO -->
+    <section id="page-contato" class="page">
+      <div class="pgh">
+        <p class="pg-ey">Fale conosco</p>
+        <h2 class="pg-t">Contato</h2>
+        <p class="pg-d">Dúvidas, parcerias ou doações? Estamos aqui para ouvir você.</p>
+      </div>
+      <div class="ctwrap">
+        <div class="socgrid">
+          <a href="https://wa.me/5527996996584" class="socc">
+            <div class="socic" style="background:#000"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-11.7 8.38 8.38 0 0 1 3.8.9L21 3z"/></svg></div>
+            <div class="socbody"><h4>WhatsApp</h4><p>(27) 99699-6584</p></div>
+            <span>›</span>
+          </a>
+          <a href="https://instagram.com/institutodasmontanhas" class="socc">
+            <div class="socic" style="background:#000"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+            <div class="socbody"><h4>Instagram</h4><p>@institutodasmontanhas</p></div>
+            <span>›</span>
+          </a>
+          <a href="mailto:institutodasmontanhas@gmail.com" class="socc">
+            <div class="socic" style="background:#000"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div class="socbody"><h4>E-mail</h4><p>institutodasmontanhas@gmail.com</p></div>
+            <span>›</span>
+          </a>
+        </div>
+        <div class="donatecta">
+          <p>Sua contribuição mantém nossos projetos vivos e transforma a realidade de centenas de jovens.</p>
+          <a href="#" class="btn-donate">PIX: 51.892.817/0001-52</a>
+        </div>
+      </div>
+    </section>
 
-        // Hide banner on scroll
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            const banner = document.getElementById('installBanner');
-            if (currentScroll > 100 && banner.classList.contains('show')) {
-                banner.classList.remove('show');
-            }
-            lastScroll = currentScroll;
-        });
-    </script>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bnv">
+    <button id="bn-home" onclick="go('home')" class="bn on">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Início
+    </button>
+    <button id="bn-projetos" onclick="go('projetos')" class="bn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Projetos
+    </button>
+    <button id="bn-eventos" onclick="go('eventos')" class="bn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Eventos
+    </button>
+    <button id="bn-contato" onclick="go('contato')" class="bn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Contato
+    </button>
+  </nav>
+
+  <!-- DETAIL VIEWS -->
+  <div id="proj-orquestra" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('proj-orquestra')">‹</button><span class="detail-hdr-title">Projeto</span></div>
+    <div class="detail-hero"><div class="di">🎻</div><h2>Orquestra Jônice Tristão</h2><p>Música clássica e popular para jovens de Afonso Cláudio.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Sobre o projeto</h3><p>A Orquestra Jônice Tristão é o pilar cultural do Instituto, oferecendo ensino gratuito de instrumentos de cordas (violino, viola, violoncelo e contrabaixo) e sopros para crianças e adolescentes.</p></div>
+      <div class="detail-section"><h3>O que oferecemos</h3><ul><li>Aulas semanais de técnica instrumental</li><li>Teoria musical e percepção</li><li>Prática de conjunto e orquestra</li><li>Apresentações públicas e concertos</li></ul></div>
+      <div class="tag-row"><span class="tag">Música</span><span class="tag">Gratuito</span><span class="tag dark">Afonso Cláudio</span></div>
+    </div>
+  </div>
+
+  <div id="proj-corais" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('proj-corais')">‹</button><span class="detail-hdr-title">Projeto</span></div>
+    <div class="detail-hero"><div class="di">🎤</div><h2>Corais das Montanhas</h2><p>A voz como instrumento de união e expressão.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Sobre o projeto</h3><p>O projeto de corais reúne vozes de diversas idades, promovendo a integração comunitária e o desenvolvimento da sensibilidade artística através do canto coletivo.</p></div>
+      <div class="detail-section"><h3>Grupos</h3><ul><li>Coral Infantil</li><li>Coral Juvenil</li><li>Coral Adulto/Terceira Idade</li></ul></div>
+      <div class="tag-row"><span class="tag">Canto</span><span class="tag">Comunidade</span><span class="tag dark">Todas as idades</span></div>
+    </div>
+  </div>
+
+  <div id="proj-ct" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('proj-ct')">‹</button><span class="detail-hdr-title">Projeto</span></div>
+    <div class="detail-hero"><div class="di">🏐</div><h2>Centro de Treinamento</h2><p>Esporte, disciplina e saúde para o futuro.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Sobre o projeto</h3><p>O CT ICM foca no desenvolvimento esportivo de crianças e jovens, utilizando o voleibol e o basquete como ferramentas de inclusão social e formação de cidadãos.</p></div>
+      <div class="detail-section"><h3>Modalidades</h3><ul><li>Voleibol Masculino e Feminino</li><li>Basquetebol</li><li>Preparação física e cidadania</li></ul></div>
+      <div class="tag-row"><span class="tag">Esporte</span><span class="tag">Saúde</span><span class="tag dark">Alto Rendimento</span></div>
+    </div>
+  </div>
+
+  <div id="proj-musical" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('proj-musical')">‹</button><span class="detail-hdr-title">Projeto</span></div>
+    <div class="detail-hero"><div class="di">🌱</div><h2>Musicalização Agrícola</h2><p>Levando a arte para onde o povo está.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Sobre o projeto</h3><p>Este projeto inovador leva oficinas de música e cultura para as zonas rurais, adaptando o ensino à realidade do campo e valorizando as raízes locais.</p></div>
+      <div class="tag-row"><span class="tag">Rural</span><span class="tag">Inovação</span><span class="tag dark">Cultura no Campo</span></div>
+    </div>
+  </div>
+
+  <!-- EVENTOS DETALHES -->
+  <div id="ev-vijazz" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('ev-vijazz')">‹</button><span class="detail-hdr-title">Evento</span></div>
+    <div class="detail-hero"><div class="di">🎷</div><h2>VIJAZZ 2024</h2><p>O festival que faz as montanhas vibrarem.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Sobre o evento</h3><p>O VIJAZZ é um dos eventos mais esperados do ano, trazendo o melhor do jazz e da música instrumental para o coração de Afonso Cláudio. Um evento para toda a família com entrada franca.</p></div>
+      <div class="detail-section"><h3>Programação</h3><ul><li>Apresentações da Orquestra Jônice Tristão</li><li>Shows de bandas regionais e nacionais</li><li>Workshops musicais</li><li>Feira de gastronomia local</li></ul></div>
+      <div class="tag-row"><span class="tag">Jazz</span><span class="tag">Gratuito</span><span class="tag dark">Outubro</span></div>
+    </div>
+  </div>
+
+  <div id="ev-volei" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('ev-volei')">‹</button><span class="detail-hdr-title">Evento</span></div>
+    <div class="detail-hero"><div class="di">🏐</div><h2>Supercopa de Voleibol</h2><p>A disputa pelo topo das montanhas.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Sobre o evento</h3><p>A Supercopa reúne times de toda a região serrana em uma competição saudável e emocionante, destacando os novos talentos do esporte capixaba.</p></div>
+      <div class="tag-row"><span class="tag">Vôlei</span><span class="tag">Competição</span><span class="tag dark">Julho</span></div>
+    </div>
+  </div>
+
+  <div id="ev-basquete" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('ev-basquete')">‹</button><span class="detail-hdr-title">Evento</span></div>
+    <div class="detail-hero"><div class="di">🏀</div><h2>Supercopa de Basquete</h2><p>Enterradas e muita emoção.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Sobre o evento</h3><p>O basquete ganha destaque em nossa agenda com torneios que mobilizam a juventude e promovem o espírito esportivo.</p></div>
+      <div class="tag-row"><span class="tag">Basquete</span><span class="tag">Esporte</span><span class="tag dark">Agosto</span></div>
+    </div>
+  </div>
+
+  <!-- NOTICIAS DETALHES -->
+  <div id="news-1" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('news-1')">‹</button><span class="detail-hdr-title">Notícia</span></div>
+    <div class="detail-hero"><div class="di">📰</div><h2>Inscrições Orquestra</h2><p>Oportunidade para novos talentos.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Vagas abertas</h3><p>Estão abertas as inscrições para novos alunos da Orquestra Jônice Tristão. Não é necessário ter o instrumento ou conhecimento prévio.</p></div>
+      <div class="detail-section"><h3>Como se inscrever</h3><p>Compareça à nossa sede administrativa com documento de identidade e comprovante de residência, ou entre em contato pelo nosso WhatsApp.</p></div>
+      <div class="tag-row"><span class="tag">Inscrições</span><span class="tag dark">Vagas Limitadas</span></div>
+    </div>
+  </div>
+
+  <div id="news-2" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('news-2')">‹</button><span class="detail-hdr-title">Notícia</span></div>
+    <div class="detail-hero"><div class="di">🏆</div><h2>CT ICM em Destaque</h2><p>Nossos atletas no pódio estadual.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Conquistas</h3><p>O Centro de Treinamento do Instituto Cultural das Montanhas obteve excelentes resultados no último torneio estadual de vôlei de base, reforçando a qualidade do nosso trabalho esportivo.</p></div>
+      <div class="tag-row"><span class="tag">Esporte</span><span class="tag dark">Vitória</span></div>
+    </div>
+  </div>
+
+  <!-- SOBRE SUB-PÁGINAS -->
+  <div id="sobre-atendidos" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('sobre-atendidos')">‹</button><span class="detail-hdr-title">Perfil dos Atendidos</span></div>
+    <div class="detail-hero"><div class="di">👥</div><h2>Perfil dos Atendidos</h2><p>Conheça quem transforma com o Instituto.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Quem atendemos</h3><p>O Instituto Cultural das Montanhas atende prioritariamente crianças, adolescentes e jovens em situação de vulnerabilidade social, residentes em Afonso Cláudio e municípios vizinhos da região serrana do Espírito Santo.</p></div>
+      <div class="detail-section"><h3>Perfil socioeconômico</h3><ul><li>Famílias inscritas no CadÚnico</li><li>Crianças encaminhadas pelo CRAS e CREAS</li><li>Jovens em zona rural com pouco acesso à cultura</li><li>Adolescentes em situação de risco social</li><li>Idosos em situação de isolamento social</li></ul></div>
+      <div class="detail-section"><h3>Números</h3><p>Em 2024, o Instituto impactou diretamente mais de 500 pessoas entre participantes de projetos, familiares e comunidade, através de seus 8 projetos ativos.</p></div>
+      <div class="tag-row"><span class="tag">500+ impactados</span><span class="tag">8 projetos</span><span class="tag dark">Afonso Cláudio e região</span></div>
+    </div>
+  </div>
+
+  <div id="sobre-voluntario" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('sobre-voluntario')">‹</button><span class="detail-hdr-title">Seja Voluntário</span></div>
+    <div class="detail-hero"><div class="di">🙋</div><h2>Seja Voluntário</h2><p>Junte-se a nós e transforme vidas através da cultura.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Por que ser voluntário?</h3><p>O voluntariado no Instituto Cultural das Montanhas é uma oportunidade de contribuir diretamente para a transformação social de Afonso Cláudio. Cada hora dedicada ajuda a manter projetos que mudam a vida de crianças e jovens.</p></div>
+      <div class="detail-section"><h3>Áreas de atuação</h3><ul><li>Ensino musical (instrumentos, teoria, canto)</li><li>Esporte e educação física</li><li>Artes visuais e artesanato</li><li>Comunicação e redes sociais</li><li>Captação de recursos e projetos</li><li>Apoio administrativo</li><li>Transporte e logística de eventos</li></ul></div>
+      <div class="detail-section"><h3>Como se candidatar</h3><p>Envie uma mensagem pelo WhatsApp (27) 99699-6584 ou pelo e-mail institutodasmontanhas@gmail.com com seu nome, área de interesse e disponibilidade de horário.</p></div>
+      <div class="tag-row"><span class="tag">Todas as áreas</span><span class="tag">Flexível</span><span class="tag dark">Candidate-se já</span></div>
+    </div>
+  </div>
+
+  <div id="sobre-patrocinadores" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('sobre-patrocinadores')">‹</button><span class="detail-hdr-title">Patrocinadores</span></div>
+    <div class="detail-hero"><div class="di">🌟</div><h2>Patrocinadores e Parceiros</h2><p>Empresas e instituições que acreditam na transformação pela cultura.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Nossos parceiros</h3><p>O Instituto Cultural das Montanhas conta com o apoio de empresas, prefeituras, governo estadual e federal, além de pessoas físicas que acreditam no poder transformador da cultura e do esporte.</p></div>
+      <div class="detail-section"><h3>Como apoiar</h3><ul><li>Patrocínio de projetos ou eventos</li><li>Doação de instrumentos musicais e equipamentos</li><li>Lei de Incentivo à Cultura (dedução fiscal)</li><li>Doação de produtos e serviços</li><li>Parcerias institucionais</li></ul></div>
+      <div class="detail-section"><h3>Seja um patrocinador</h3><p>Entre em contato pelo WhatsApp (27) 99699-6584 ou pelo e-mail institutodasmontanhas@gmail.com. Enviamos uma proposta de parceria personalizada para sua empresa.</p></div>
+      <div class="tag-row"><span class="tag">Lei de Incentivo</span><span class="tag">Dedução fiscal</span><span class="tag dark">Fale conosco</span></div>
+    </div>
+  </div>
+
+  <!-- TRANSPARÊNCIA SUB-PÁGINAS -->
+  <div id="trans-relatorios" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('trans-relatorios')">‹</button><span class="detail-hdr-title">Relatórios</span></div>
+    <div class="detail-hero"><div class="di">📋</div><h2>Relatórios e Documentos</h2><p>Gestão transparente e prestação de contas ao público.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Nosso compromisso</h3><p>O Instituto Cultural das Montanhas acredita que a transparência é fundamental para uma organização da sociedade civil. Todos os nossos documentos institucionais e relatórios de gestão estão disponíveis para consulta.</p></div>
+      <div class="detail-section"><h3>Documentos disponíveis</h3><ul><li>Estatuto Social do Instituto</li><li>Atas de reuniões da Diretoria</li><li>Relatórios anuais de atividades</li><li>Demonstrativos financeiros</li><li>Certidões negativas (CNPJ, INSS, FGTS)</li><li>Contratos e convênios com o poder público</li></ul></div>
+      <div class="detail-section"><h3>Solicitar documentos</h3><p>Para solicitar qualquer documento institucional, entre em contato pelo e-mail institutodasmontanhas@gmail.com ou pelo WhatsApp (27) 99699-6584. O prazo de resposta é de até 5 dias úteis.</p></div>
+      <div class="tag-row"><span class="tag">CNPJ 51.892.817/0001-52</span><span class="tag dark">Transparência total</span></div>
+    </div>
+  </div>
+
+  <div id="trans-fornecedores" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('trans-fornecedores')">‹</button><span class="detail-hdr-title">Fornecedores</span></div>
+    <div class="detail-hero"><div class="di">🤝</div><h2>Cadastro de Fornecedores</h2><p>Trabalhe conosco e contribua com nossa missão.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Seja nosso fornecedor</h3><p>O Instituto Cultural das Montanhas busca fornecedores comprometidos com a missão social da organização. Priorizamos empresas locais e regionais, especialmente aquelas com práticas de responsabilidade social.</p></div>
+      <div class="detail-section"><h3>Categorias de fornecimento</h3><ul><li>Instrumentos musicais e equipamentos de som</li><li>Material esportivo</li><li>Materiais de escritório e papelaria</li><li>Serviços gráficos e comunicação</li><li>Alimentação para eventos</li><li>Transporte e logística</li><li>Serviços de TI e tecnologia</li></ul></div>
+      <div class="detail-section"><h3>Como se cadastrar</h3><p>Envie seus dados (razão social, CNPJ, área de atuação e contato) pelo e-mail institutodasmontanhas@gmail.com com o assunto "Cadastro de Fornecedor".</p></div>
+    </div>
+  </div>
+
+  <div id="trans-ouvidoria" class="detail">
+    <div class="detail-hdr"><button class="back-btn" onclick="closeDetail('trans-ouvidoria')">‹</button><span class="detail-hdr-title">Ouvidoria</span></div>
+    <div class="detail-hero"><div class="di">📣</div><h2>Ouvidoria</h2><p>Canal direto para sua voz chegar ao Instituto.</p></div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section"><h3>Nossa ouvidoria</h3><p>A ouvidoria do Instituto Cultural das Montanhas é um canal independente para receber sugestões, reclamações, denúncias e elogios relacionados às atividades do Instituto. Todas as mensagens são tratadas com sigilo e respondidas.</p></div>
+      <div class="detail-section"><h3>Como entrar em contato</h3><ul><li>📧 E-mail: institutodasmontanhas@gmail.com</li><li>📱 WhatsApp: (27) 99699-6584</li><li>📍 Presencialmente: Rua Alcino Martins de Souza, 110 — Afonso Cláudio/ES</li></ul></div>
+      <div class="detail-section"><h3>Prazo de resposta</h3><p>Todas as mensagens recebidas são respondidas em até 10 dias úteis. Casos urgentes são tratados em até 48 horas. Garantimos o sigilo de todas as informações recebidas.</p></div>
+      <div class="tag-row"><span class="tag">Sigiloso</span><span class="tag">Até 10 dias úteis</span><span class="tag dark">Anônimo se preferir</span></div>
+    </div>
+  </div>
+
+  <!-- INSTALAÇÃO DO APP -->
+  <div id="install-app" class="detail">
+    <div class="detail-hdr">
+      <button class="back-btn" onclick="closeDetail('install-app')">‹</button>
+      <span class="detail-hdr-title">Instalar App</span>
+    </div>
+    <div class="detail-hero">
+      <div class="di">📱</div>
+      <h2>Instale o nosso App!</h2>
+      <p>Tenha o Instituto Cultural das Montanhas sempre à mão na sua tela inicial.</p>
+    </div>
+    <div class="detail-sep"></div>
+    <div class="detail-body">
+      <div class="detail-section">
+        <h3>Para iPhone (iOS)</h3>
+        <p>Siga estes passos simples para instalar como um aplicativo real:</p>
+        <ol>
+          <li>No Safari, toque no ícone de <strong>Compartilhar</strong> na barra de baixo.</li>
+          <li>Role as opções para baixo e toque em <strong>"Adicionar à Tela de Início"</strong>.</li>
+          <li>Toque em <strong>"Adicionar"</strong> no canto superior direito.</li>
+          <li>Pronto! O ícone do ICM aparecerá junto com seus outros aplicativos.</li>
+        </ol>
+      </div>
+      <div class="detail-section">
+        <h3>Para Android</h3>
+        <p>Siga estes passos para ter o app no seu celular:</p>
+        <ol>
+          <li>No Chrome, toque nos <strong>três pontinhos</strong> no canto superior direito.</li>
+          <li>Toque em <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.</li>
+          <li>Toque em <strong>"Instalar"</strong> ou <strong>"Adicionar"</strong> para confirmar.</li>
+          <li>Pronto! Agora você pode abrir o app direto da sua tela de início.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const cfg={
+  home:          {title:'Início',        bn:'bn-home',    dl:'dl-home'},
+  projetos:      {title:'Projetos',      bn:'bn-projetos',dl:'dl-projetos'},
+  eventos:       {title:'Eventos',       bn:'bn-eventos', dl:'dl-eventos'},
+  noticias:      {title:'Notícias',      bn:null,         dl:'dl-noticias'},
+  sobre:         {title:'Sobre',         bn:null,         dl:'dl-sobre'},
+  transparencia: {title:'Transparência', bn:null,         dl:'dl-transparencia'},
+  contato:       {title:'Contato',       bn:'bn-contato', dl:'dl-contato'},
+};
+let cur='home', drw=false;
+
+function go(k){
+  if(!cfg[k])return;
+  document.getElementById('page-'+cur)?.classList.remove('active');
+  document.getElementById('page-'+k)?.classList.add('active');
+  document.querySelectorAll('.bn').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.drw-nav a').forEach(e=>e.classList.remove('on'));
+  if(cfg[k].bn)document.getElementById(cfg[k].bn)?.classList.add('on');
+  if(cfg[k].dl)document.getElementById(cfg[k].dl)?.classList.add('on');
+  document.getElementById('main').scrollTo({top:0,behavior:'smooth'});
+  cur=k;
+}
+
+function openDetail(id){
+  const el=document.getElementById(id);
+  if(el){el.classList.add('open');el.scrollTo({top:0});}
+}
+function closeDetail(id){
+  document.getElementById(id)?.classList.remove('open');
+}
+
+function toggleDrawer(){
+  drw=!drw;
+  document.getElementById('drw').classList.toggle('open',drw);
+  document.getElementById('ovl').classList.toggle('open',drw);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(drw)toggleDrawer();}});
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('splash').classList.add('out');
+    document.getElementById('app').classList.add('ready');
+  },2000);
+});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
 </body>
 </html>
