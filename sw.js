@@ -1,11 +1,10 @@
-const CACHE_NAME = 'afohand-v2';
+const CACHE_NAME = 'afohand-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json'
 ];
 
-// Install
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -14,25 +13,16 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Fetch
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
         if (response) return response;
-        return fetch(event.request)
-          .then((fetchResponse) => {
-            return fetchResponse;
-          });
-      })
-      .catch(() => {
-        // Offline fallback
-        return new Response('Offline');
+        return fetch(event.request);
       })
   );
 });
 
-// Activate
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
