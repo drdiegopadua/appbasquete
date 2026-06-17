@@ -1,1720 +1,722 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#050816">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Basquete AFC">
-<title>Supercopa de Basquete AFC · 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:#f8f9fa; --bg2:#ffffff; --bg3:#f1f3f5;
-  --gold:#fcc137; --gold2:#bd772b; --gold-dim:rgba(252,193,55,0.15);
-  --blue:#671217; --blue2:#500d11; --blue3:#3a090c;
-	  --red:#ff4040; --green:#22c55e;
-	  --card:#ffffff; --card2:#f8f9fa; --card3:rgba(103,18,23,0.05);
-	  --border:rgba(0,0,0,0.08); --border-gold:rgba(252,193,55,0.28); --border-blue:rgba(103,18,23,0.4);
-	  --text:#212529; --text2:#495057; --muted:#868e96;
-	  --topbar:#671217; --nav:#671217;
-  --shadow:0 8px 32px rgba(0,0,0,0.5);
-  --r:20px; --r-sm:12px; --r-xs:8px;
-}
-body.day {
-	  --bg:#ffffff; --bg2:#f4f6fb; --bg3:#f8f9fa;
-	  --gold:#fcc137; --gold2:#bd772b; --gold-dim:rgba(252,193,55,0.15);
-	  --blue:#671217; --blue2:#500d11; --blue3:#3a090c;
-	  --card:#ffffff; --card2:#f8f9fa; --card3:rgba(103,18,23,0.05);
-	  --border:rgba(0,0,0,0.08); --border-gold:rgba(252,193,55,0.5); --border-blue:rgba(103,18,23,0.2);
-	  --text:#212529; --text2:#495057; --muted:#868e96;
-	  --topbar:#671217; --nav:#671217;
-	  --shadow:0 4px 20px rgba(103,18,23,0.15);
-	}
-	body.day .topbar { background: #671217 !important; border-bottom: 2px solid #fcc137; }
-	body.day .topbar-title { color: #ffffff !important; }
-	body.day .icon-btn { color: #ffffff !important; }
-	body.day .live-dot-wrap { background: rgba(255,255,255,0.15) !important; color: #ffffff !important; }
-	body.day .live-dot { background: #fcc137 !important; }
-	body.day .bottom-nav { background: #671217 !important; border-top: 2px solid #fcc137; }
-	body.day .nav-btn { color: rgba(255,255,255,0.55) !important; }
-	body.day .nav-btn.on { color: #fcc137 !important; }
-	body.day .card { background: #ffffff !important; border: 1px solid rgba(103,18,23,0.1) !important; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#006400">
+    <title>AfoHand - Handebol de 5</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:#212529;font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .35s,color .35s;}
-body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-background:radial-gradient(circle at 15% 0%,rgba(103,18,23,.05) 0%,transparent 50%),
-             radial-gradient(circle at 85% 100%,rgba(252,193,55,.05) 0%,transparent 50%);
-  transition:opacity .35s;}
-body.day::before{opacity:.04;}
-a{text-decoration:none;color:inherit;}
-button{font-family:'DM Sans',sans-serif;cursor:pointer;}
-input,select,textarea{font-family:'DM Sans',sans-serif;}
+        :root {
+            --verde: #006400;
+            --verde-claro: #228B22;
+            --vermelho: #CC0000;
+            --vermelho-escuro: #8B0000;
+            --branco: #FFFFFF;
+            --cinza-claro: #f5f5f5;
+        }
 
-/* SPLASH */
-#splash{position:fixed;inset:0;z-index:9999;background:#0a0203;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,transform .7s cubic-bezier(.4,0,.2,1);}
-#splash.out{opacity:0;transform:scale(1.05);pointer-events:none;}
-.splash-rings{position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;}
-.splash-ring{position:absolute;border-radius:50%;border:2px solid rgba(244,197,66,.15);animation:ringPulse 2s ease infinite;}
-.splash-ring:nth-child(1){width:140px;height:140px;animation-delay:0s;}
-.splash-ring:nth-child(2){width:110px;height:110px;animation-delay:.3s;}
-.splash-ring:nth-child(3){width:80px;height:80px;animation-delay:.6s;}
-@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.15}50%{transform:scale(1.06);opacity:.4}}
-.splash-logo-img{width:80px;height:80px;object-fit:contain;position:relative;z-index:1;animation:splashPop .8s cubic-bezier(.34,1.56,.64,1) .2s both;filter:drop-shadow(0 0 30px rgba(244,197,66,.5));border-radius:18px;}
-@keyframes splashPop{from{opacity:0;transform:scale(.3) rotate(-15deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-	.splash-name{font-family:'Anton',sans-serif;font-size:28px;letter-spacing:1px;color:#fff;animation:fadeUp .5s ease .9s both;}
-	.splash-ed{font-size:11px;color:#fff;opacity:0.7;letter-spacing:3px;text-transform:uppercase;animation:fadeUp .5s ease 1.05s both;margin-top:4px;}
-.splash-track{width:180px;height:3px;background:rgba(255,255,255,.08);border-radius:999px;margin-top:28px;overflow:hidden;animation:fadeUp .4s ease 1.1s both;}
-.splash-fill{height:100%;background:linear-gradient(90deg,var(--gold),#e8a010);border-radius:999px;animation:fillBar 1.5s cubic-bezier(.4,0,.2,1) 1.1s both;}
-@keyframes fillBar{from{width:0}to{width:100%}}
-	@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-	
-	/* BASKETBALL & MOUNTAIN ANIMATIONS */
-	.bball-float{position:absolute;font-size:40px;opacity:.15;pointer-events:none;z-index:0;animation:bballFloat 8s linear infinite;}
-	@keyframes bballFloat{from{transform:translate(-50px,100vh) rotate(0)}to{transform:translate(100vw,-100px) rotate(360deg)}}
-	.mtn-bg{position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to top,rgba(103,18,23,.05),transparent);clip-path:polygon(0% 100%,15% 40%,30% 70%,45% 20%,60% 60%,80% 10%,100% 100%);z-index:0;pointer-events:none;}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
+            min-height: 100vh;
+            color: var(--branco);
+        }
 
-/* TOPBAR */
-.topbar{position:sticky;top:0;z-index:200;min-height:64px;display:flex;align-items:center;justify-content:space-between;padding-left:16px;padding-right:16px;padding-top:max(env(safe-area-inset-top,0px),12px);padding-bottom:12px;background:var(--topbar);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:background .35s;}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand-logo{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(244,197,66,.35));}
-	.brand-text small{display:block;font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;text-transform:uppercase;}
-	.brand-text h1{font-family:'Anton',sans-serif;font-size:15px;line-height:1.1;color:#fff;}
-	.live-pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,0.3);padding:5px 11px;border-radius:999px;font-size:11px;font-weight:700;color:#fff;}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.4s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:17px;}
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-/* PAGES */
-main{position:relative;z-index:1;padding-bottom:160px;}
-.page{display:none;}
-.page.active{display:block;animation:pgIn .3s ease;}
-@keyframes pgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid var(--vermelho);
+        }
 
-/* TICKER */
-.ticker{margin:12px 14px 0;height:48px;border-radius:14px;background:linear-gradient(135deg,rgba(103,18,23,.45),rgba(8,18,40,.8));border:1px solid var(--border-gold);overflow:hidden;display:flex;align-items:center;}
-.ticker-inner{display:flex;align-items:center;white-space:nowrap;animation:tick 20s linear infinite;will-change:transform;}
-.ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;font-size:12px;font-weight:700;color:var(--gold);}
-.ticker-sep{color:rgba(244,197,66,.3);font-size:8px;}
-@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
 
-/* HERO */
-.hero{position:relative;margin:12px 14px 0;border-radius:24px;overflow:hidden;min-height:420px;box-shadow:0 24px 60px rgba(0,0,0,.6);}
-.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 28%;transition:filter .4s;}
-.hero-ov{position:absolute;inset:0;background:linear-gradient(160deg,rgba(103,18,23,0.9) 0%,rgba(58,9,12,0.95) 100%);}
-.hero-fade{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,transparent 44%);pointer-events:none;}
-.hero-body{position:relative;z-index:2;padding:28px 24px 24px;}
-	.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:7px 14px;border-radius:9999px;margin-bottom:18px;font-size:11px;font-weight:700;color:#fff;letter-spacing:.8px;}
-.hero-logorow{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.hero-logorow img{width:66px;height:66px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(244,197,66,.5));}
-.hero-logorow-text .ed{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;text-transform:uppercase;}
-.hero-logorow-text .ht{font-family:'Anton',sans-serif;font-size:24px;line-height:1;color:#fff;text-transform:uppercase;}
-.hero h2{font-family:'Anton',sans-serif;font-size:46px;line-height:.93;text-transform:uppercase;color:#fff;margin-bottom:10px;}
-.hero h2 em{color:var(--gold);font-style:normal;}
-	.hero-sub{font-size:12px;color:#fff;opacity:0.8;margin-bottom:22px;line-height:1.5;}
-.cdown{display:flex;gap:8px;margin-bottom:24px;}
-.cd{flex:1;background:rgba(103,18,23,.28);border:1px solid var(--border-gold);border-radius:13px;padding:9px 4px 7px;display:flex;flex-direction:column;align-items:center;backdrop-filter:blur(6px);}
-.cd-n{font-family:'Anton',sans-serif;font-size:28px;color:var(--gold);line-height:1;min-width:36px;text-align:center;}
-.cd-n.flipping{animation:cdFlip .22s ease;}
-@keyframes cdFlip{0%{transform:scaleY(1);opacity:1}50%{transform:scaleY(0);opacity:0}100%{transform:scaleY(1);opacity:1}}
-	.cd-l{font-size:8px;color:#fff;opacity:0.7;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
-.cd-sep{display:flex;align-items:center;font-family:'Anton',sans-serif;font-size:22px;color:var(--gold);padding-bottom:2px;opacity:.7;}
-.hero-btns{display:flex;gap:10px;}
-.btn-gold{flex:1;height:48px;border-radius:13px;border:none;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:13px;letter-spacing:.4px;box-shadow:0 6px 20px rgba(103,18,23,0.2);transition:transform .12s;}
-.btn-gold:active{transform:scale(.97);}
-.btn-ghost{flex:1;height:48px;border-radius:13px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-weight:700;font-size:13px;backdrop-filter:blur(8px);transition:background .15s;}
-.btn-ghost:active{background:rgba(255,255,255,.18);}
+        .ball-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--vermelho);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            border: 3px solid var(--branco);
+        }
 
-/* STATS GRID */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 14px 0;}
-.stat{background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;padding:13px 8px;text-align:center;transition:background .35s,border .35s;}
-.stat-n{font-family:'Anton',sans-serif;font-size:24px;color:var(--gold);}
-.stat-l{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3;}
+        h1 {
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
 
-/* SECTION HEADER */
-.sec{padding:20px 16px 10px;display:flex;align-items:center;justify-content:space-between;}
-.sec-title{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;}
-.sec-link{font-size:12px;color:var(--gold);font-weight:700;cursor:pointer;}
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
 
-/* TEAM CHIPS */
-.hscroll{display:flex;gap:10px;padding:0 14px;overflow-x:auto;scroll-snap-type:x mandatory;}
-.hscroll::-webkit-scrollbar{display:none;}
-.team-chip{flex-shrink:0;scroll-snap-align:start;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:11px 14px;display:flex;align-items:center;gap:10px;min-width:155px;cursor:pointer;transition:transform .12s,border .35s,background .35s;}
-.team-chip:active{transform:scale(.96);}
-.team-chip.gold{border-color:var(--border-gold);}
-.tc-av{width:36px;height:36px;border-radius:10px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
-.tc-name{font-weight:800;font-size:12px;}
-.tc-city{font-size:10px;color:var(--muted);margin-top:1px;}
-.tc-badge{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:.4px;margin-top:3px;}
+        .org-info {
+            background: var(--branco);
+            color: var(--verde);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--vermelho);
+        }
 
-/* MVP STRIP */
-.mvp-strip{display:flex;gap:10px;padding:0 14px;overflow-x:auto;}
-.mvp-strip::-webkit-scrollbar{display:none;}
-.mvp-card{flex-shrink:0;background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:14px 12px;width:120px;text-align:center;transition:background .35s,border .35s;}
-.mvp-card.no1{border-color:var(--border-gold);background:linear-gradient(135deg,rgba(244,197,66,.07),rgba(14,25,55,.92));}
-.mvp-rank{font-family:'Anton',sans-serif;font-size:20px;color:var(--gold);}
-.mvp-av{font-size:30px;margin:5px 0;}
-.mvp-nm{font-weight:800;font-size:11px;line-height:1.2;}
-.mvp-tm{font-size:10px;color:var(--muted);margin-top:2px;}
+        .org-info h3 {
+            color: var(--vermelho);
+            margin-bottom: 5px;
+        }
 
-/* NEWS */
-.news-list{padding:0 14px;display:flex;flex-direction:column;gap:10px;}
-.news-card{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;gap:12px;align-items:flex-start;transition:background .35s,border .35s;cursor:pointer;}
-.news-ic{font-size:28px;flex-shrink:0;margin-top:2px;}
-.news-tag{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
-.news-title{font-size:13px;font-weight:800;line-height:1.3;}
-.news-date{font-size:10px;color:var(--muted);margin-top:4px;}
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
 
-/* PAGE TITLE */
-.ptitle{padding:16px 16px 12px;font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;}
-.ptitle span{color:var(--gold);}
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: var(--branco);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
 
-/* TABS */
-.tabs{display:flex;gap:7px;padding:0 14px 12px;overflow-x:auto;}
-.tabs::-webkit-scrollbar{display:none;}
-.tab{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;transition:.15s;}
-.tab.on{background:var(--gold);border-color:var(--gold);color:#050816;}
+        .nav-tab.active {
+            background: var(--vermelho);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+        }
 
-/* SEARCH */
-.search-wrap{margin:0 14px 12px;position:relative;}
-.search-ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;}
-.search-inp{width:100%;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--card2);color:#212529;font-size:13px;padding:0 14px 0 38px;outline:none;transition:border .2s,background .35s;}
-.search-inp:focus{border-color:var(--border-gold);}
+        .nav-tab:hover {
+            background: var(--vermelho-escuro);
+        }
 
-/* PULL REFRESH */
-.pull-bar{height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(--muted);font-weight:700;transition:height .3s;}
-.pull-bar.show{height:44px;}
-.pull-spin{width:16px;height:16px;border:2px solid var(--border-gold);border-top-color:var(--gold);border-radius:50%;animation:spin .6s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
+        .section {
+            display: none;
+            background: var(--branco);
+            color: #333;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
 
-/* GAME CARDS */
-.cards{padding:0 14px;display:flex;flex-direction:column;gap:11px;}
-.gc{background:var(--card2);border:1px solid var(--border);border-radius:var(--r);padding:15px;position:relative;overflow:hidden;transition:background .35s,border .35s;}
-.gc.live-card{border-color:rgba(255,64,64,.4);}
-.gc.live-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);animation:scan 1.8s linear infinite;}
-@keyframes scan{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-.gc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
-.gc-phase{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
-.gc-dt{font-size:10px;color:var(--muted);}
-.gc-mid{display:flex;align-items:center;justify-content:space-between;gap:6px;}
-.gc-t{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
-.gc-t-ic{width:50px;height:50px;border-radius:13px;background:var(--blue2);display:flex;align-items:center;justify-content:center;font-size:22px;}
-.gc-t-nm{font-size:12px;font-weight:800;text-align:center;line-height:1.2;}
-.gc-sc{text-align:center;min-width:60px;}
-.gc-sc-num{font-family:'Anton',sans-serif;font-size:40px;color:var(--gold);line-height:1;letter-spacing:2px;}
-.gc-vs{font-family:'Anton',sans-serif;font-size:24px;color:var(--muted);}
-.gc-sc-sets{font-size:10px;color:var(--muted);margin-top:2px;}
-.gc-bot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
-.gc-loc{font-size:10px;color:var(--muted);}
-.gc-actions{display:flex;gap:7px;align-items:center;}
-.btn-watch{height:28px;padding:0 11px;border-radius:8px;border:1px solid var(--border-gold);background:transparent;color:var(--gold);font-size:10px;font-weight:700;cursor:pointer;transition:.15s;}
-.btn-watch.on{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e;}
-.grp-lbl{font-size:10px;font-weight:800;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;padding:14px 14px 6px;border-bottom:1px solid var(--border-gold);margin-bottom:8px;}
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
 
-/* TABLE */
-.tbl-wrap{margin:0 14px;border-radius:16px;overflow:hidden;border:1px solid var(--border);}
-.tbl-head{display:grid;grid-template-columns:32px 1fr 32px 32px 32px 40px 44px;background:rgba(103,18,23,.3);padding:9px 14px;border-bottom:1px solid var(--border);}
-.th{font-size:10px;color:var(--gold);font-weight:800;letter-spacing:.5px;text-align:center;text-transform:uppercase;}
-.tbl-row{display:grid;grid-template-columns:32px 1fr 32px 32px 32px 40px 44px;padding:11px 14px;border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
-.tbl-row:last-child{border-bottom:none;}
-.tbl-row.top2{background:rgba(244,197,66,.05);}
-.td{font-size:12px;text-align:center;display:flex;align-items:center;justify-content:center;}
-.td-nm{text-align:left;justify-content:flex-start;font-weight:800;font-size:11px;gap:5px;overflow:hidden;}
-.td-pos{font-family:'Anton',sans-serif;font-size:15px;color:var(--muted);}
-.td-pos.g{color:var(--gold);}
-.td-pts{font-family:'Anton',sans-serif;font-size:15px;color:var(--gold);}
-.td-bdg{font-size:8px;color:var(--gold);background:rgba(252,193,55,.1);padding:1px 5px;border-radius:4px;}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-/* BRACKET */
-.bracket-scroll{overflow-x:auto;padding:0 14px 14px;}
-.bracket-scroll::-webkit-scrollbar{display:none;}
-.bracket-inner{display:flex;gap:20px;min-width:700px;}
-.b-col{flex:1;display:flex;flex-direction:column;gap:14px;}
-.b-col h3{font-family:'Anton',sans-serif;font-size:14px;color:var(--gold);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;text-align:center;}
-.match-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px;transition:background .35s;}
-.match-card.final{border-color:var(--border-gold);background:linear-gradient(135deg,rgba(244,197,66,.07),rgba(14,25,55,.95));}
-.m-meta{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.5px;margin-bottom:8px;text-align:center;}
-.mt{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border);}
-.mt:last-child{border-bottom:none;}
-.mt-ic{width:22px;text-align:center;font-size:14px;}
-.mt-nm{flex:1;font-size:11px;font-weight:800;}
-.mt-sc{font-family:'Anton',sans-serif;font-size:15px;min-width:24px;text-align:center;}
-.mt-sc.empty{color:var(--muted);}
-.mt-sc.winner{color:var(--gold);}
-.mt-sc.loser{color:var(--muted);opacity:.5;}
-.champ-card{margin-top:14px;background:linear-gradient(135deg,rgba(244,197,66,.15),rgba(103,18,23,.25));border:1px solid var(--border-gold);border-radius:16px;padding:18px;text-align:center;position:relative;overflow:hidden;}
-.champ-ic{font-size:36px;margin-bottom:6px;}
-.champ-nm{font-family:'Anton',sans-serif;font-size:20px;color:var(--gold);}
-.champ-lbl{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;text-transform:uppercase;}
-.cp{position:absolute;animation:confettiFall linear both;}
-@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(60px) rotate(360deg);opacity:0}}
-.auto-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);padding:6px 13px;border-radius:999px;font-size:11px;font-weight:700;color:#22c55e;}
+        .section-title {
+            color: var(--verde);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--vermelho);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-/* SCHEDULE */
-.schedule-day{margin:0 14px 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:background .35s,border .35s;}
-.sched-day-hd{display:flex;align-items:center;gap:10px;padding:13px 16px;background:rgba(103,18,23,.25);border-bottom:1px solid var(--border);}
-.sched-day-pill{background:var(--gold);color:#050816;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;padding:3px 10px;border-radius:6px;letter-spacing:1px;}
-.sched-day-lbl{font-size:12px;color:var(--text2);font-weight:700;}
-.sched-row{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);}
-.sched-row:last-child{border-bottom:none;}
-.sched-time{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:var(--gold);min-width:46px;line-height:1;}
-.sched-info{flex:1;}
-.sched-info strong{display:block;font-size:12px;font-weight:800;line-height:1.3;}
-.sched-info span{font-size:11px;color:var(--muted);margin-top:2px;display:block;}
-.sched-loc{font-size:10px;color:var(--muted);text-align:right;min-width:50px;padding-top:2px;line-height:1.3;}
+        .game-card {
+            background: var(--cinza-claro);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--verde);
+            transition: transform 0.2s;
+        }
 
-/* MAIS */
-.mais-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 14px;}
-.mais-card{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:14px 10px;text-align:center;cursor:pointer;transition:transform .12s,background .35s,border .35s;}
-.mais-card:active{transform:scale(.95);}
-.mais-card.full{grid-column:span 3;display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;}
-.mais-card-ic{font-size:26px;margin-bottom:6px;}
-.mais-card-lbl{font-size:12px;font-weight:800;}
-.mais-card-sub{font-size:10px;color:var(--muted);margin-top:2px;}
-.mais-admin-card{grid-column:span 3;background:rgba(255,64,64,.06);border:1px solid rgba(255,64,64,.2);border-radius:15px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.18s;}
-.info-block{margin:12px 14px;background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:16px;transition:background .35s,border .35s;}
-.info-block h4{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;text-transform:uppercase;margin-bottom:12px;color:var(--gold);}
-.info-row{display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--border);}
-.info-row:last-child{border-bottom:none;}
-.ir-ic{font-size:18px;flex-shrink:0;margin-top:1px;}
-.ir-lbl{font-size:11px;color:var(--muted);margin-bottom:2px;}
-.ir-val{font-size:12px;font-weight:700;}
-.faq-wrap{padding:0 14px;}
-.faq-item{background:var(--card2);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden;transition:background .35s,border .35s;}
-.faq-q{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;font-size:13px;font-weight:800;cursor:pointer;}
-.faq-arrow{font-size:11px;color:var(--muted);transition:transform .2s;}
-.faq-item.open .faq-arrow{transform:rotate(180deg);}
-.faq-a{display:none;padding:0 16px 13px;font-size:12px;color:var(--text2);line-height:1.6;}
-.faq-item.open .faq-a{display:block;}
-.cta-block{margin:14px 14px 0;background:linear-gradient(135deg,rgba(103,18,23,.5),rgba(5,8,22,.8));border:1px solid var(--border-gold);border-radius:20px;padding:22px 18px;text-align:center;}
-.cta-block h3{font-family:'Anton',sans-serif;font-size:22px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
-.cta-block p{font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
-.cta-block a{display:block;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;letter-spacing:.3px;}
+        .game-card:hover {
+            transform: translateX(5px);
+        }
 
-/* TEAM MODAL */
-#teamModal{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.7);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);}
-#teamModal.on{display:flex;}
-.tm-sheet{background:var(--bg2);border-radius:28px 28px 0 0;padding:22px 20px 44px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;}
-.tm-handle{width:40px;height:4px;background:rgba(255,255,255,.12);border-radius:999px;margin:0 auto 16px;}
-.tm-header{display:flex;align-items:center;gap:13px;margin-bottom:14px;}
-.tm-av{width:56px;height:56px;border-radius:16px;background:var(--blue2);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
-.tm-name{font-family:'Anton',sans-serif;font-size:22px;text-transform:uppercase;}
-.tm-city{font-size:12px;color:var(--muted);margin-top:3px;}
-.tm-badge-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
-.tm-badge{font-size:10px;font-weight:700;background:rgba(252,193,55,.1);border:1px solid var(--border-gold);color:var(--gold);padding:4px 10px;border-radius:6px;}
-.tm-insta{font-size:10px;font-weight:700;background:rgba(103,18,23,.05);border:1px solid var(--border-blue);color:var(--text2);padding:4px 10px;border-radius:6px;text-decoration:none;}
-.tm-section{font-size:10px;font-weight:800;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border);}
-.tm-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
-.tm-info-card{background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:12px;padding:11px 12px;text-align:center;}
-.tm-info-ic{font-size:20px;margin-bottom:4px;}
-.tm-info-lbl{font-size:9px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;}
-.tm-info-val{font-size:12px;font-weight:800;margin-top:3px;}
-.tm-stats{display:flex;gap:8px;margin-bottom:8px;}
-.ts{flex:1;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:12px;padding:11px 8px;text-align:center;}
-.ts.highlight{border-color:var(--border-gold);}
-.ts-n{font-family:'Anton',sans-serif;font-size:28px;color:var(--gold);}
-.ts-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
-.tm-update-note{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted);margin-bottom:4px;}
-.player-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
-.player-row:last-child{border-bottom:none;}
-.pr-num{font-family:'Anton',sans-serif;font-size:16px;color:var(--gold);min-width:32px;}
-.pr-name{flex:1;font-size:12px;font-weight:800;}
-.pr-pos{font-size:10px;color:var(--muted);background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);padding:2px 7px;border-radius:5px;}
-.modal-close{position:absolute;top:20px;right:20px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.05);border:none;color:#212529;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-/* ADMIN */
-#adminModal{position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,.7);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);}
-#adminModal.on{display:flex;}
-.adm-sheet{background:var(--bg2);border-radius:28px 28px 0 0;padding:22px 20px 40px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;}
-.adm-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
-.adm-tab{padding:6px 11px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;}
-.adm-tab.on{background:var(--gold);color:#050816;border-color:transparent;}
-.adm-lbl{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:12px 0 5px;}
-.adm-inp{width:100%;height:40px;border-radius:11px;border:1px solid var(--border);background:var(--card2);color:#212529;font-size:13px;padding:0 12px;outline:none;margin-bottom:8px;}
-.adm-inp:focus{border-color:var(--border-gold);}
-.adm-select{width:100%;height:40px;border-radius:11px;border:1px solid var(--border);background:var(--card2);color:#212529;font-size:13px;padding:0 12px;outline:none;margin-bottom:8px;}
-.adm-score-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.adm-sc-inp{width:52px;height:44px;border-radius:11px;border:1px solid var(--border-gold);background:var(--card);color:var(--gold);font-family:'Anton',sans-serif;font-size:22px;text-align:center;outline:none;}
-.adm-sep{font-family:'Anton',sans-serif;font-size:20px;color:var(--muted);}
-.adm-set-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.adm-set-lbl{font-size:11px;color:var(--muted);white-space:nowrap;}
-.adm-team-row{display:flex;gap:8px;}
-.adm-actions{display:flex;gap:8px;margin-top:14px;}
-.adm-cancel{flex:1;height:42px;border-radius:11px;border:1px solid var(--border);background:transparent;color:var(--muted);font-weight:700;font-size:13px;}
-.adm-save{flex:2;height:42px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:13px;}
-.adm-section h4{font-size:13px;font-weight:800;margin-bottom:10px;}
+        .game-date {
+            background: var(--verde);
+            color: var(--branco);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
 
-/* LIVE VIDEO */
-.live-video-card{margin:0 14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:background .35s,border .35s;}
-	.lv-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
-	.lv-header strong{font-size:13px;font-weight:800;color:var(--text);}
-.lv-placeholder{height:160px;background:linear-gradient(135deg,rgba(103,18,23,.3),rgba(5,8,22,.8));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;}
-.lv-play{width:52px;height:52px;border-radius:50%;background:rgba(244,197,66,.2);border:2px solid var(--border-gold);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold);}
-	.lv-sub{font-size:11px;color:#fff;opacity:0.8;text-align:center;}
+        .game-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
 
-/* FIREWORKS */
-#fireworks{position:fixed;inset:0;z-index:9000;pointer-events:none;}
-#fireworks.on{pointer-events:none;}
-.fw-particle{position:absolute;width:6px;height:6px;border-radius:50%;animation:fw .8s ease-out both;}
-@keyframes fw{0%{transform:translate(0,0);opacity:1}100%{transform:translate(var(--tx),var(--ty));opacity:0}}
+        .status-live {
+            background: var(--vermelho);
+            color: var(--branco);
+            animation: pulse 1.5s infinite;
+        }
 
-/* TOAST */
-#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,25,55,.96);border:1px solid var(--border-gold);border-radius:999px;padding:10px 20px;font-size:13px;font-weight:700;color:#fff;z-index:9500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+        .status-finished {
+            background: #666;
+            color: var(--branco);
+        }
 
-/* BOTTOM NAV */
-.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--nav);border-top:1px solid var(--border);display:flex;padding-bottom:max(env(safe-area-inset-bottom,0px),8px);}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:9px 4px 6px;background:none;border:none;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.3px;transition:color .15s;cursor:pointer;}
-.nav-btn.on{color:var(--gold);}
-.ni{font-size:20px;line-height:1;}
+        .status-scheduled {
+            background: #f0ad4e;
+            color: var(--branco);
+        }
 
-/* MAP/LOCAL */
-.map-wrap{margin:12px 14px;border-radius:16px;overflow:hidden;height:260px;}
-.map-wrap iframe{width:100%;height:100%;border:none;}
-.gps-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 14px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:13px;text-decoration:none;}
-.poi-group{font-size:10px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:1.2px;padding:14px 14px 6px;border-bottom:1px solid var(--border-gold);}
-.poi-card{margin:0 14px 8px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:background .35s,border .35s;}
-.poi-card.hl{border-color:var(--border-gold);}
-.poi-emoji{font-size:26px;flex-shrink:0;}
-.poi-info{flex:1;min-width:0;}
-.poi-type{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
-.poi-name{font-size:12px;font-weight:800;line-height:1.3;}
-.poi-name.gd{color:var(--gold);}
-.poi-addr{font-size:11px;color:var(--muted);margin-top:2px;}
-.poi-detail{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5;}
-.poi-maps{flex-shrink:0;padding:6px 11px;border-radius:8px;border:1px solid var(--border-gold);background:transparent;color:var(--gold);font-size:10px;font-weight:800;text-decoration:none;}
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
 
-/* THEME TOGGLE */
-.theme-block{margin:12px 14px;background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:background .35s,border .35s;}
-.th-ic{font-size:22px;flex-shrink:0;}
-.th-text{flex:1;}
-.th-label{font-size:13px;font-weight:800;}
-.th-sub{font-size:10px;color:var(--muted);margin-top:2px;}
-.th-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
-.th-switch input{opacity:0;width:0;height:0;}
-.th-slider{position:absolute;inset:0;border-radius:999px;background:var(--border-blue);border:1px solid var(--border);transition:.3s;cursor:pointer;}
-.th-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;border-radius:50%;background:var(--muted);transition:.3s;}
-input:checked~.th-slider{background:rgba(244,197,66,.2);border-color:var(--border-gold);}
-input:checked~.th-slider::before{transform:translateX(20px);background:var(--gold);}
-.th-thumb{font-size:14px;}
+        .teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
 
-/* SPORTS BANNER */
-.sports-banner{position:relative;margin:12px 14px 0;border-radius:20px;overflow:hidden;height:190px;}
-.sb-bg{position:absolute;inset:0;background-size:cover;background-position:center 35%;transition:transform .5s ease;}
-.sports-banner:hover .sb-bg{transform:scale(1.04);}
-.sb-ov{position:absolute;inset:0;background:linear-gradient(95deg,rgba(5,8,22,.88) 0%,rgba(5,8,22,.3) 52%,rgba(5,8,22,.7) 100%);}
-.sb-body{position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 22px;}
-.sb-tag{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
-.sb-title{font-family:'Anton',sans-serif;font-size:22px;color:#fff;text-transform:uppercase;line-height:1.05;}
-.sb-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:5px;}
-.sb-icons{display:flex;gap:6px;margin-top:9px;}
-.sb-ic{width:30px;height:30px;border-radius:8px;background:rgba(244,197,66,.14);border:1px solid rgba(244,197,66,.28);display:flex;align-items:center;justify-content:center;font-size:15px;}
-.sb-bolt{font-size:38px;filter:drop-shadow(0 0 14px rgba(120,160,255,.8));}
+        .team {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
 
-/* INSTALL MODAL */
-#installModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:flex-end;justify-content:center;}
+        .team-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--verde);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--branco);
+            font-weight: bold;
+        }
 
-</style>
+        .score {
+            font-size: 2em;
+            color: var(--vermelho);
+            padding: 0 20px;
+        }
+
+        .vs {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .standings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .standings-table th {
+            background: var(--verde);
+            color: var(--branco);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .standings-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .standings-table tr:nth-child(even) {
+            background: var(--cinza-claro);
+        }
+
+        .standings-table tr:hover {
+            background: #e8f5e9;
+        }
+
+        .position {
+            font-weight: bold;
+            color: var(--verde);
+        }
+
+        .position-1 { color: #FFD700; }
+        .position-2 { color: #C0C0C0; }
+        .position-3 { color: #CD7F32; }
+
+        .team-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+            color: var(--branco);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .news-card {
+            background: var(--cinza-claro);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--vermelho);
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .news-title {
+            color: var(--verde);
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .news-text {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .btn-primary {
+            background: var(--vermelho);
+            color: var(--branco);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--vermelho-escuro);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+        }
+
+        .install-banner {
+            display: none;
+            background: var(--vermelho);
+            color: var(--branco);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .install-banner.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9em;
+        }
+
+        .footer-logo {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5em; }
+            .teams { font-size: 1em; }
+            .score { font-size: 1.5em; }
+            .nav-tab { padding: 10px; font-size: 0.9em; }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <div class="ball-icon">🤾</div>
+                <div>
+                    <h1>AfoHand</h1>
+                    <div class="subtitle">Handebol de 5</div>
+                </div>
+            </div>
+            <div style="margin-top: 15px; font-size: 0.9em; opacity: 0.8;">
+                Campeonato Municipal
+            </div>
+        </header>
 
-<!-- FIREWORKS -->
-<div id="fireworks"></div>
-
-  <div class="bball-float" style="left:10%;animation-duration:12s;font-size:30px;">🏀</div>
-	  <div class="bball-float" style="left:50%;animation-duration:18s;font-size:50px;animation-delay:2s;">🏀</div>
-	  <div class="bball-float" style="left:80%;animation-duration:15s;font-size:25px;animation-delay:5s;">🏀</div>
-	  <div class="mtn-bg"></div>
-	
-	  <!-- SPLASH -->
-	<div id="splash">
-  <div class="splash-rings">
-    <div class="splash-ring"></div>
-    <div class="splash-ring"></div>
-    <div class="splash-ring"></div>
-    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663735693189/oNYSWjOSTPTkcmUz.png" style="width:100px;height:100px;object-fit:contain;position:relative;z-index:1;animation:splashPop .8s cubic-bezier(.34,1.56,.64,1) .2s both;filter:drop-shadow(0 0 30px rgba(252,193,55,.5));">
-  </div>
-  <div class="splash-name">Basquete AFC</div>
-  <div class="splash-ed">Supercopa 2026 · Afonso Cláudio</div>
-  <div class="splash-track"><div class="splash-fill"></div></div>
-</div>
-
-<!-- ONBOARDING -->
-<div id="onboarding" style="position:fixed;inset:0;z-index:5000;background:rgba(255,255,255,0.8);display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(10px);">
-  <div style="background:var(--bg2);border-radius:28px 28px 0 0;padding:30px 24px 44px;width:100%;max-width:480px;animation:slideUp .45s cubic-bezier(.34,1.2,.64,1);box-shadow:0 -10px 40px rgba(0,0,0,0.1);">
-    <style>@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}</style>
-    <div style="width:40px;height:4px;background:rgba(0,0,0,.1);border-radius:999px;margin:0 auto 22px;"></div>
-    <div style="text-align:center;margin-bottom:14px;"><img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663735693189/oNYSWjOSTPTkcmUz.png" style="width:120px;height:120px;object-fit:contain;"></div>
-    <div style="font-family:'Anton',sans-serif;font-size:26px;text-align:center;text-transform:uppercase;">Bem-vindo! 🏀</div>
-    <div style="font-size:12px;color:var(--muted);text-align:center;margin:6px 0 22px;line-height:1.6;">Acompanhe o Basquete da Supercopa AFC em tempo real — jogos, tabela, mata-mata e muito mais.</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px;">
-      <div style="display:flex;gap:14px;align-items:center;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;padding:12px 14px;"><div style="font-size:22px;flex-shrink:0;">📅</div><div><strong style="display:block;font-size:13px;font-weight:800;">Jogos ao vivo</strong><span style="font-size:11px;color:var(--muted);">Placares animados em tempo real</span></div></div>
-      <div style="display:flex;gap:14px;align-items:center;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;padding:12px 14px;"><div style="font-size:22px;flex-shrink:0;">🏆</div><div><strong style="display:block;font-size:13px;font-weight:800;">Chaveamento automático</strong><span style="font-size:11px;color:var(--muted);">Bracket avança com os resultados</span></div></div>
-      <div style="display:flex;gap:14px;align-items:center;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;padding:12px 14px;"><div style="font-size:22px;flex-shrink:0;">📲</div><div><strong style="display:block;font-size:13px;font-weight:800;">Funciona offline</strong><span style="font-size:11px;color:var(--muted);">Instale como app na tela inicial</span></div></div>
-    </div>
-    <button onclick="closeOnboarding()" style="width:100%;height:52px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:15px;letter-spacing:.5px;box-shadow:0 6px 20px rgba(103,18,23,0.2);">VAMOS LÁ! →</button>
-  </div>
-</div>
-
-<!-- TEAM MODAL -->
-<div id="teamModal">
-  <div class="tm-sheet">
-    <button class="modal-close" onclick="closeTeamModal()">✕</button>
-    <div class="tm-handle"></div>
-    <div class="tm-header">
-      <div class="tm-av" id="tmAv">🏀</div>
-      <div>
-        <div class="tm-name" id="tmName">—</div>
-        <div class="tm-city" id="tmCity">—</div>
-      </div>
-    </div>
-    <div class="tm-badge-row" id="tmBadges"></div>
-    <div class="tm-section">📋 Informações</div>
-    <div class="tm-info-grid">
-      <div class="tm-info-card">
-        <div class="tm-info-ic">👔</div>
-        <div class="tm-info-lbl">Responsável</div>
-        <div class="tm-info-val" id="tmResp">—</div>
-      </div>
-      <div class="tm-info-card">
-        <div class="tm-info-ic">🏅</div>
-        <div class="tm-info-lbl">Capitão</div>
-        <div class="tm-info-val" id="tmCap">—</div>
-      </div>
-    </div>
-    <div class="tm-section">📊 Desempenho · 2026</div>
-    <div class="tm-stats">
-      <div class="ts"><div class="ts-n" id="tmPJ">—</div><div class="ts-l">Partidas</div></div>
-      <div class="ts highlight"><div class="ts-n" id="tmV">—</div><div class="ts-l">Vitórias</div></div>
-    </div>
-    <div class="tm-update-note" id="tmUpdateNote"><span>🔄</span><span>Dados da planilha</span></div>
-    <div id="tmPlayers"></div>
-  </div>
-</div>
-
-<!-- ADMIN MODAL -->
-<div id="adminModal">
-  <div class="adm-sheet">
-    <div id="admLoginScreen">
-      <div style="text-align:center;padding:10px 0 24px;">
-        <div style="font-size:48px;margin-bottom:12px;">🔐</div>
-        <div style="font-family:'Anton',sans-serif;font-size:22px;text-transform:uppercase;margin-bottom:4px;">Painel Admin</div>
-        <div style="font-size:12px;color:var(--muted);">Digite a senha para acessar</div>
-      </div>
-      <input class="adm-inp" type="password" id="admLoginPw" placeholder="Senha de acesso..." style="font-size:20px;letter-spacing:6px;text-align:center;" onkeydown="if(event.key==='Enter')admLogin()">
-      <div id="admLoginErro" style="display:none;text-align:center;font-size:12px;color:var(--blue);margin-top:8px;font-weight:700;">❌ Senha incorreta.</div>
-      <div style="display:flex;gap:10px;margin-top:16px;">
-        <button class="adm-cancel" onclick="closeAdmin()" style="flex:1;">Cancelar</button>
-        <button class="adm-save" onclick="admLogin()" style="flex:2;">ENTRAR →</button>
-      </div>
-    </div>
-    <div id="admPainelPrincipal" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <div>
-          <div style="font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase;">🔐 Admin</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;">Painel Basquete AFC 2026</div>
+        <div class="org-info">
+            <h3>🏛️ Realização</h3>
+            <p><strong>Prefeitura Municipal de Afonso Cláudio</strong></p>
+            <p>Secretaria Municipal de Esportes e Lazer</p>
         </div>
-        <button class="modal-close" style="position:static;" onclick="closeAdmin()">✕</button>
-      </div>
-      <div class="adm-tabs">
-        <button class="adm-tab on" onclick="admTab('score',this)">Placar</button>
-        <button class="adm-tab" onclick="admTab('teams',this)">Times</button>
-        <button class="adm-tab" onclick="admTab('mvp',this)">MVP</button>
-      </div>
-      <div id="admScore">
-        <div class="adm-lbl">Placar (pontos)</div>
-        <div class="adm-score-row">
-          <span id="admT1" style="font-size:11px;font-weight:700;flex:1;">Time A</span>
-          <input class="adm-sc-inp" type="number" min="0" max="200" id="admS1" placeholder="0">
-          <div class="adm-sep">×</div>
-          <input class="adm-sc-inp" type="number" min="0" max="200" id="admS2" placeholder="0">
-          <span id="admT2" style="font-size:11px;font-weight:700;flex:1;text-align:right;">Time B</span>
+
+        <div class="install-banner" id="installBanner">
+            <p>📲 Instale o AfoHand em seu celular!</p>
+            <button class="btn-primary" onclick="installApp()">Instalar App</button>
         </div>
-        <div class="adm-lbl">Senha Admin</div>
-        <input class="adm-inp" type="password" placeholder="Senha..." id="admPw">
-        <div class="adm-actions">
-          <button class="adm-cancel" onclick="closeAdmin()">Cancelar</button>
-          <button class="adm-save" onclick="saveScore()">SALVAR</button>
-        </div>
-      </div>
-      <div id="admTeams" style="display:none;">
-        <div class="adm-section">
-          <h4>Adicionar Time</h4>
-          <div class="adm-team-row">
-            <input class="adm-inp" id="newTeamName" placeholder="Nome do time">
-            <input class="adm-inp" id="newTeamCity" placeholder="Cidade, UF" style="max-width:130px;">
-          </div>
-          <select class="adm-select" id="newTeamGroup"><option value="grupoA">Grupo A</option><option value="grupoB">Grupo B</option><option value="grupoC">Grupo C</option></select>
-          <input class="adm-inp" type="password" placeholder="Senha Admin" id="admPw2">
-          <div class="adm-actions">
-            <button class="adm-cancel" onclick="closeAdmin()">Cancelar</button>
-            <button class="adm-save" onclick="addTeam()">ADICIONAR</button>
-          </div>
-        </div>
-      </div>
-      <div id="admMvp" style="display:none;">
-        <div class="adm-section">
-          <div style="text-align:center;margin-bottom:16px;"><div style="font-size:32px;margin-bottom:6px;">⭐</div><div style="font-family:'Anton',sans-serif;font-size:16px;color:var(--gold);text-transform:uppercase;">MVP da Partida</div></div>
-          <div class="adm-lbl">Nome do Jogador</div>
-          <input class="adm-inp" id="mvpName" placeholder="Nome completo do jogador">
-          <div class="adm-lbl">Time</div>
-          <input class="adm-inp" id="mvpTeam" placeholder="Nome do time">
-          <div class="adm-actions" style="margin-top:14px;">
-            <button class="adm-cancel" onclick="closeAdmin()">Cancelar</button>
-            <button class="adm-save" onclick="addMvp()">⭐ SALVAR MVP</button>
-          </div>
-          <div id="admMvpStatus" style="margin-top:10px;text-align:center;font-size:12px;color:var(--muted);"></div>
-        </div>
-      </div>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('jogos')">🏆 Jogos</button>
+            <button class="nav-tab" onclick="showSection('classificacao')">📊 Classificação</button>
+            <button class="nav-tab" onclick="showSection('estatisticas')">📈 Estatísticas</button>
+            <button class="nav-tab" onclick="showSection('noticias')">📰 Notícias</button>
+        </nav>
+
+        <!-- Seção Jogos -->
+        <section id="jogos" class="section active">
+            <h2 class="section-title">🏆 Jogos do Campeonato</h2>
+            
+            <div class="game-card">
+                <div class="game-header">
+                    <span class="game-date">📅 20/06/2026 - 19:00</span>
+                    <span class="game-status status-live">● AO VIVO</span>
+                </div>
+                <div class="teams">
+                    <div class="team">
+                        <div class="team-logo">A</div>
+                        <span>Atlético AC</span>
+                    </div>
+                    <div class="score">12 <span class="vs">vs</span> 10</div>
+                    <div class="team" style="justify-content: flex-end;">
+                        <span>Flamengo AC</span>
+                        <div class="team-logo" style="background: var(--vermelho);">F</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 10px; color: #666; font-size: 0.9em;">
+                    Ginásio Municipal - Afonso Cláudio
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-header">
+                    <span class="game-date">📅 22/06/2026 - 20:00</span>
+                    <span class="game-status status-scheduled">AGENDADO</span>
+                </div>
+                <div class="teams">
+                    <div class="team">
+                        <div class="team-logo" style="background: #333;">V</div>
+                        <span>Vasco AC</span>
+                    </div>
+                    <div class="score">- <span class="vs">vs</span> -</div>
+                    <div class="team" style="justify-content: flex-end;">
+                        <span>Sport AC</span>
+                        <div class="team-logo" style="background: #FF6B00;">S</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-header">
+                    <span class="game-date">📅 18/06/2026 - 19:30</span>
+                    <span class="game-status status-finished">ENCERRADO</span>
+                </div>
+                <div class="teams">
+                    <div class="team">
+                        <div class="team-logo">P</div>
+                        <span>Palmeiras AC</span>
+                    </div>
+                    <div class="score">15 <span class="vs">vs</span> 8</div>
+                    <div class="team" style="justify-content: flex-end;">
+                        <span>Corinthians AC</span>
+                        <div class="team-logo" style="background: #000;">C</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Classificação -->
+        <section id="classificacao" class="section">
+            <h2 class="section-title">📊 Classificação</h2>
+            <table class="standings-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th style="text-align: left;">Time</th>
+                        <th>P</th>
+                        <th>J</th>
+                        <th>V</th>
+                        <th>D</th>
+                        <th>GP</th>
+                        <th>GC</th>
+                        <th>SG</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="position position-1">1º</td>
+                        <td class="team-cell">
+                            <div class="team-logo" style="width: 30px; height: 30px; font-size: 0.8em;">P</div>
+                            Palmeiras AC
+                        </td>
+                        <td><strong>9</strong></td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>0</td>
+                        <td>42</td>
+                        <td>28</td>
+                        <td>+14</td>
+                    </tr>
+                    <tr>
+                        <td class="position position-2">2º</td>
+                        <td class="team-cell">
+                            <div class="team-logo" style="width: 30px; height: 30px; font-size: 0.8em;">A</div>
+                            Atlético AC
+                        </td>
+                        <td><strong>6</strong></td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>38</td>
+                        <td>32</td>
+                        <td>+6</td>
+                    </tr>
+                    <tr>
+                        <td class="position position-3">3º</td>
+                        <td class="team-cell">
+                            <div class="team-logo" style="width: 30px; height: 30px; font-size: 0.8em; background: var(--vermelho);">F</div>
+                            Flamengo AC
+                        </td>
+                        <td><strong>3</strong></td>
+                        <td>3</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>35</td>
+                        <td>38</td>
+                        <td>-3</td>
+                    </tr>
+                    <tr>
+                        <td class="position">4º</td>
+                        <td class="team-cell">
+                            <div class="team-logo" style="width: 30px; height: 30px; font-size: 0.8em; background: #333;">V</div>
+                            Vasco AC
+                        </td>
+                        <td><strong>0</strong></td>
+                        <td>3</td>
+                        <td>0</td>
+                        <td>3</td>
+                        <td>25</td>
+                        <td>42</td>
+                        <td>-17</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Seção Estatísticas -->
+        <section id="estatisticas" class="section">
+            <h2 class="section-title">📈 Estatísticas do Campeonato</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total de Jogos</div>
+                    <div class="stat-number">12</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Gols Marcados</div>
+                    <div class="stat-number">156</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Média de Gols/Jogo</div>
+                    <div class="stat-number">13.0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Times Participantes</div>
+                    <div class="stat-number">8</div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: var(--verde); margin-bottom: 15px;">Artilheiros</h3>
+            <div class="game-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="team-cell">
+                        <div class="team-logo" style="width: 35px; height: 35px;">1</div>
+                        <div>
+                            <div style="font-weight: bold;">João Silva</div>
+                            <div style="font-size: 0.85em; color: #666;">Palmeiras AC</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.5em; color: var(--vermelho); font-weight: bold;">18 gols</div>
+                </div>
+            </div>
+            <div class="game-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="team-cell">
+                        <div class="team-logo" style="width: 35px; height: 35px; background: #666;">2</div>
+                        <div>
+                            <div style="font-weight: bold;">Pedro Santos</div>
+                            <div style="font-size: 0.85em; color: #666;">Atlético AC</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.5em; color: var(--vermelho); font-weight: bold;">15 gols</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Notícias -->
+        <section id="noticias" class="section">
+            <h2 class="section-title">📰 Notícias</h2>
+            
+            <div class="news-card">
+                <div class="news-date">📅 16/06/2026</div>
+                <div class="news-title">Abertura do AfoHand 2026!</div>
+                <div class="news-text">
+                    A Prefeitura de Afonso Cláudio, através da Secretaria de Esportes, 
+                    inaugura nesta semana o campeonato municipal de handebol de 5. 
+                    O evento conta com 8 equipes e promete grandes emoções.
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-date">📅 15/06/2026</div>
+                <div class="news-title">Regulamento Oficial Publicado</div>
+                <div class="news-text">
+                    Confira o regulamento completo do campeonato no site da prefeitura. 
+                    As inscrições foram encerradas com recorde de participação.
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-date">📅 10/06/2026</div>
+                <div class="news-title">Reforma do Ginásio Municipal Concluída</div>
+                <div class="news-text">
+                    A Secretaria de Esportes finalizou a reforma do ginásio municipal, 
+                    que receberá todos os jogos do campeonato com nova pintura e piso renovado.
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-logo">🏛️ Prefeitura Municipal de Afonso Cláudio</div>
+            <p>Secretaria Municipal de Esportes e Lazer</p>
+            <p style="margin-top: 10px; font-size: 0.8em;">© 2026 AfoHand - Todos os direitos reservados</p>
+        </footer>
     </div>
-  </div>
-</div>
 
-<div id="toast"></div>
+    <script>
+        // Navegação entre seções
+        function showSection(sectionId) {
+            // Esconde todas as seções
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active de todos os tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostra a seção selecionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Ativa o tab correspondente
+            event.target.classList.add('active');
+        }
 
-<!-- TOPBAR -->
-<header class="topbar">
-  <div class="brand">
-    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663735693189/oNYSWjOSTPTkcmUz.png" style="width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(252,193,55,.35));">
-    <div class="brand-text">
-      <small>SUPERCOPA AFC · 2026</small>
-      <h1>BASQUETE</h1>
-    </div>
-  </div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <div class="live-pill"><span class="live-dot"></span>EM BREVE</div>
-  </div>
-</header>
+        // Registro do Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('SW registrado:', registration);
+                    })
+                    .catch(error => {
+                        console.log('SW falhou:', error);
+                    });
+            });
+        }
 
-<main>
-
-<!-- ==================== HOME ==================== -->
-<section id="homePage" class="page active">
-
-  <div class="ticker">
-    <div class="ticker-inner" id="tickerInner">
-      <span class="ticker-item">⚡ 25 e 26 de Julho de 2026</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">🏀 Supercopa de Basquete AFC</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">🏆 Grupos → Semi → Final</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">✅ Inscrição 100% Gratuita</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">📍 Afonso Cláudio, ES</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">⚡ 25 e 26 de Julho de 2026</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">🏀 Supercopa de Basquete AFC</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">🏆 Grupos → Semi → Final</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">✅ Inscrição 100% Gratuita</span><span class="ticker-sep">●</span>
-      <span class="ticker-item">📍 Afonso Cláudio, ES</span><span class="ticker-sep">●</span>
-    </div>
-  </div>
-
-  <section class="hero">
-    <div class="hero-bg" style="background:linear-gradient(135deg,#0a2d5e 0%,#050816 100%);"></div>
-    <div class="hero-ov"></div>
-    <div class="hero-fade"></div>
-    <div class="hero-body">
-      <div class="hero-badge"><span class="live-dot"></span>BASQUETE AFC · JUL 2026</div>
-      <div class="hero-logorow">
-        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663735693189/oNYSWjOSTPTkcmUz.png" style="width:66px;height:66px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(252,193,55,.5));">
-        <div class="hero-logorow-text">
-          <div class="ed">SUPERCOPA AFC · 2026</div>
-          <div class="ht">BASQUETE<br>AFC</div>
-        </div>
-      </div>
-      <h2 style="font-size:38px;">O MAIOR<br>CAMPEONATO DE<br><em>BASQUETE</em><br>DA REGIÃO</h2>
-      <p class="hero-sub">Região das Montanhas · Afonso Cláudio, ES<br>25 e 26 de Julho de 2026</p>
-      <div class="cdown">
-        <div class="cd"><div class="cd-n" id="cdD">--</div><div class="cd-l">Dias</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd"><div class="cd-n" id="cdH">--</div><div class="cd-l">Hrs</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd"><div class="cd-n" id="cdM">--</div><div class="cd-l">Min</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd"><div class="cd-n" id="cdS">--</div><div class="cd-l">Seg</div></div>
-      </div>
-      <div class="hero-btns">
-        <button class="btn-gold" onclick="nav('gamesPage',document.querySelectorAll('.nav-btn')[1])">VER JOGOS</button>
-	        <button class="btn-ghost" style="border:2px solid var(--gold); background:rgba(252,193,55,0.1); color:var(--gold); font-weight:800;" onclick="nav('tablePage',document.querySelectorAll('.nav-btn')[2])">TABELA</button>
-      </div>
-    </div>
-  </section>
-
-  <div class="stats-grid">
-    <div class="stat"><div class="stat-n" id="statTimes">6</div><div class="stat-l">Times</div></div>
-    <div class="stat"><div class="stat-n" id="statJogos">—</div><div class="stat-l">Jogos</div></div>
-    <div class="stat"><div class="stat-n" style="font-size:16px">R$0</div><div class="stat-l">Inscrição</div></div>
-    <div class="stat"><div class="stat-n">6ª</div><div class="stat-l">Edição</div></div>
-  </div>
-
-  <!-- TRANSMISSÃO -->
-  <div class="sec"><span class="sec-title">📺 Transmissão</span></div>
-  <div class="live-video-card">
-    <div class="lv-header">
-      <strong>Ao Vivo · 26 Jul</strong>
-      <div class="live-pill"><span class="live-dot"></span>EM BREVE</div>
-    </div>
-    <div class="lv-placeholder" onclick="showToast('📺 Transmissão disponível durante o evento!')">
-      <div class="lv-play">▶</div>
-      <div class="lv-sub">Clique para assistir ao vivo no evento</div>
-    </div>
-  </div>
-
-  <div class="sec" style="padding-top:18px;"><span class="sec-title">Times Inscritos</span><span class="sec-link" onclick="nav('tablePage',document.querySelectorAll('.nav-btn')[2])">VER TODOS →</span></div>
-  <p style="font-size:11px;color:var(--muted);padding:0 16px 9px;">👉 Toque para ver o perfil</p>
-  <div class="hscroll" id="teamChipsHome">
-	    <div class="team-chip gold" onclick="openTeam('CT das Montanhas','Afonso Cláudio, ES','🏠',0,0,0)"><div class="tc-av">🏠</div><div><div class="tc-name">CT das Montanhas</div><div class="tc-city">Afonso Cláudio, ES</div><div class="tc-badge">EQUIPE DA CASA</div></div></div>
-	    <div class="team-chip" onclick="openTeam('Marlins','Vitória, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Marlins</div><div class="tc-city">Vitória, ES</div><div class="tc-badge">INSCRITO</div></div></div>
-	    <div class="team-chip" onclick="openTeam('Central Serrano','Serra, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Central Serrano</div><div class="tc-city">Serra, ES</div><div class="tc-badge">INSCRITO</div></div></div>
-	    <div class="team-chip" onclick="openTeam('Crossover Basquete','Itapemirim, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Crossover Basquete</div><div class="tc-city">Itapemirim, ES</div><div class="tc-badge">INSCRITO</div></div></div>
-	    <div class="team-chip" onclick="openTeam('Basquete Aracruz','Aracruz, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Basquete Aracruz</div><div class="tc-city">Aracruz, ES</div><div class="tc-badge">INSCRITO</div></div></div>
-	    <div class="team-chip" onclick="openTeam('Basquete São Pedro','Vitória, ES','🏀',0,0,0)"><div class="tc-av">🏀</div><div><div class="tc-name">Basquete São Pedro</div><div class="tc-city">Vitória, ES</div><div class="tc-badge">INSCRITO</div></div></div>
-	  </div>
-
-  <div class="sec" style="padding-top:18px;"><span class="sec-title">🏅 MVP da Partida</span><span class="sec-link">Destaques · 2026</span></div>
-  <div class="mvp-strip" id="mvpStrip">
-    <div class="mvp-card no1"><div class="mvp-rank">1°</div><div class="mvp-av">🏀</div><div class="mvp-nm">A definir</div><div class="mvp-tm">—</div></div>
-    <div class="mvp-card"><div class="mvp-rank" style="color:var(--muted)">2°</div><div class="mvp-av">🏀</div><div class="mvp-nm">A definir</div><div class="mvp-tm">—</div></div>
-    <div class="mvp-card"><div class="mvp-rank" style="color:var(--muted)">3°</div><div class="mvp-av">🏀</div><div class="mvp-nm">A definir</div><div class="mvp-tm">—</div></div>
-  </div>
-
-  <!-- NEWS -->
-  <div class="sec" style="padding-top:18px;"><span class="sec-title">📰 Notícias</span></div>
-  <div class="news-list" id="newsList">
-	    <div class="news-card"><div class="news-ic">🗳️</div><div><div class="news-tag">Sorteio</div><div class="news-title">Sorteio dos grupos será dia 01/07 no instagram oficial da supercopa e da secretaria de esportes.</div><div class="news-date">Junho 2026</div></div></div>
-	    <div class="news-card"><div class="news-ic">🥤</div><div><div class="news-tag">Patrocínio</div><div class="news-title">O grupo coroa é patrocinador da Supercopa, Vem muita coisa boa por aí! Fiquem de olho.</div><div class="news-date">Junho 2026</div></div></div>
-	    <div class="news-card"><div class="news-ic">🎁</div><div><div class="news-tag">Especial</div><div class="news-title">Temos um presente especial para todas as equipes no sábado à noite, ja já a gente te conta.</div><div class="news-date">Junho 2026</div></div></div>
-	  </div>
-
-</section>
-
-<!-- ==================== JOGOS ==================== -->
-<section id="gamesPage" class="page">
-  <div class="ptitle">📅 <span>Jogos</span></div>
-  <div class="pull-bar" id="pullBar"><div class="pull-spin"></div>Atualizando...</div>
-  <div class="tabs">
-    <button class="tab on" onclick="filterGames('todos',this)">Todos</button>
-    <button class="tab" onclick="filterGames('grupos',this)">Grupos</button>
-    <button class="tab" onclick="filterGames('semi',this)">Semifinal</button>
-    <button class="tab" onclick="filterGames('final',this)">Final</button>
-  </div>
-  <div class="cards" id="gamesList">
-    <div style="text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;">
-      <div style="font-size:28px;margin-bottom:8px">⏳</div>
-      Carregando jogos da planilha...
-    </div>
-  </div>
-</section>
-
-<!-- ==================== TABELA ==================== -->
-<section id="tablePage" class="page">
-  <div class="ptitle">📊 <span>Classificação</span></div>
-  <div class="search-wrap"><span class="search-ic">🔍</span><input class="search-inp" type="text" placeholder="Buscar equipe..." oninput="searchTeam(this.value)"></div>
-  <div class="tabs">
-    <button class="tab on" onclick="filterTable('grupoA',this)">Grupo A</button>
-    <button class="tab" onclick="filterTable('grupoB',this)">Grupo B</button>
-    <button class="tab" onclick="filterTable('grupoC',this)">Grupo C</button>
-  </div>
-  <div class="tbl-wrap">
-    <div class="tbl-head"><div class="th">#</div><div class="th" style="text-align:left">Equipe</div><div class="th">PJ</div><div class="th">V</div><div class="th">D</div><div class="th">SP</div><div class="th" style="color:var(--gold)">PTS</div></div>
-    <div id="tableBody"></div>
-  </div>
-  <div style="margin:10px 14px;font-size:10px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;">
-    <span>PJ=Jogos</span><span>V=Vitórias</span><span>D=Derrotas</span><span>SP=Saldo</span><span style="color:var(--gold)">PTS=Pontos</span>
-  </div>
-  <div style="margin:0 14px 12px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.7;transition:background .35s,border .35s;">
-    ✅ <strong style="color:var(--text)">1º e 2º de cada grupo</strong> avançam para a semifinal.<br>
-    🏆 Campeão: premiação + troféu + medalhas.
-  </div>
-</section>
-
-<!-- ==================== MATA-MATA ==================== -->
-<section id="bracketPage" class="page">
-  <div class="ptitle">🏆 <span>Mata-Mata</span></div>
-  <div style="padding:0 14px 10px;"><div class="auto-badge">⚡ Chaveamento automático ativado</div></div>
-  <div class="bracket-scroll">
-    <div class="bracket-inner">
-      <div class="b-col">
-        <h3>Semifinal</h3>
-        <div class="match-card"><div class="m-meta">SF1 · 26/07 09:00h</div><div class="mt"><div class="mt-ic">🔵</div><div class="mt-nm" id="sf1t1nm">1º Grupo A</div><div class="mt-sc empty" id="bsf1t1">—</div></div><div class="mt"><div class="mt-ic">🔴</div><div class="mt-nm" id="sf1t2nm">2º Grupo B</div><div class="mt-sc empty" id="bsf1t2">—</div></div></div>
-        <div class="match-card" style="margin-top:36px;"><div class="m-meta">SF2 · 26/07 10:30h</div><div class="mt"><div class="mt-ic">🔴</div><div class="mt-nm" id="sf2t1nm">1º Grupo B</div><div class="mt-sc empty" id="bsf2t1">—</div></div><div class="mt"><div class="mt-ic">🔵</div><div class="mt-nm" id="sf2t2nm">2º Grupo A</div><div class="mt-sc empty" id="bsf2t2">—</div></div></div>
-      </div>
-      <div class="b-col">
-        <h3>🏆 Grande Final</h3>
-        <div class="match-card final"><div class="m-meta" style="color:var(--gold)">FINAL · 26/07 14:00h</div><div class="mt"><div class="mt-ic">🔥</div><div class="mt-nm" id="fint1nm">Venc. SF1</div><div class="mt-sc empty" id="bfint1">—</div></div><div class="mt"><div class="mt-ic">🔥</div><div class="mt-nm" id="fint2nm">Venc. SF2</div><div class="mt-sc empty" id="bfint2">—</div></div></div>
-        <div class="champ-card" id="champCard">
-          <div class="confetti-wrap" id="confettiWrap"></div>
-          <div class="champ-ic">🏆</div>
-          <div class="champ-nm" id="champName">Aguardando</div>
-          <div class="champ-lbl">Campeão 2026</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== AGENDA ==================== -->
-<section id="schedulePage" class="page">
-  <div class="ptitle">📅 <span>Agenda</span></div>
-  <div class="schedule-day">
-	    <div class="sched-day-hd"><div class="sched-day-pill">SÁBADO</div><div class="sched-day-lbl">Dia 1 · Fase de Grupos</div></div>
-	    <div class="sched-row"><div class="sched-time">08:00</div><div class="sched-info"><strong>Recepção & Alojamento</strong><span>Abertura do alojamento e recepção das equipes</span></div><div class="sched-loc">Quadra</div></div>
-	    <div class="sched-row" style="border-color:var(--border-gold);background:linear-gradient(135deg,rgba(244,197,66,0.06),transparent);"><div class="sched-time" style="color:var(--gold)">13:00</div><div class="sched-info"><strong>🏀 Início dos Jogos</strong><span>Fase de grupos — Sem parada para almoço</span></div><div class="sched-loc">Quadra</div></div>
-	    <div class="sched-row"><div class="sched-time">20:00</div><div class="sched-info"><strong>🍕 Encontro Festivo</strong><span>Momento de integração na Pizzaria Express</span></div><div class="sched-loc">Express</div></div>
-	  </div>
-	  <div class="schedule-day">
-	    <div class="sched-day-hd"><div class="sched-day-pill">DOMINGO</div><div class="sched-day-lbl">Dia 2 · Mata-Mata</div></div>
-	    <div class="sched-row"><div class="sched-time">08:00</div><div class="sched-info"><strong>Abertura da Quadra</strong><span>Aquecimento e preparação final</span></div><div class="sched-loc">Quadra</div></div>
-	    <div class="sched-row"><div class="sched-time">08:30</div><div class="sched-info"><strong>⚡ Semifinais</strong><span>Disputa das vagas para a final</span></div><div class="sched-loc">Quadra</div></div>
-	    <div class="sched-row"><div class="sched-time">11:30</div><div class="sched-info"><strong>🍔 Parada para Almoço</strong><span>Intervalo antes da decisão</span></div><div class="sched-loc">Praça</div></div>
-	    <div class="sched-row" style="border-color:var(--border-gold);background:linear-gradient(135deg,rgba(244,197,66,0.06),transparent);"><div class="sched-time" style="color:var(--gold)">13:30</div><div class="sched-info"><strong>🏆 GRANDE FINAL</strong><span>A decisão do título!</span></div><div class="sched-loc">Quadra</div></div>
-	    <div class="sched-row"><div class="sched-time">14:45</div><div class="sched-info"><strong>🎖️ Cerimônia de Premiação</strong><span>Entrega de troféus e medalhas</span></div><div class="sched-loc">Quadra</div></div>
-	  </div>
-</section>
-
-<!-- ==================== MAIS ==================== -->
-<section id="maisPage" class="page">
-  <div class="ptitle">⚙️ <span>Mais</span></div>
-  <div class="mais-grid">
-    <div class="mais-admin-card" onclick="openAdmin()">
-      <div style="font-size:28px;">🔐</div>
-      <div><div style="font-size:14px;font-weight:800;">Painel Admin</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Atualizar placares e destaques</div></div>
-    </div>
-    <div class="mais-card full" onclick="window.open('https://www.supercopaafc.com.br/inscricao.html')"><div class="mais-card-ic">📝</div><div><div class="mais-card-lbl">Fazer Inscrição</div><div class="mais-card-sub">Garanta sua vaga · Sem taxa</div></div></div>
-    <div class="mais-card" onclick="nav('galleryPage',null);renderGallery('2026')"><div class="mais-card-ic">📸</div><div class="mais-card-lbl">Galeria</div><div class="mais-card-sub">Fotos do evento</div></div>
-    <div class="mais-card" onclick="nav('cardgenPage',null)"><div class="mais-card-ic">🖼️</div><div class="mais-card-lbl">Card Social</div><div class="mais-card-sub">Compartilhe placar</div></div>
-    <div class="mais-card" onclick="nav('qrPage',null);drawQR()"><div class="mais-card-ic">📲</div><div class="mais-card-lbl">QR Code</div><div class="mais-card-sub">Compartilhe o app</div></div>
-    <div class="mais-card" onclick="nav('schedulePage',null)"><div class="mais-card-ic">📅</div><div class="mais-card-lbl">Agenda</div><div class="mais-card-sub">Programação completa</div></div>
-    <div class="mais-card" onclick="window.open('https://www.supercopaafc.com.br/regulamento.html')"><div class="mais-card-ic">📋</div><div class="mais-card-lbl">Regulamento</div><div class="mais-card-sub">Regras oficiais</div></div>
-    <div class="mais-card" onclick="window.open('https://www.instagram.com/supercopaafc/')"><div class="mais-card-ic">📱</div><div class="mais-card-lbl">Instagram</div><div class="mais-card-sub">@supercopaafc</div></div>
-    <div class="mais-card" onclick="window.open('https://wa.link/900kb2')"><div class="mais-card-ic">💬</div><div class="mais-card-lbl">WhatsApp</div><div class="mais-card-sub">Fale conosco</div></div>
-    <div class="mais-card" onclick="openInstallModal()"><div class="mais-card-ic">📲</div><div class="mais-card-lbl">Instalar App</div><div class="mais-card-sub">Adicionar à tela inicial</div></div>
-    <div class="mais-card" onclick="nav('localPage',null)"><div class="mais-card-ic">🗺️</div><div class="mais-card-lbl">Locais</div><div class="mais-card-sub">Quadra e pontos de apoio</div></div>
-    <div class="mais-card" onclick="window.open('https://www.supercopaafc.com.br')"><div class="mais-card-ic">🌐</div><div class="mais-card-lbl">Site Oficial</div><div class="mais-card-sub">supercopaafc.com.br</div></div>
-  </div>
-
-  <!-- THEME TOGGLE -->
-  <div class="theme-block" style="margin-top:14px;">
-    <div class="th-ic" id="thIc">🌙</div>
-    <div class="th-text">
-      <div class="th-label" id="thLbl">Modo Noite</div>
-      <div class="th-sub" id="thSub">Design escuro ativado</div>
-    </div>
-    <label class="th-switch">
-      <input type="checkbox" id="thToggle" onchange="toggleTheme(this)">
-      <span class="th-slider"></span>
-    </label>
-    <span class="th-thumb" id="thThumb">🌙</span>
-  </div>
-
-  <div class="info-block" style="margin-top:12px;">
-    <h4>🏀 Evento</h4>
-    <div class="info-row"><div class="ir-ic">📅</div><div><div class="ir-lbl">Datas · Basquete</div><div class="ir-val">25 e 26 de Julho de 2026</div></div></div>
-    <div class="info-row"><div class="ir-ic">📍</div><div><div class="ir-lbl">Local</div><div class="ir-val">Afonso Cláudio, ES · Quadra Eurico Vieira</div></div></div>
-    <div class="info-row"><div class="ir-ic">🏀</div><div><div class="ir-lbl">Times</div><div class="ir-val">6 equipes · Grupos + Mata-mata</div></div></div>
-    <div class="info-row"><div class="ir-ic">🏆</div><div><div class="ir-lbl">Formato</div><div class="ir-val">Grupos → Semifinal → Grande Final</div></div></div>
-    <div class="info-row"><div class="ir-ic">✅</div><div><div class="ir-lbl">Taxa de Inscrição</div><div class="ir-val" style="color:var(--gold);font-weight:700;">GRATUITO · R$0,00</div></div></div>
-  </div>
-
-  <div class="faq-wrap" style="margin-top:4px;">
-    <div class="ptitle" style="padding:14px 0 10px;">❓ Dúvidas</div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Como funciona o torneio de basquete? <span class="faq-arrow">▼</span></div><div class="faq-a">Fase de grupos no sábado, semifinal e grande final no domingo. Os dois primeiros de cada grupo avançam.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Tem taxa de inscrição? <span class="faq-arrow">▼</span></div><div class="faq-a">NÃO! O evento é completamente gratuito para todas as equipes participantes.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Quantos jogadores por equipe? <span class="faq-arrow">▼</span></div><div class="faq-a">Equipes de basquete com mínimo de 5 e máximo de 12 jogadores inscritos.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Como me inscrevo? <span class="faq-arrow">▼</span></div><div class="faq-a">Pré-inscrição pelo site supercopaafc.com.br. A Comissão avalia e envia convites.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Qual a pontuação por vitória? <span class="faq-arrow">▼</span></div><div class="faq-a">Vitória = 2 pontos. Derrota = 1 ponto. WO = 0 pontos para o perdedor.</div></div>
-  </div>
-  <div class="cta-block">
-    <h3>PRONTO PARA O JOGO?</h3>
-    <p>Inscrições abertas! Vagas limitadas para o Basquete da Supercopa AFC 2026.</p>
-    <a href="https://www.supercopaafc.com.br/inscricao.html" target="_blank">INSCREVER MEU TIME →</a>
-  </div>
-  <div style="text-align:center;padding:18px 14px 4px;font-size:10px;color:var(--muted);line-height:1.9;">
-    BASQUETE AFC · Supercopa 2026<br>Campeonato Multiesporte de Afonso Cláudio<br>
-    <span style="color:var(--gold)">supercopaafc.com.br</span>
-  </div>
-</section>
-
-<!-- ==================== LOCAL ==================== -->
-<section id="localPage" class="page">
-  <div style="display:flex;align-items:center;gap:10px;padding:16px 16px 14px;">
-    <button class="icon-btn" onclick="nav('maisPage',document.querySelectorAll('.nav-btn')[4])">←</button>
-    <div class="ptitle" style="padding:0;">📍 <span>Locais</span></div>
-  </div>
-
-  <div class="map-wrap">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1877.5!2d-41.12805!3d-20.07524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjDCsDA0JzMxLjAiUyA0McKwMDcnMzcuNyJX!5e0!3m2!1spt-BR!2sbr!4v1748000000000!5m2!1spt-BR!2sbr" allowfullscreen loading="lazy"></iframe>
-  </div>
-  <a class="gps-btn" href="https://www.google.com/maps/dir/?api=1&destination=-20.0752374,-41.1267671" target="_blank">
-    📍 Abrir GPS — Quadra Eurico Vieira
-  </a>
-
-  <p class="poi-group">🏀 Local do Evento</p>
-  <div class="poi-card hl">
-    <div class="poi-emoji">🏀</div>
-    <div class="poi-info">
-      <div class="poi-type">Quadra</div>
-      <div class="poi-name gd">Quadra Eurico Vieira de Resende</div>
-      <div class="poi-addr">Av. Idolindo Fonseca Lamas, 221 — Afonso Cláudio, ES</div>
-    </div>
-    <a class="poi-maps" href="https://maps.google.com/?cid=14397320840438908995" target="_blank">📍 Maps</a>
-  </div>
-
-  <p class="poi-group">🏥 Saúde</p>
-  <div class="poi-card">
-    <div class="poi-emoji">🏥</div>
-    <div class="poi-info">
-      <div class="poi-type">Hospital</div>
-      <div class="poi-name">Conferência São Vicente de Paulo</div>
-      <div class="poi-addr">R. José Giestas, 63 — Centro</div>
-      <div class="poi-detail">📞 <em>(27) 3735-1699</em> · 🕐 <em>24 horas</em></div>
-    </div>
-    <a class="poi-maps" href="https://maps.google.com/?cid=6542271719951999176" target="_blank">📍 Maps</a>
-  </div>
-
-  <p class="poi-group">🏨 Hospedagem</p>
-  <div class="poi-card">
-    <div class="poi-emoji">🏨</div>
-    <div class="poi-info">
-      <div class="poi-type">Pousada</div>
-      <div class="poi-name">Pousada Afonso Cláudio</div>
-      <div class="poi-addr">R. Quintino Bocaiúva, 128 — Centro</div>
-      <div class="poi-detail">📞 <em>(27) 3735-7801</em></div>
-    </div>
-    <a class="poi-maps" href="https://www.google.com/maps/search/?api=1&query=-20.077409,-41.1240347" target="_blank">📍 Maps</a>
-  </div>
-
-  <p class="poi-group">🍽️ Alimentação</p>
-  <div class="poi-card">
-    <div class="poi-emoji">🍕</div>
-    <div class="poi-info">
-      <div class="poi-type">Pizza & Lanches</div>
-      <div class="poi-name">Express Pizzas e Lanches</div>
-      <div class="poi-addr">Centro — Afonso Cláudio</div>
-      <div class="poi-detail">📞 <em>(27) 99999-5220</em> · 🕐 <em>Ter–Dom 18h–00h</em></div>
-    </div>
-    <a class="poi-maps" href="https://maps.google.com/?cid=818182377540330188" target="_blank">📍 Maps</a>
-  </div>
-  <div class="poi-card">
-    <div class="poi-emoji">🍽️</div>
-    <div class="poi-info">
-      <div class="poi-type">Restaurante</div>
-      <div class="poi-name">Restaurante Prato Fino</div>
-      <div class="poi-addr">R. José Jorge Haddad, 34 — Centro</div>
-      <div class="poi-detail">📞 <em>(27) 99900-4700</em> · 🕐 <em>Seg–Dom 9h–14h</em></div>
-    </div>
-    <a class="poi-maps" href="https://maps.google.com/?cid=5906541593162519242" target="_blank">📍 Maps</a>
-  </div>
-
-  <p class="poi-group">💊 Farmácias</p>
-  <div class="poi-card">
-    <div class="poi-emoji">💊</div>
-    <div class="poi-info">
-      <div class="poi-type">Farmácia</div>
-      <div class="poi-name">Farmácia São Tomé</div>
-      <div class="poi-addr">Av. Pres. Vargas, 236</div>
-      <div class="poi-detail">📞 <em>(27) 3735-1165</em> · 🕐 <em>Seg–Sáb 8h–18h</em></div>
-    </div>
-    <a class="poi-maps" href="https://maps.google.com/?cid=4168622811040752207" target="_blank">📍 Maps</a>
-  </div>
-  <div class="poi-card">
-    <div class="poi-emoji">💊</div>
-    <div class="poi-info">
-      <div class="poi-type">Farmácia</div>
-      <div class="poi-name">Farmácia São Tomé</div>
-      <div class="poi-addr">Av. Mal. Deodoro, 212 — Centro</div>
-      <div class="poi-detail">📞 <em>(27) 99890-6726</em> · 🕐 <em>Seg–Sex 7h–18h | Sáb 7h–12h</em></div>
-    </div>
-    <a class="poi-maps" href="https://maps.google.com/?cid=15484967853277222919" target="_blank">📍 Maps</a>
-  </div>
-</section>
-
-<!-- ==================== GALERIA ==================== -->
-<section id="galleryPage" class="page">
-  <div style="display:flex;align-items:center;gap:10px;padding:16px 16px 14px;">
-    <button class="icon-btn" onclick="nav('maisPage',document.querySelectorAll('.nav-btn')[4])">←</button>
-    <div class="ptitle" style="padding:0;">📸 <span>Galeria</span></div>
-  </div>
-  <div style="padding:10px 14px; text-align:center; color:var(--muted); font-size:12px;">
-	    📸 Primeira edição do basquete! As fotos aparecerão aqui durante o evento.
-	  </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin:0 14px;" id="galleryGrid"></div>
-</section>
-<div style="position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:20px;" id="galleryLb">
-  <button onclick="closeLb()" style="position:absolute;top:20px;right:20px;background:rgba(0,0,0,.05);border:none;border-radius:50%;width:38px;height:38px;color:#fff;font-size:18px;cursor:pointer;">✕</button>
-  <div id="lbIc" style="font-size:80px;">📸</div>
-  <div id="lbCap" style="font-size:14px;font-weight:800;color:#fff;"></div>
-  <div id="lbSub" style="font-size:12px;color:rgba(255,255,255,.5);"></div>
-</div>
-
-<!-- ==================== CARD SOCIAL ==================== -->
-<section id="cardgenPage" class="page">
-  <div style="display:flex;align-items:center;gap:10px;padding:16px 16px 14px;">
-    <button class="icon-btn" onclick="nav('maisPage',document.querySelectorAll('.nav-btn')[4])">←</button>
-    <div class="ptitle" style="padding:0;">🖼️ <span>Card Social</span></div>
-  </div>
-  <div style="padding:0 14px 12px;font-size:12px;color:var(--muted);">Gere um card com placar para postar no Instagram e WhatsApp</div>
-  <div style="margin:0 14px;border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.5);">
-    <canvas id="scCanvas" style="width:100%;display:block;border-radius:16px;"></canvas>
-  </div>
-  <div style="margin:10px 14px;display:flex;flex-direction:column;gap:8px;padding-bottom:160px;">
-    <div style="display:flex;gap:8px;">
-      <input style="flex:1;height:42px;border-radius:11px;border:1px solid var(--border);background:var(--card2);color:#212529;font-size:13px;padding:0 12px;outline:none;" id="scT1" placeholder="Time 1" value="CT Montanhas" oninput="updateCard()">
-      <input style="flex:1;height:42px;border-radius:11px;border:1px solid var(--border);background:var(--card2);color:#212529;font-size:13px;padding:0 12px;outline:none;" id="scT2" placeholder="Time 2" value="Equipe B" oninput="updateCard()">
-    </div>
-    <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
-      <input style="width:58px;height:46px;border-radius:11px;border:1px solid var(--border-gold);background:var(--card);color:var(--gold);font-family:'Anton',sans-serif;font-size:24px;text-align:center;outline:none;" id="scS1" type="number" min="0" max="200" value="65" oninput="updateCard()">
-      <div style="font-family:Anton,sans-serif;font-size:20px;color:var(--gold)">×</div>
-      <input style="width:58px;height:46px;border-radius:11px;border:1px solid var(--border-gold);background:var(--card);color:var(--gold);font-family:'Anton',sans-serif;font-size:24px;text-align:center;outline:none;" id="scS2" type="number" min="0" max="200" value="58" oninput="updateCard()">
-    </div>
-    <button style="width:100%;height:44px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:13px;cursor:pointer;" onclick="gerarImagemCard('share')">📤 Compartilhar Card</button>
-    <button style="width:100%;height:44px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.08);color:#212529;font-weight:700;font-size:13px;cursor:pointer;" onclick="gerarImagemCard('download')">⬇️ Baixar como Imagem</button>
-  </div>
-</section>
-
-<!-- ==================== QR CODE ==================== -->
-<section id="qrPage" class="page">
-  <div style="display:flex;align-items:center;gap:10px;padding:16px 16px 14px;">
-    <button class="icon-btn" onclick="nav('maisPage',document.querySelectorAll('.nav-btn')[4])">←</button>
-    <div class="ptitle" style="padding:0;">📲 <span>QR Code</span></div>
-  </div>
-  <div style="padding:0 14px 14px;font-size:12px;color:var(--muted);">Compartilhe o QR no ginásio para que todos acessem o app</div>
-  <div style="margin:0 14px;background:var(--card2);border:1px solid var(--border-gold);border-radius:var(--r);padding:22px;text-align:center;">
-    <canvas id="qrCanvas" style="display:block;margin:0 auto 14px;border-radius:10px;background:#fff;padding:8px;" width="200" height="200"></canvas>
-    <div style="font-family:'Anton',sans-serif;font-size:19px;color:var(--gold);margin-bottom:3px;">Basquete AFC</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5;">supercopaafc.com.br<br>Escaneie e acompanhe ao vivo</div>
-    <button onclick="downloadQR()" style="height:42px;padding:0 22px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:12px;cursor:pointer;">⬇️ Baixar QR Code</button>
-  </div>
-  <div style="margin:12px 14px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px;font-size:12px;color:var(--muted);line-height:1.7;">
-    💡 <strong style="color:var(--text)">Dica:</strong> Imprima e cole na quadra, entrada e arquibancada!
-  </div>
-</section>
-
-</main>
-
-<!-- BOTTOM NAV -->
-<nav class="bnav">
-  <button class="nav-btn on" onclick="nav('homePage',this)"><span class="ni">🏠</span><small>Início</small></button>
-  <button class="nav-btn" onclick="nav('gamesPage',this)"><span class="ni">📅</span><small>Jogos</small></button>
-  <button class="nav-btn" onclick="nav('tablePage',this)"><span class="ni">📊</span><small>Tabela</small></button>
-  <button class="nav-btn" onclick="nav('bracketPage',this)"><span class="ni">🏆</span><small>Mata-mata</small></button>
-  <button class="nav-btn" onclick="nav('maisPage',this)"><span class="ni">⋯</span><small>Mais</small></button>
-</nav>
-
-<!-- INSTALL MODAL -->
-<div id="installModal" onclick="closeInstallModal(event)" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:flex-end;justify-content:center;">
-  <div style="background:var(--bg2);border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;" onclick="event.stopPropagation()">
-    <div style="width:40px;height:4px;background:var(--border);border-radius:999px;margin:0 auto 20px;"></div>
-    <div style="text-align:center;margin-bottom:20px;">
-      <div style="font-size:40px;margin-bottom:8px;">📲</div>
-      <div style="font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase;">Instalar Aplicativo</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:4px;">Acesse mais rápido direto da tela inicial!</div>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:20px;">
-      <button id="installBtnAndroid" onclick="setInstallOS('android')" style="flex:1;padding:10px;border-radius:12px;border:2px solid var(--gold);background:rgba(252,193,55,.1);color:var(--gold);font-weight:800;font-size:13px;cursor:pointer;">🤖 ANDROID</button>
-      <button id="installBtnIos" onclick="setInstallOS('ios')" style="flex:1;padding:10px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-weight:800;font-size:13px;cursor:pointer;">🍎 IPHONE</button>
-    </div>
-    <div id="installGuideAndroid">
-      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;margin-bottom:10px;"><div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#050816;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">1</div><div style="font-size:13px;line-height:1.5;">Toque nos <strong>três pontinhos ⋮</strong> no canto superior direito do Chrome</div></div>
-      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;margin-bottom:10px;"><div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#050816;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">2</div><div style="font-size:13px;line-height:1.5;">Toque em <strong>"Adicionar à tela inicial"</strong></div></div>
-      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;"><div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#050816;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">3</div><div style="font-size:13px;line-height:1.5;">Confirme em <strong>"Instalar"</strong>. O ícone aparecerá na sua tela! ✅</div></div>
-    </div>
-    <div id="installGuideIos" style="display:none;">
-      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;margin-bottom:10px;"><div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#050816;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">1</div><div style="font-size:13px;line-height:1.5;">Abra no <strong>Safari</strong> e toque no botão <strong>Compartilhar ⎋</strong></div></div>
-      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;margin-bottom:10px;"><div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#050816;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">2</div><div style="font-size:13px;line-height:1.5;">Role para baixo e toque em <strong>"Adicionar à Tela de Início" +</strong></div></div>
-      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:#f8f9fa;border:1px solid rgba(0,0,0,0.05);border-radius:14px;"><div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#050816;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">3</div><div style="font-size:13px;line-height:1.5;">Toque em <strong>"Adicionar"</strong>. Pronto! ✅</div></div>
-    </div>
-    <button onclick="closeInstallModal(event)" style="width:100%;margin-top:20px;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#ffffff;font-weight:800;font-size:15px;cursor:pointer;">ENTENDIDO ✓</button>
-  </div>
-</div>
-
-<script>
-// ==================== SPLASH ====================
-setTimeout(()=>{
-  document.getElementById('splash').classList.add('out');
-  setTimeout(()=>{
-    document.getElementById('splash').style.display='none';
-    const ob = localStorage.getItem('onboarded_basquete2026');
-    if(!ob){ document.getElementById('onboarding').style.display='flex'; }
-    else { loadBasqueteData(); startDataCycle(); drawQR(); loadMvps(); }
-  },700);
-},2200);
-
-function closeOnboarding(){
-  document.getElementById('onboarding').style.display='none';
-  localStorage.setItem('onboarded_basquete2026','1');
-  loadBasqueteData();
-  startDataCycle();
-  drawQR();
-  loadMvps();
-}
-
-// ==================== NAV ====================
-function nav(pid,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(pid).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
-  if(btn) btn.classList.add('on');
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(navigator.vibrate) navigator.vibrate(6);
-  if(pid==='gamesPage'||pid==='tablePage'||pid==='bracketPage'){
-    loadBasqueteData();
-    startDataCycle();
-  } else {
-    stopDataCycle();
-  }
-}
-
-// ==================== THEME ====================
-function isDayTime(){ const h=new Date().getHours(); return h>=7 && h<18; }
-function applyTheme(isDay){
-  document.body.classList.toggle('day',isDay);
-  const toggle=document.getElementById('thToggle'); if(toggle) toggle.checked=isDay;
-  ['thIc','thThumb'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=isDay?'☀️':'🌙';});
-  const l=document.getElementById('thLbl'); if(l) l.textContent=isDay?'Modo Dia':'Modo Noite';
-  const s=document.getElementById('thSub'); if(s) s.textContent=isDay?'Design claro ativado':'Design escuro ativado';
-}
-function toggleTheme(cb){
-  const d=cb.checked;
-  applyTheme(d);
-  localStorage.setItem('theme_basquete',d?'day':'night');
-  localStorage.setItem('themeManual_basquete','1');
-  showToast(d?'☀️ Modo Dia ativado':'🌙 Modo Noite ativado');
-}
-(()=>{
-  const manual=localStorage.getItem('themeManual_basquete');
-  const saved=localStorage.getItem('theme_basquete');
-  const isDay=manual ? saved==='day' : isDayTime();
-  applyTheme(isDay);
-  setInterval(()=>{ if(!localStorage.getItem('themeManual_basquete')){ applyTheme(isDayTime()); } },60000);
-})();
-
-// ==================== COUNTDOWN ====================
-const target=new Date('2026-07-25T09:00:00');
-const prev={d:'--',h:'--',m:'--',s:'--'};
-function flip(el,val){
-  const s=String(val).padStart(2,'0');
-  if(el.textContent===s) return;
-  el.classList.remove('flipping'); void el.offsetWidth; el.classList.add('flipping');
-  el.textContent=s;
-}
-function updateCD(){
-  const diff=target-new Date();
-  if(diff<=0){['cdD','cdH','cdM','cdS'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='00';});return;}
-  flip(document.getElementById('cdD'),Math.floor(diff/86400000));
-  flip(document.getElementById('cdH'),Math.floor((diff%86400000)/3600000));
-  flip(document.getElementById('cdM'),Math.floor((diff%3600000)/60000));
-  flip(document.getElementById('cdS'),Math.floor((diff%60000)/1000));
-}
-updateCD(); setInterval(updateCD,1000);
-
-// ==================== GOOGLE SHEETS CONFIG (BASQUETE) ====================
-const BASQUETE_SHEET_ID = ''; // COLE AQUI O ID DA PLANILHA DE BASQUETE
-const GOOGLE_API_KEY    = 'AIzaSyBzIsc4TKy_he2P8PcOgOzs8Eor3EVHBzw';
-let _dataTimer = null;
-let _countdown = 30;
-let _cdTimer   = null;
-
-const tableData = { grupoA: [], grupoB: [], grupoC: [] };
-let curGrp = 'grupoA';
-
-function _cc(rows,r,col){ return (rows[r]&&rows[r][col]!=null)?rows[r][col].toString().trim():''; }
-
-function _makeGameCard(phase, dataPhase, meta, casa, visit, sC, sV, vencedor, gid, loc) {
-  const finalizado = vencedor && vencedor !== 'A DEFINIR' && vencedor !== '—';
-  const temPlacar  = sC || sV || finalizado;
-  let scoreHtml;
-  if (temPlacar) {
-    scoreHtml = `<div class="gc-sc-num">${sC||'0'} × ${sV||'0'}</div>`;
-  } else {
-    scoreHtml = `<div class="gc-vs">VS</div><div class="gc-sc-sets">Em breve</div>`;
-  }
-  const watchId    = gid ? `id="w-${gid}"` : '';
-  const watchClick = gid ? `onclick="toggleWatch('${gid}')"` : '';
-  const watchLabel = gid && watched.has(gid) ? '✅ Acompanhando' : '🔔 Acompanhar';
-  const watchClass = gid && watched.has(gid) ? 'btn-watch on' : 'btn-watch';
-  const liveClass  = (temPlacar && !finalizado) ? ' live-card' : '';
-  return `<div class="gc${liveClass}" data-phase="${dataPhase}"${gid?` data-gid="${gid}"`:''}">
-    <div class="gc-top">
-      <span class="gc-phase">${phase}</span>
-      <span class="gc-dt">${meta}</span>
-    </div>
-    <div class="gc-mid">
-      <div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">${casa||'—'}</div></div>
-      <div class="gc-sc">${scoreHtml}</div>
-      <div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">${visit||'—'}</div></div>
-    </div>
-    ${finalizado
-      ? `<div class="gc-bot"><span class="gc-loc">📍 ${loc}</span><div class="gc-actions"><span style="font-size:11px;color:var(--green);font-weight:700;">✅ ${vencedor}</span><button class="${watchClass}" ${watchId} ${watchClick}>${watchLabel}</button></div></div>`
-      : `<div class="gc-bot"><span class="gc-loc">📍 ${loc}</span><div class="gc-actions"><button class="${watchClass}" ${watchId} ${watchClick}>${watchLabel}</button></div></div>`
-    }
-  </div>`;
-}
-
-async function loadBasqueteData() {
-  if (!BASQUETE_SHEET_ID) {
-    // Sem planilha configurada — carrega dados de demonstração
-    loadDemoData();
-    return;
-  }
-  const makeUrl = (sheet, range) =>
-    `https://sheets.googleapis.com/v4/spreadsheets/${BASQUETE_SHEET_ID}/values/${encodeURIComponent("'"+sheet+"'!"+range)}?key=${GOOGLE_API_KEY}`;
-  try {
-    const [resClass, resJogos, resMata] = await Promise.all([
-      fetch(makeUrl('Classificação','A1:K26')),
-      fetch(makeUrl('Fase de Grupos','A1:Q49')),
-      fetch(makeUrl('Mata-Mata','A1:Q21'))
-    ]);
-    const [dataClass, dataJogos, dataMata] = await Promise.all([
-      resClass.json(), resJogos.json(), resMata.json()
-    ]);
-    const rowsC = dataClass.values || [];
-    const rowsJ = dataJogos.values || [];
-    const rowsM = dataMata.values  || [];
-
-    // CLASSIFICAÇÃO
-    const grpMap = { grupoA:[5,6], grupoB:[11,12], grupoC:[17,18] };
-    Object.keys(grpMap).forEach(g => {
-      tableData[g] = grpMap[g].map(r => ({
-        pos:  _cc(rowsC,r,0)||'—', name: _cc(rowsC,r,1)||'—', city: _cc(rowsC,r,5)||'',
-        badge:'', pj: _cc(rowsC,r,6)||'0', v: _cc(rowsC,r,3)||'0', d: _cc(rowsC,r,4)||'0',
-        sp:   _cc(rowsC,r,7)||'0', pts: _cc(rowsC,r,2)||'0'
-      })).filter(r=>r.name&&r.name!=='—');
-    });
-    renderTable(curGrp);
-
-    // JOGOS
-    const gamesList = document.getElementById('gamesList');
-    if (gamesList) {
-      const grupos = [
-        { label:'FASE DE GRUPOS · GRUPO A', rows:[10,11,12], grp:'A' },
-        { label:'FASE DE GRUPOS · GRUPO B', rows:[22,23,24], grp:'B' },
-        { label:'FASE DE GRUPOS · GRUPO C', rows:[34,35,36], grp:'C' }
-      ];
-      let html = '';
-      grupos.forEach(({ label, rows, grp }) => {
-        html += `<div class="grp-lbl" data-phase="grupos">${label}</div>`;
-        rows.forEach((row, idx) => {
-          const casa     = _cc(rowsJ,row,1);
-          const visit    = _cc(rowsJ,row,11);
-          if (!casa && !visit) return;
-          const sC       = _cc(rowsJ,row,12);
-          const sV       = _cc(rowsJ,row,13);
-          const vencedor = _cc(rowsJ,row,14);
-          const hora     = _cc(rowsJ,row,15)||'';
-          const gid      = `sg${grp}${idx+1}`;
-          html += _makeGameCard(`GRUPO ${grp}`, 'grupos', hora, casa, visit, sC, sV, vencedor, gid, 'Quadra Eurico Vieira');
+        // Instalação do PWA
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBanner').classList.add('show');
         });
-      });
 
-      // SEMIFINAIS
-      html += `<div class="grp-lbl" data-phase="semi">⚡ SEMIFINAIS</div>`;
-      [[5,'SF1','semi'],[6,'SF2','semi']].forEach(([row,lbl,phase])=>{
-        const c=_cc(rowsM,row,1)||'A definir', v=_cc(rowsM,row,11)||'A definir';
-        const sC=_cc(rowsM,row,12), sV=_cc(rowsM,row,13), venc=_cc(rowsM,row,14);
-        html += _makeGameCard(lbl, phase, _cc(rowsM,row,15)||'', c, v, sC, sV, venc, lbl.toLowerCase(), 'Quadra Eurico Vieira');
-      });
-
-      // FINAL
-      html += `<div class="grp-lbl" data-phase="final" style="color:var(--gold)">🏆 GRANDE FINAL</div>`;
-      const fRow=17;
-      html += _makeGameCard('Grande Final','final',_cc(rowsM,fRow,15)||'',
-        _cc(rowsM,fRow,1)||'Venc. SF1', _cc(rowsM,fRow,11)||'Venc. SF2',
-        _cc(rowsM,fRow,12), _cc(rowsM,fRow,13), _cc(rowsM,fRow,14), 'fin', 'Quadra Eurico Vieira');
-
-      gamesList.innerHTML = html;
-      watched.forEach(id=>{const b=document.getElementById('w-'+id);if(b){b.classList.add('on');b.innerHTML='✅ Acompanhando';}});
-      const activeTab=document.querySelector('#gamesPage .tab.on');
-      if(activeTab){const phase=activeTab.getAttribute('onclick').match(/'([^']+)'/)?.[1];if(phase&&phase!=='todos')filterGames(phase,activeTab);}
-    }
-
-    // BRACKET
-    function applyBracket(row, rows, idA, idB, nmA, nmB) {
-      const nameA=_cc(rows,row,1)||'—', nameB=_cc(rows,row,11)||'—';
-      const sA=_cc(rows,row,12)||'—', sB=_cc(rows,row,13)||'—';
-      const winner=_cc(rows,row,14);
-      if(nmA&&document.getElementById(nmA)) document.getElementById(nmA).textContent=nameA;
-      if(nmB&&document.getElementById(nmB)) document.getElementById(nmB).textContent=nameB;
-      const elA=document.getElementById(idA), elB=document.getElementById(idB);
-      if(elA){elA.textContent=sA;elA.className='mt-sc'+(winner===nameA?' winner':winner?' loser':' empty');}
-      if(elB){elB.textContent=sB;elB.className='mt-sc'+(winner===nameB?' winner':winner?' loser':' empty');}
-    }
-    applyBracket(5, rowsM, 'bsf1t1','bsf1t2','sf1t1nm','sf1t2nm');
-    applyBracket(6, rowsM, 'bsf2t1','bsf2t2','sf2t1nm','sf2t2nm');
-    applyBracket(17,rowsM, 'bfint1','bfint2','fint1nm','fint2nm');
-    const campeo = _cc(rowsM,20,0);
-    const champEl = document.getElementById('champName');
-    if(champEl){
-      const waiting = !campeo||campeo==='—'||campeo.toLowerCase().includes('aguard');
-      champEl.textContent = waiting ? 'Aguardando' : campeo;
-      if(!waiting) launchFireworks(campeo);
-    }
-
-    // Update stats count
-    const totalTimes = Object.values(tableData).flat().length;
-    const statTimesEl = document.getElementById('statTimes');
-    if(statTimesEl) statTimesEl.textContent = totalTimes || '6';
-
-  } catch(e) {
-    console.warn('Sheets error:', e);
-    loadDemoData();
-  }
-}
-
-function loadDemoData() {
-  // Dados de demonstração
-  tableData.grupoA = [
-    {pos:'1',name:'CT Montanhas',city:'Afonso Cláudio, ES',badge:'🏠 CASA',pj:'0',v:'0',d:'0',sp:'0',pts:'0'},
-    {pos:'2',name:'Equipe B',city:'Cidade, ES',badge:'',pj:'0',v:'0',d:'0',sp:'0',pts:'0'},
-  ];
-  tableData.grupoB = [
-    {pos:'1',name:'Equipe C',city:'Cidade, RJ',badge:'',pj:'0',v:'0',d:'0',sp:'0',pts:'0'},
-    {pos:'2',name:'Equipe D',city:'Cidade, MG',badge:'',pj:'0',v:'0',d:'0',sp:'0',pts:'0'},
-  ];
-  tableData.grupoC = [
-    {pos:'1',name:'Equipe E',city:'Cidade, SP',badge:'',pj:'0',v:'0',d:'0',sp:'0',pts:'0'},
-    {pos:'2',name:'Equipe F',city:'Cidade, ES',badge:'',pj:'0',v:'0',d:'0',sp:'0',pts:'0'},
-  ];
-  renderTable(curGrp);
-
-  const gamesList = document.getElementById('gamesList');
-  if(gamesList){
-    gamesList.innerHTML = `
-      <div class="grp-lbl" data-phase="grupos">FASE DE GRUPOS · GRUPO A</div>
-      <div class="gc" data-phase="grupos"><div class="gc-top"><span class="gc-phase">GRUPO A</span><span class="gc-dt">25/07 · 09:00h</span></div><div class="gc-mid"><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">CT Montanhas</div></div><div class="gc-sc"><div class="gc-vs">VS</div><div class="gc-sc-sets">Sábado</div></div><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">Equipe B</div></div></div><div class="gc-bot"><span class="gc-loc">📍 Quadra Eurico Vieira</span><div class="gc-actions"><button class="btn-watch">🔔 Acompanhar</button></div></div></div>
-      <div class="grp-lbl" data-phase="grupos">FASE DE GRUPOS · GRUPO B</div>
-      <div class="gc" data-phase="grupos"><div class="gc-top"><span class="gc-phase">GRUPO B</span><span class="gc-dt">25/07 · 10:30h</span></div><div class="gc-mid"><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">Equipe C</div></div><div class="gc-sc"><div class="gc-vs">VS</div><div class="gc-sc-sets">Sábado</div></div><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">Equipe D</div></div></div><div class="gc-bot"><span class="gc-loc">📍 Quadra Eurico Vieira</span><div class="gc-actions"><button class="btn-watch">🔔 Acompanhar</button></div></div></div>
-      <div class="grp-lbl" data-phase="grupos">FASE DE GRUPOS · GRUPO C</div>
-      <div class="gc" data-phase="grupos"><div class="gc-top"><span class="gc-phase">GRUPO C</span><span class="gc-dt">25/07 · 12:00h</span></div><div class="gc-mid"><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">Equipe E</div></div><div class="gc-sc"><div class="gc-vs">VS</div><div class="gc-sc-sets">Sábado</div></div><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">Equipe F</div></div></div><div class="gc-bot"><span class="gc-loc">📍 Quadra Eurico Vieira</span><div class="gc-actions"><button class="btn-watch">🔔 Acompanhar</button></div></div></div>
-      <div class="grp-lbl" data-phase="semi">⚡ SEMIFINAIS</div>
-      <div class="gc" data-phase="semi"><div class="gc-top"><span class="gc-phase">SEMIFINAL 1</span><span class="gc-dt">26/07 · 09:00h</span></div><div class="gc-mid"><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">1º Grupo A</div></div><div class="gc-sc"><div class="gc-vs">VS</div><div class="gc-sc-sets">Domingo</div></div><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">2º Grupo B</div></div></div><div class="gc-bot"><span class="gc-loc">📍 Quadra Eurico Vieira</span></div></div>
-      <div class="gc" data-phase="semi"><div class="gc-top"><span class="gc-phase">SEMIFINAL 2</span><span class="gc-dt">26/07 · 10:30h</span></div><div class="gc-mid"><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">1º Grupo B</div></div><div class="gc-sc"><div class="gc-vs">VS</div><div class="gc-sc-sets">Domingo</div></div><div class="gc-t"><div class="gc-t-ic">🏀</div><div class="gc-t-nm">2º Grupo A</div></div></div><div class="gc-bot"><span class="gc-loc">📍 Quadra Eurico Vieira</span></div></div>
-      <div class="grp-lbl" data-phase="final" style="color:var(--gold)">🏆 GRANDE FINAL</div>
-      <div class="gc" data-phase="final"><div class="gc-top"><span class="gc-phase">GRANDE FINAL</span><span class="gc-dt">26/07 · 14:00h</span></div><div class="gc-mid"><div class="gc-t"><div class="gc-t-ic">🔥</div><div class="gc-t-nm">Venc. SF1</div></div><div class="gc-sc"><div class="gc-vs">VS</div><div class="gc-sc-sets">Domingo</div></div><div class="gc-t"><div class="gc-t-ic">🔥</div><div class="gc-t-nm">Venc. SF2</div></div></div><div class="gc-bot"><span class="gc-loc">📍 Quadra Eurico Vieira</span></div></div>`;
-  }
-}
-
-// Ciclo de auto-refresh
-function startDataCycle() {
-  stopDataCycle();
-  _countdown = 30;
-  _cdTimer = setInterval(()=>{ _countdown--; if(_countdown<=0){ _countdown=30; loadBasqueteData(); } },1000);
-}
-function stopDataCycle() { clearInterval(_dataTimer); clearInterval(_cdTimer); _dataTimer=null; _cdTimer=null; }
-
-// ==================== TABLE ====================
-function renderTable(grp, filter='') {
-  curGrp = grp;
-  const rows = (tableData[grp]||[]).filter(r=>!filter||r.name.toLowerCase().includes(filter.toLowerCase()));
-  document.getElementById('tableBody').innerHTML = rows.map((r,i)=>`
-    <div class="tbl-row ${i<2?'top2':''}" onclick="openTeam('${r.name}','${r.city}','🏀',${r.pj},${r.v},${r.pts})">
-      <div class="td"><span class="td-pos ${i===0?'g':''}">${r.pos}º</span></div>
-      <div class="td td-nm">${r.name}${r.badge?`<span class="td-bdg">${r.badge}</span>`:''}</div>
-      <div class="td">${r.pj}</div><div class="td">${r.v}</div><div class="td">${r.d}</div>
-      <div class="td">${Number(r.sp)>0?'+'+r.sp:r.sp}</div>
-      <div class="td"><span class="td-pts">${r.pts}</span></div>
-    </div>`).join('');
-}
-renderTable('grupoA');
-
-function filterTable(g,btn){ document.querySelectorAll('.tabs .tab').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); renderTable(g); }
-function searchTeam(v){ renderTable(curGrp,v); }
-
-// ==================== GAMES FILTER ====================
-function filterGames(phase,btn){
-  document.querySelectorAll('.tabs .tab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  document.querySelectorAll('#gamesList [data-phase]').forEach(el=>{
-    el.style.display=(phase==='todos'||el.dataset.phase===phase)?'':'none';
-  });
-}
-
-// PULL TO REFRESH
-let pts=0,pulling=false;
-const gp=document.getElementById('gamesPage');
-gp.addEventListener('touchstart',e=>{pts=e.touches[0].clientY;});
-gp.addEventListener('touchmove',e=>{if(gp.scrollTop===0&&e.touches[0].clientY-pts>65){document.getElementById('pullBar').classList.add('show');pulling=true;}});
-gp.addEventListener('touchend',()=>{if(pulling){setTimeout(()=>{document.getElementById('pullBar').classList.remove('show');loadBasqueteData();showToast('✅ Jogos atualizados!');},1100);pulling=false;}});
-
-// ==================== WATCH ====================
-const watched=new Set(JSON.parse(localStorage.getItem('watched_basquete')||'[]'));
-function toggleWatch(id){
-  const btn=document.getElementById('w-'+id);
-  if(watched.has(id)){watched.delete(id);if(btn){btn.classList.remove('on');btn.textContent='🔔 Acompanhar';}showToast('Removido dos acompanhados');}
-  else{watched.add(id);if(btn){btn.classList.add('on');btn.innerHTML='✅ Acompanhando';}showToast('🔔 Você vai acompanhar este jogo!');if(navigator.vibrate)navigator.vibrate([8,20,8]);}
-  localStorage.setItem('watched_basquete',JSON.stringify([...watched]));
-}
-watched.forEach(id=>{const b=document.getElementById('w-'+id);if(b){b.classList.add('on');b.innerHTML='✅ Acompanhando';}});
-
-// ==================== TEAM MODAL ====================
-const teamInfo = {
-	  'CT das Montanhas': { insta:'@ctdasmontanhas', resp:'Diego Pádua', cap:'Caio', badge:'🏠 EQUIPE DA CASA', av:'🏠' },
-	  'Marlins': { insta:'@marlinsbasquete', resp:'Eduardo', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' },
-	  'Central Serrano': { insta:'@cesbbasquete', resp:'Robson', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' },
-	  'Crossover Basquete': { insta:'a definir', resp:'Carlos Eduardo', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' },
-	  'Basquete Aracruz': { insta:'a definir', resp:'Nicolas', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' },
-	  'Basquete São Pedro': { insta:'a definir', resp:'Márcio', cap:'A definir', badge:'🏀 INSCRITO', av:'🏀' }
-	};
-	const players = {
-	  'CT das Montanhas': [{n:10,name:'Caio',pos:'Pivô'},{n:7,name:'Lucas',pos:'Ala'},{n:5,name:'Renan',pos:'Armador'}],
-	  'Marlins': [],
-	  'Central Serrano': [],
-	  'Crossover Basquete': [],
-	  'Basquete Aracruz': [],
-	  'Basquete São Pedro': []
-	};
-
-function openTeam(name, city, av, pj, v, pts) {
-  const info = teamInfo[name] || {};
-  document.getElementById('tmAv').textContent = info.av || av || '🏀';
-  document.getElementById('tmName').textContent = name || '—';
-  document.getElementById('tmCity').innerHTML = `📍 ${city || '—'}`;
-  const badgesEl = document.getElementById('tmBadges');
-  let badgesHtml = '';
-  if(info.badge) badgesHtml += `<span class="tm-badge">${info.badge}</span>`;
-  if(info.insta){const href=`https://instagram.com/${info.insta.replace('@','')}`;badgesHtml+=`<a class="tm-insta" href="${href}" target="_blank" rel="noopener">📷 ${info.insta}</a>`;}
-  badgesEl.innerHTML = badgesHtml || '<span class="tm-badge">Supercopa Basquete AFC 2026</span>';
-  document.getElementById('tmResp').textContent = info.resp || '—';
-  document.getElementById('tmCap').textContent  = info.cap  || '—';
-  document.getElementById('tmPJ').textContent   = pj ?? '—';
-  document.getElementById('tmV').textContent    = v  ?? '—';
-  const noteEl = document.getElementById('tmUpdateNote');
-  if(noteEl){const now=new Date();noteEl.innerHTML=`<span>🔄</span><span>Atualizado às ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}</span>`;}
-  const pl = players[name] || [];
-  document.getElementById('tmPlayers').innerHTML = pl.length
-    ? `<div class="tm-section">👥 Elenco</div>` + pl.map(p=>`<div class="player-row"><div class="pr-num">#${p.n}</div><div class="pr-name">${p.name}</div><span class="pr-pos">${p.pos}</span></div>`).join('')
-    : '';
-  document.getElementById('teamModal').classList.add('on');
-}
-function closeTeamModal(){ document.getElementById('teamModal').classList.remove('on'); }
-document.getElementById('teamModal').addEventListener('click',e=>{if(e.target===document.getElementById('teamModal'))closeTeamModal();});
-
-// ==================== ADMIN ====================
-const PW='supercopa2026';
-
-function openAdmin(){
-  document.getElementById('admLoginPw').value='';
-  document.getElementById('admLoginErro').style.display='none';
-  document.getElementById('admLoginScreen').style.display='block';
-  document.getElementById('admPainelPrincipal').style.display='none';
-  document.getElementById('adminModal').classList.add('on');
-}
-function admLogin(){
-  const pw=document.getElementById('admLoginPw').value;
-  if(pw===PW){
-    document.getElementById('admLoginScreen').style.display='none';
-    document.getElementById('admPainelPrincipal').style.display='block';
-    document.getElementById('admLoginErro').style.display='none';
-  } else {
-    document.getElementById('admLoginErro').style.display='block';
-    document.getElementById('admLoginPw').value='';
-    document.getElementById('admLoginPw').focus();
-    if(navigator.vibrate) navigator.vibrate([100,50,100]);
-  }
-}
-function closeAdmin(){ document.getElementById('adminModal').classList.remove('on'); }
-document.getElementById('adminModal').addEventListener('click',e=>{if(e.target===document.getElementById('adminModal'))closeAdmin();});
-function admTab(tab,btn){
-  document.querySelectorAll('.adm-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-  document.getElementById('admScore').style.display=tab==='score'?'block':'none';
-  document.getElementById('admTeams').style.display=tab==='teams'?'block':'none';
-  document.getElementById('admMvp').style.display=tab==='mvp'?'block':'none';
-}
-function checkPw(id){const e=document.getElementById(id);if(e.value!==PW){showToast('❌ Senha incorreta');return false;}return true;}
-
-function saveScore(){
-  if(!checkPw('admPw')) return;
-  const s1=document.getElementById('admS1').value;
-  const s2=document.getElementById('admS2').value;
-  if(s1===''||s2==='') return showToast('⚠️ Preencha o placar');
-  closeAdmin();
-  showToast(`✅ Placar ${s1} × ${s2} salvo!`);
-}
-
-function addTeam(){
-  if(!checkPw('admPw2')) return;
-  const name=document.getElementById('newTeamName').value.trim();
-  const city=document.getElementById('newTeamCity').value.trim();
-  const grp=document.getElementById('newTeamGroup').value;
-  if(!name||!city) return showToast('⚠️ Preencha nome e cidade');
-  if(tableData[grp]) tableData[grp].push({pos:tableData[grp].length+1,name,city,badge:'',pj:0,v:0,d:0,sp:0,pts:0});
-  renderTable(grp);
-  document.getElementById('newTeamName').value='';
-  document.getElementById('newTeamCity').value='';
-  closeAdmin();
-  showToast(`✅ Time adicionado ao ${grp}!`);
-}
-
-function addMvp(){
-  const name=document.getElementById('mvpName')?.value.trim();
-  const team=document.getElementById('mvpTeam')?.value.trim();
-  const statusEl=document.getElementById('admMvpStatus');
-  if(!name){showToast('⚠️ Digite o nome do jogador!');return;}
-  if(!team){showToast('⚠️ Digite o time!');return;}
-  const strip=document.getElementById('mvpStrip');
-  if(strip){
-    const count=strip.querySelectorAll('.mvp-card').length+1;
-    const cls=count===1?'no1':count===2?'no2':count===3?'no3':'';
-    const card=document.createElement('div');
-    card.className='mvp-card '+cls;
-    card.innerHTML=`<div class="mvp-rank">${count}°</div><div class="mvp-av">⭐</div><div class="mvp-nm">${name}</div><div class="mvp-tm">${team}</div>`;
-    strip.appendChild(card);
-  }
-  const mvps=JSON.parse(localStorage.getItem('mvpList_basquete_v1')||'[]');
-  mvps.push({name,team,ts:Date.now()});
-  localStorage.setItem('mvpList_basquete_v1',JSON.stringify(mvps));
-  if(statusEl) statusEl.textContent=`✅ ${name} (${team}) adicionado!`;
-  if(document.getElementById('mvpName')) document.getElementById('mvpName').value='';
-  if(document.getElementById('mvpTeam')) document.getElementById('mvpTeam').value='';
-  showToast('⭐ MVP adicionado com sucesso!');
-}
-
-function loadMvps(){
-  const strip=document.getElementById('mvpStrip');
-  if(!strip) return;
-  const mvps=JSON.parse(localStorage.getItem('mvpList_basquete_v1')||'[]');
-  if(!mvps.length) return;
-  strip.innerHTML='';
-  mvps.forEach((m,i)=>{
-    const cls=i===0?'no1':i===1?'no2':i===2?'no3':'';
-    const card=document.createElement('div');
-    card.className='mvp-card '+cls;
-    card.innerHTML=`<div class="mvp-rank">${i+1}°</div><div class="mvp-av">⭐</div><div class="mvp-nm">${m.name}</div><div class="mvp-tm">${m.team}</div>`;
-    strip.appendChild(card);
-  });
-}
-
-// ==================== CONFETTI & FIREWORKS ====================
-function spawnConfetti(){
-  const c=document.getElementById('confettiWrap');
-  if(!c) return;
-  ['#F4C542','#e8a010','#fff','#0E3B78','#ff6b6b','#22c55e'].forEach((col)=>{
-    for(let i=0;i<4;i++){
-      const p=document.createElement('div');
-      p.className='cp';
-      p.style.cssText=`left:${Math.random()*100}%;background:${col};animation-delay:${Math.random()*2.5}s;animation-duration:${2+Math.random()*2}s;width:${5+Math.random()*5}px;height:${5+Math.random()*5}px;border-radius:${Math.random()>.5?'50%':'2px'};`;
-      c.appendChild(p);
-    }
-  });
-}
-spawnConfetti();
-
-function launchFireworks(name){
-  document.getElementById('champName').textContent=name;
-  const fw=document.getElementById('fireworks');
-  fw.classList.add('on'); fw.innerHTML='';
-  const colors=['#F4C542','#e8a010','#fff','#ff6b6b','#22c55e','#60a5fa'];
-  for(let i=0;i<60;i++){
-    const p=document.createElement('div');
-    p.className='fw-particle';
-    const x=20+Math.random()*60, y=10+Math.random()*60;
-    const tx=(Math.random()-.5)*200, ty=(Math.random()-.5)*200;
-    p.style.cssText=`left:${x}%;top:${y}%;width:${4+Math.random()*5}px;height:${4+Math.random()*5}px;background:${colors[Math.floor(Math.random()*colors.length)]};--tx:${tx}px;--ty:${ty}px;animation-delay:${Math.random()*.5}s;animation-duration:${.8+Math.random()*.6}s;`;
-    fw.appendChild(p);
-  }
-  setTimeout(()=>fw.classList.remove('on'),2500);
-  showToast('🎉 '+name+' é CAMPEÃO 2026!');
-}
-
-// ==================== TOAST ====================
-let toastT;
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);
-}
-
-// ==================== FAQ ====================
-function toggleFaq(el){ el.parentElement.classList.toggle('open'); }
-
-// ==================== NEWS ====================
-document.querySelectorAll('.news-card').forEach(c=>{c.addEventListener('click',()=>showToast('📰 Em breve: notícias completas!'));});
-
-// ==================== GALLERY ====================
-const galleryData = {
-	  '2026':[]
-	};
-
-function renderGallery(year){
-  const el=document.getElementById('galleryGrid');
-  if(!el) return;
-  const items=galleryData[year]||[];
-  el.innerHTML=items.map(item=>`
-    <div onclick="openLb('${item.ic}','${item.img||''}','${item.cap}','${item.sub}','photo')"
-      style="aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:pointer;background:var(--card2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .15s;position:relative;">
-      ${item.img?`<img src="${item.img}" alt="${item.cap}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;position:absolute;inset:0;" loading="lazy">`:''}
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%);pointer-events:none;border-radius:10px;"></div>
-      <div style="position:relative;z-index:2;font-size:26px;">${item.ic}</div>
-      <div style="position:relative;z-index:2;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-align:center;padding:0 4px;">${item.cap.substring(0,14)}</div>
-    </div>`).join('');
-}
-
-function gallTab(year,btn){
-  document.querySelectorAll('.tabs .tab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on'); renderGallery(year);
-}
-
-function openLb(ic,src,cap,sub,type){
-  const e=document.getElementById('lbIc');
-  if(e){
-    if(src) e.innerHTML=`<img src="${src}" alt="${cap}" style="max-width:100%;max-height:70vh;border-radius:12px;object-fit:contain;">`;
-    else e.textContent=ic;
-  }
-  const c=document.getElementById('lbCap'); if(c) c.textContent=cap;
-  const s=document.getElementById('lbSub'); if(s) s.textContent=sub;
-  const lb=document.getElementById('galleryLb');
-  if(lb){lb.style.display='flex';}
-}
-function closeLb(){
-  const lb=document.getElementById('galleryLb');
-  if(lb) lb.style.display='none';
-  const e=document.getElementById('lbIc');
-  if(e){e.innerHTML='📸';e.textContent='📸';}
-}
-
-// ==================== SOCIAL CARD ====================
-const _arteImg = new Image();
-const scCanvas = document.getElementById('scCanvas');
-if(scCanvas){
-  scCanvas.width=1080; scCanvas.height=1080;
-  const ctx=scCanvas.getContext('2d');
-  function desenharCard(){
-    const t1=document.getElementById('scT1')?.value||'Time 1';
-    const t2=document.getElementById('scT2')?.value||'Time 2';
-    const s1=document.getElementById('scS1')?.value||'0';
-    const s2=document.getElementById('scS2')?.value||'0';
-    const W=1080,H=1080;
-    // Fundo
-    const grad=ctx.createLinearGradient(0,0,W,H);
-    grad.addColorStop(0,'#050816'); grad.addColorStop(.5,'#0a2d5e'); grad.addColorStop(1,'#050816');
-    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
-    // Bola
-    ctx.font='240px serif'; ctx.textAlign='center'; ctx.fillStyle='rgba(244,197,66,.08)';
-    ctx.fillText('🏀',540,580);
-    // Header
-    ctx.fillStyle='rgba(244,197,66,.9)'; ctx.font='bold 28px DM Sans,sans-serif';
-    ctx.fillText('SUPERCOPA AFC · BASQUETE 2026',540,80);
-    // Times
-    const teamFontSize=t=>t.length>14?52:t.length>10?60:72;
-    ctx.fillStyle='#ffffff';
-    ctx.font=`bold ${teamFontSize(t1)}px Anton,sans-serif`;
-    ctx.fillText(t1,270,460);
-    ctx.font=`bold ${teamFontSize(t2)}px Anton,sans-serif`;
-    ctx.fillText(t2,810,460);
-    // VS/Placar
-    ctx.font='bold 160px Anton,sans-serif';
-    ctx.fillStyle='#fcc137';
-    ctx.fillText(s1,300,620);
-    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='bold 60px Anton,sans-serif';
-    ctx.fillText('×',540,600);
-    ctx.fillStyle='#fcc137'; ctx.font='bold 160px Anton,sans-serif';
-    ctx.fillText(s2,780,620);
-    // Footer
-    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='bold 24px DM Sans,sans-serif';
-    ctx.fillText('supercopaafc.com.br · Afonso Cláudio, ES',540,1040);
-  }
-  desenharCard();
-  function updateCard(){ desenharCard(); }
-}
-
-async function gerarImagemCard(acao){
-  const canvas=document.getElementById('scCanvas');
-  if(!canvas) return;
-  const t1=document.getElementById('scT1')?.value||'Time1';
-  const t2=document.getElementById('scT2')?.value||'Time2';
-  const s1=document.getElementById('scS1')?.value||'0';
-  const s2=document.getElementById('scS2')?.value||'0';
-  desenharCard();
-  const dataUrl=canvas.toDataURL('image/jpeg',0.95);
-  if(acao==='download'){
-    const link=document.createElement('a');
-    link.download=`basquete-afc-${t1}-${s1}x${s2}-${t2}.jpg`;
-    link.href=dataUrl; link.click();
-    showToast('🖼️ Imagem salva!'); return;
-  }
-  try{
-    if(navigator.share&&navigator.canShare){
-      const res=await fetch(dataUrl);
-      const blob=await res.blob();
-      const file=new File([blob],'basquete-afc.jpg',{type:'image/jpeg'});
-      if(navigator.canShare({files:[file]})){
-        await navigator.share({files:[file],title:'Basquete AFC 2026',text:`🏀 ${t1} ${s1} × ${s2} ${t2} | Basquete AFC 2026`});
-        return;
-      }
-    }
-    const link=document.createElement('a');
-    link.download='basquete-afc.jpg'; link.href=dataUrl; link.click();
-    showToast('🖼️ Imagem salva! Compartilhe pelo WhatsApp/Instagram.');
-  }catch(e){ showToast('⚠️ Erro. Imagem baixada.'); }
-}
-
-// ==================== QR CODE ====================
-function drawQR(){
-  const canvas=document.getElementById('qrCanvas');
-  if(!canvas) return;
-  const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,200,200);
-  ctx.fillStyle='#0a0203';
-  function finder(x,y){
-    ctx.fillStyle='#0a0203'; ctx.fillRect(x,y,56,56);
-    ctx.fillStyle='#fff'; ctx.fillRect(x+8,y+8,40,40);
-    ctx.fillStyle='#0a0203'; ctx.fillRect(x+16,y+16,24,24);
-  }
-  finder(8,8); finder(136,8); finder(8,136);
-  const seed=456;
-  for(let r=0;r<23;r++){for(let c=0;c<23;c++){
-    const skip=(r<8&&c<8)||(r<8&&c>14)||(r>14&&c<8);
-    if(!skip&&Math.sin(r*19+c*11+seed)>0.15){ ctx.fillRect(8+c*8,8+r*8,7,7); }
-  }}
-  ctx.fillStyle='rgba(244,197,66,.95)';
-  ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
-  ctx.fillText('🏀AFC',100,104);
-}
-
-function downloadQR(){
-  const canvas=document.getElementById('qrCanvas');
-  if(!canvas){showToast('⚠️ QR não disponível');return;}
-  const link=document.createElement('a');
-  link.download='basquete-afc-qrcode.png'; link.href=canvas.toDataURL(); link.click();
-  showToast('⬇️ QR Code baixado!');
-}
-
-// ==================== INSTALL ====================
-function openInstallModal(){
-  const modal=document.getElementById('installModal');
-  if(!modal) return;
-  modal.style.display='flex';
-  const ua=navigator.userAgent.toLowerCase();
-  if(ua.includes('iphone')||ua.includes('ipad')){setInstallOS('ios');}
-  else{setInstallOS('android');}
-}
-function closeInstallModal(e){
-  const modal=document.getElementById('installModal');
-  if(modal) modal.style.display='none';
-}
-function setInstallOS(os){
-  const btnA=document.getElementById('installBtnAndroid');
-  const btnI=document.getElementById('installBtnIos');
-  const guideA=document.getElementById('installGuideAndroid');
-  const guideI=document.getElementById('installGuideIos');
-  if(os==='android'){
-    btnA.style.borderColor='var(--gold)';btnA.style.background='rgba(244,197,66,.15)';btnA.style.color='var(--gold)';
-    btnI.style.borderColor='var(--border)';btnI.style.background='var(--card)';btnI.style.color='var(--muted)';
-    guideA.style.display='block'; guideI.style.display='none';
-  } else {
-    btnI.style.borderColor='var(--gold)';btnI.style.background='rgba(244,197,66,.15)';btnI.style.color='var(--gold)';
-    btnA.style.borderColor='var(--border)';btnA.style.background='var(--card)';btnA.style.color='var(--muted)';
-    guideI.style.display='block'; guideA.style.display='none';
-  }
-}
-
-// ==================== INIT ====================
-loadBasqueteData();
-startDataCycle();
-renderGallery('2025');
-drawQR();
-loadMvps();
-</script>
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('Usuário instalou o app');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installBanner').style.display = 'none';
+                });
+            }
+        }
+    </script>
 </body>
 </html>
